@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<fmt:setLocale value="en"/>
+<fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="i18n.messages"/>
 
 <html lang="en">
@@ -135,13 +135,13 @@
       <fmt:message key="footer.logged_user"/>
     </span>
         <span class="mr-4">
-            ${sessionScope.get(user).getUsername()}
+            ${sessionScope.user.getUsername()}
         </span>
         <span>
       <fmt:message key="footer.roles"/>
     </span>
         <span class="mr-4">
-            ${sessionScope.get(user).getRole()}
+            ${sessionScope.user.getRole()}
         </span>
     </p>
     <span style="float: right">
