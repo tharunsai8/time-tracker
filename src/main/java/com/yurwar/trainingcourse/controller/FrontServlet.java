@@ -1,6 +1,7 @@
 package com.yurwar.trainingcourse.controller;
 
 import com.yurwar.trainingcourse.controller.command.Command;
+import com.yurwar.trainingcourse.controller.command.CommandManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,25 +14,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FrontServlet extends HttpServlet {
-    private Logger logger = LogManager.getLogger();
-    private Map<String, Command> commands = new HashMap<>();
+    private static final Logger log = LogManager.getLogger();
+    private CommandManager commandManager = CommandManager.getInstance();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        process(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        process(request, response);
     }
 
-    private void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
+    private void process(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException  {
         String path = request.getRequestURI().replaceAll(".*/timetracker/", "");
-        Command command = commands.getOrDefault(path, r -> "index.jsp");
+        Command command = commandManager.getCommand(path);
 
-        logger.info(command.getClass().getSimpleName());
+        log.info("Current command: " + command.getClass().getSimpleName());
 
         String page = command.execute(request);
 

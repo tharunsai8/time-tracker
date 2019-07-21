@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<fmt:setLocale value="ua"/>
+<fmt:setLocale value="en"/>
 <fmt:setBundle basename="i18n.messages"/>
 
 <html lang="en">
@@ -13,19 +13,19 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-  <a class="navbar-brand" href="/index">
+  <a class="navbar-brand" href="${pageContext.request.contextPath}/index">
     <img src="${pageContext.request.contextPath}/images/stopwatch-white.svg" class="d-inline-block align-top" width="30" height="30">
     Time-Tracker
   </a>
   <div class="collapse navbar-collapse" id="navbars">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="/index">
+        <a class="nav-link" href="${pageContext.request.contextPath}/index">
           <fmt:message key="link.home"/>
         </a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="/users">
+        <a class="nav-link" href="${pageContext.request.contextPath}/users">
           <fmt:message key="link.all_users"/>
         </a>
       </li>
@@ -34,9 +34,9 @@
           Activities
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="/activities">All activities</a>
-          <a class="dropdown-item" href="/activities/add">Add activity</a>
-          <a class="dropdown-item" href="/activities/request">All activity requests</a>
+          <a class="dropdown-item" href="${pageContext.request.contextPath}/activities">All activities</a>
+          <a class="dropdown-item" href="${pageContext.request.contextPath}/activities/add">Add activity</a>
+          <a class="dropdown-item" href="${pageContext.request.contextPath}/activities/request">All activity requests</a>
         </div>
       </li>
     </ul>
@@ -51,7 +51,7 @@
           <fmt:message key="button.signin"/>
         </button>
       </form>
-      <form action="/logout" method="get">
+      <form action="${pageContext.request.contextPath}/logout" method="get">
         <button type="submit" class="btn btn-primary my-2 my-sm-0">
           <fmt:message key="button.signout"/>
         </button>
@@ -110,13 +110,13 @@
       <fmt:message key="footer.logged_user"/>
     </span>
     <span class="mr-4">
-      Roles
+      ${user.getUsername()}
     </span>
     <span>
       <fmt:message key="footer.roles"/>
     </span>
     <span class="mr-4">
-      Roles
+      ${user.getRole()}
     </span>
   </p>
   <span style="float: right">
