@@ -5,7 +5,7 @@
          version="4.0">
     <servlet>
         <servlet-name>Servlet</servlet-name>
-        <servlet-class>com.yurwar.trainingcourse.controller.Servlet</servlet-class>
+        <servlet-class>com.yurwar.trainingcourse.controller.FrontServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Servlet</servlet-name>
