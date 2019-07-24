@@ -19,6 +19,6 @@ public class LogoutCommand implements Command {
 //        session.removeAttribute("role");
         request.setAttribute("success", true);
         log.info("User " + username + " logout successfully");
-        return "redirect:login";
+        return "/login.jsp";
     }
 }

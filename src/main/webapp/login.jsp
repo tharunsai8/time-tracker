@@ -20,7 +20,7 @@
     <h1 class="h3 mb-3 font-weight-normal">
         <fmt:message key="login.header"/>
     </h1>
-    <c:if test="${success}">
+    <c:if test="${requestScope.success}">
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <span>
                 <fmt:message key="login.logout.success"/>
@@ -30,7 +30,7 @@
             </button>
         </div>
     </c:if>
-    <c:if test="${error}">
+    <c:if test="${requestScope.error}">
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <span>
                 <fmt:message key="login.error"/>

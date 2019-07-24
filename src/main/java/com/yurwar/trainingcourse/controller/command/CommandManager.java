@@ -14,6 +14,7 @@ public class CommandManager {
         commandMap.put("logout", new LogoutCommand());
         commandMap.put("registration", new RegistrationCommand(new UserService()));
         commandMap.put("users", new UsersCommand(new UserService()));
+        commandMap.put("index", new HomeCommand());
     }
 
     public static CommandManager getInstance() {

@@ -30,6 +30,7 @@ public class LoginCommand implements Command {
         Optional<User> userOptional = userService.getUserByUsername(username);
         if (!userOptional.isPresent()) {
             log.warn("No such user " + username + " in database");
+            request.setAttribute("error", true);
             return "/login.jsp";
         }
 
@@ -44,6 +45,7 @@ public class LoginCommand implements Command {
             return "redirect:index";
         } else {
             log.info("Invalid credentials for user " + username);
+            request.setAttribute("error", true);
             return "/login.jsp";
         }
     }
