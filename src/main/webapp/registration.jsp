@@ -12,19 +12,19 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-    <a class="navbar-brand" href="${pageContext.request.contextPath}/index">
-        <img src="${pageContext.request.contextPath}/images/stopwatch-white.svg" class="d-inline-block align-top" width="30" height="30">
+    <a class="navbar-brand" href="${pageContext.request.contextPath}/app/index">
+        <img src="${pageContext.request.contextPath}/images/stopwatch-white.png" class="d-inline-block align-top" width="30" height="30">
         Time-Tracker
     </a>
     <div class="collapse navbar-collapse" id="navbars">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="${pageContext.request.contextPath}/index">
+                <a class="nav-link" href="${pageContext.request.contextPath}/app/index">
                     <fmt:message key="link.home"/>
                 </a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="${pageContext.request.contextPath}/users">
+                <a class="nav-link" href="${pageContext.request.contextPath}/app/users">
                     <fmt:message key="link.all_users"/>
                 </a>
             </li>
@@ -33,24 +33,24 @@
                     Activities
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/activities">All activities</a>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/activities/add">Add activity</a>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/activities/request">All activity requests</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/app/activities">All activities</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/app/activities/add">Add activity</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/app/activities/request">All activity requests</a>
                 </div>
             </li>
         </ul>
         <div class="form-inline my-2 my-lg-0">
-            <form action="${pageContext.request.contextPath}/registration" method="get">
+            <form action="${pageContext.request.contextPath}/app/registration" method="get">
                 <button type="submit" class="btn btn-outline-primary mr-3 my-2 my-sm-0">
                     <fmt:message key="button.signup"/>
                 </button>
             </form>
-            <form action="${pageContext.request.contextPath}/login" method="get">
+            <form action="${pageContext.request.contextPath}/app/login" method="get">
                 <button type="submit" class="btn btn-primary mr-3 my-2 my-sm-0">
                     <fmt:message key="button.signin"/>
                 </button>
             </form>
-            <form action="${pageContext.request.contextPath}/logout" method="get">
+            <form action="${pageContext.request.contextPath}/app/logout" method="get">
                 <button type="submit" class="btn btn-primary my-2 my-sm-0">
                     <fmt:message key="button.signout"/>
                 </button>
@@ -65,7 +65,7 @@
             <fmt:message key="registration.header"/>
         </div>
         <div class="card-body">
-            <form action="${pageContext.request.contextPath}/registration" method="post">
+            <form action="${pageContext.request.contextPath}/app/registration" method="post">
                 <div class="form-row">
                     <div class="col-md-3 mb-3">
                         <label id="firstNameLabel" for="firstName">

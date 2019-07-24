@@ -11,6 +11,7 @@ public class CommandManager {
 
     private CommandManager() {
         commandMap.put("login", new LoginCommand(new UserService()));
+        commandMap.put("logout", new LogoutCommand());
         commandMap.put("registration", new RegistrationCommand(new UserService()));
     }
 

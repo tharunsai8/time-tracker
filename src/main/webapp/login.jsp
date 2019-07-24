@@ -13,12 +13,14 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body class="text-center">
-<form class="form-signin" action="${pageContext.request.contextPath}/login"  method="post">
-    <a href="/index"><img class="mb-4" src="${pageContext.request.contextPath}/images/stopwatch.svg" width="100" height="100"></a>
+<form class="form-signin" action="${pageContext.request.contextPath}/app/login"  method="post">
+    <a href="${pageContext.request.contextPath}/app/index">
+        <img class="mb-4" src="<c:url value="/images/stopwatch.png"/>" width="60" height="60">
+    </a>
     <h1 class="h3 mb-3 font-weight-normal">
         <fmt:message key="login.header"/>
     </h1>
-    <c:if test="${success != null}">
+    <c:if test="${success}">
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <span>
                 <fmt:message key="login.logout.success"/>
@@ -28,7 +30,7 @@
             </button>
         </div>
     </c:if>
-    <c:if test="${error != null}">
+    <c:if test="${error}">
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <span>
                 <fmt:message key="login.error"/>
@@ -69,7 +71,7 @@
                 <span>
                     <fmt:message key="login.new"/>
                 </span>
-                <a href="${pageContext.request.contextPath}/registration" class="memberNameLink">
+                <a href="${pageContext.request.contextPath}/app/registration" class="memberNameLink">
                     <fmt:message key="login.new.create"/>
                 </a>
             </p>
