@@ -7,6 +7,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 public class UserService {
@@ -31,6 +34,15 @@ public class UserService {
         } catch (Exception e) {
             log.warn("Can not register user: " + user);
             return false;
+        }
+    }
+
+    public List<User> getAllUsers() {
+        try (UserDao userDao = daoFactory.createUserDao()) {
+            return userDao.findAll();
+        } catch (Exception e) {
+            log.warn("Can not get all users");
+            return Collections.emptyList();
         }
     }
 }
