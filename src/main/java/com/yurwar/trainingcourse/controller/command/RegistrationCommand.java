@@ -45,7 +45,8 @@ public class RegistrationCommand implements Command {
             return "redirect:login";
         } else {
             log.info("User can not be registered");
-            return "/registration.jsp?error";
+            request.setAttribute("error", true);
+            return "/registration.jsp";
         }
     }
 }

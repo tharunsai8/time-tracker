@@ -79,9 +79,16 @@
                 </button>
             </form>
         </div>
-        <div id="resultMessage" class="card-footer">
-            ${resultMessage}
-        </div>
+        <c:if test="${requestScope.error}">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span>
+                <fmt:message key="users.registration.error"/>
+            </span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </c:if>
     </div>
 </div>
 

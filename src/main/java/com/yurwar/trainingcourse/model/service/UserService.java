@@ -45,4 +45,12 @@ public class UserService {
             return Collections.emptyList();
         }
     }
+
+    public void deleteUserById(long id) {
+        try (UserDao userDao = daoFactory.createUserDao()) {
+            userDao.delete(id);
+        } catch (Exception e) {
+            log.warn("Can not delete user");
+        }
+    }
 }

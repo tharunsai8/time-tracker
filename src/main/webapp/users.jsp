@@ -67,12 +67,12 @@
                             <td>${user.password}</td>
                             <td>${user.role}</td>
                             <td>
-                                <a href="${pageContext.request.contextPath}/app/users/update/${user.id}" class="btn btn-primary">
+                                <a href="${pageContext.request.contextPath}/app/users/update?id=${user.id}" class="btn btn-primary">
                                     <img src="${pageContext.request.contextPath}/images/outline-edit-24px.png" alt="edit user">
                                 </a>
                             </td>
                             <td>
-                                <a href="${pageContext.request.contextPath}/app/users/delete/${user.id}" class="btn btn-primary">
+                                <a href="${pageContext.request.contextPath}/app/users/delete?id=${user.id}" class="btn btn-primary">
                                     <img src="${pageContext.request.contextPath}/images/outline-delete-24px.png" alt="delete user">
                                 </a>
                             </td>
