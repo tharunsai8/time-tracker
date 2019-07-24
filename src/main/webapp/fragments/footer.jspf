@@ -1,0 +1,25 @@
+<footer class="container">
+    <p>
+    <span>
+      <fmt:message key="footer.logged_user"/>
+    </span>
+        <span class="mr-4">
+            ${sessionScope.user.getUsername()}
+        </span>
+        <span>
+      <fmt:message key="footer.roles"/>
+    </span>
+        <span class="mr-4">
+            ${sessionScope.user.getRole()}
+        </span>
+    </p>
+    <span style="float: right">
+    <a href="?lang=en">
+      <fmt:message key="lang.en"/>
+    </a>
+    |
+    <a href="?lang=ua">
+      <fmt:message key="lang.ua"/>
+    </a>
+</span>
+</footer>
