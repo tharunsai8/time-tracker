@@ -1,5 +1,6 @@
 package com.yurwar.trainingcourse.controller.command;
 
+import com.yurwar.trainingcourse.model.entity.Role;
 import com.yurwar.trainingcourse.model.entity.User;
 import com.yurwar.trainingcourse.model.service.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -36,7 +37,7 @@ public class RegistrationCommand implements Command {
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setPassword(password);
-        user.setRole(User.Role.USER);
+        user.setRole(Role.USER);
 
         log.info("User to be registered: " + user);
 

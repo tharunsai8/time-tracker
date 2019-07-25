@@ -1,6 +1,7 @@
 package com.yurwar.trainingcourse.model.dao.impl;
 
 import com.yurwar.trainingcourse.model.dao.UserDao;
+import com.yurwar.trainingcourse.model.entity.Role;
 import com.yurwar.trainingcourse.model.entity.User;
 
 import java.sql.*;
@@ -105,7 +106,7 @@ public class JDBCUserDao implements UserDao {
         user.setLastName(rs.getString("last_name"));
         user.setPassword(rs.getString("password"));
         user.setUsername(rs.getString("username"));
-        user.setRole(User.Role.valueOf(rs.getString("role")));
+        user.setRole(Role.valueOf(rs.getString("role")));
         return user;
     }
 }

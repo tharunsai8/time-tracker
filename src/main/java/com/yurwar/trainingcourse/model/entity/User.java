@@ -3,10 +3,6 @@ package com.yurwar.trainingcourse.model.entity;
 import java.util.Objects;
 
 public class User {
-    public enum Role {
-        USER,
-        ADMIN
-    }
     private long id;
     private String username;
     private String firstName;
