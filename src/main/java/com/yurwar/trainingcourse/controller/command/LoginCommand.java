@@ -42,7 +42,7 @@ public class LoginCommand implements Command {
             session.setAttribute("username", user.getUsername());
             session.setAttribute("role", user.getRole());
             log.info("User " + username + " successfully logged in");
-            return "redirect:index";
+            return "redirect:/index";
         } else {
             log.info("Invalid credentials for user " + username);
             request.setAttribute("error", true);

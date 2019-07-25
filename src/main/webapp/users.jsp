@@ -44,7 +44,7 @@
                             <fmt:message key="users.username"/>
                         </th>
                         <th>
-                            <fmt:message key="users.last_name"/>
+                            <fmt:message key="users.password"/>
                         </th>
                         <th>
                             <fmt:message key="users.roles"/>

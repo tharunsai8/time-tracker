@@ -43,7 +43,7 @@ public class RegistrationCommand implements Command {
 
         if (userService.registerUser(user)) {
             log.info("User successfully registered");
-            return "redirect:login";
+            return "redirect:/login";
         } else {
             log.info("User can not be registered");
             request.setAttribute("error", true);

@@ -14,9 +14,9 @@ import java.util.*;
 
 public class AuthFilter implements Filter {
     private static final Logger log = LogManager.getLogger();
-    private final List<String> adminPaths = Arrays.asList("index", "logout", "users", "users/delete");
-    private final List<String> userPaths = Arrays.asList("index", "logout");
-    private final List<String> defaultPaths = Arrays.asList("index", "login", "registration");
+    private final List<String> adminPaths = Arrays.asList("/index", "/logout", "/users", "/users/delete");
+    private final List<String> userPaths = Arrays.asList("/index", "/logout");
+    private final List<String> defaultPaths = Arrays.asList("/index", "/login", "/registration");
     private Map<Role, List<String>> allowedPathPatterns = new HashMap<>();
 
     @Override
@@ -31,7 +31,7 @@ public class AuthFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         HttpSession session = request.getSession();
-        String requestURI = request.getRequestURI().replaceAll(".*/app/", "");
+        String requestURI = request.getRequestURI().replaceAll(".*/app", "");
 
         User user = (User) session.getAttribute("user");
 
@@ -52,6 +52,7 @@ public class AuthFilter implements Filter {
         if (paths.contains(requestURI)) {
             filterChain.doFilter(request, response);
         } else {
+            response.setStatus(403);
             request.getRequestDispatcher("/WEB-INF/error/403.jsp").forward(request, response);
         }
     }

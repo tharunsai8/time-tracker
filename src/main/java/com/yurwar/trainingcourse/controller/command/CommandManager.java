@@ -10,12 +10,12 @@ public class CommandManager {
     private final Map<String, Command> commandMap = new HashMap<>();
 
     private CommandManager() {
-        commandMap.put("login", new LoginCommand(new UserService()));
-        commandMap.put("logout", new LogoutCommand());
-        commandMap.put("registration", new RegistrationCommand(new UserService()));
-        commandMap.put("users", new UsersCommand(new UserService()));
-        commandMap.put("index", new HomeCommand());
-        commandMap.put("users/delete", new UserDeleteCommand(new UserService()));
+        commandMap.put("/login", new LoginCommand(new UserService()));
+        commandMap.put("/logout", new LogoutCommand());
+        commandMap.put("/registration", new RegistrationCommand(new UserService()));
+        commandMap.put("/users", new UsersCommand(new UserService()));
+        commandMap.put("/index", new HomeCommand());
+        commandMap.put("/users/delete", new UserDeleteCommand(new UserService()));
     }
 
     public static CommandManager getInstance() {

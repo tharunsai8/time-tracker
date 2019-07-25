@@ -27,7 +27,7 @@ public class FrontServlet extends HttpServlet {
 
     private void process(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException  {
-        String path = request.getRequestURI().replaceAll(".*/app/", "");
+        String path = request.getRequestURI().replaceAll(".*/app", "");
         Command command = commandManager.getCommand(path);
 
         log.info("Current command: " + command.getClass().getSimpleName());
@@ -37,7 +37,6 @@ public class FrontServlet extends HttpServlet {
         if (page.contains("redirect")) {
             response.sendRedirect(request.getContextPath() +
                     request.getServletPath() +
-                    "/" +
                     page.replace("redirect:", ""));
         } else {
             request.getRequestDispatcher(page).forward(request, response);
