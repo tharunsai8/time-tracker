@@ -3,6 +3,7 @@ package com.yurwar.trainingcourse.controller.command;
 import com.yurwar.trainingcourse.model.entity.Role;
 import com.yurwar.trainingcourse.model.entity.User;
 import com.yurwar.trainingcourse.model.service.UserService;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,7 +37,7 @@ public class RegistrationCommand implements Command {
         user.setUsername(username);
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        user.setPassword(password);
+        user.setPassword(DigestUtils.md5Hex(password));
         user.setRole(Role.USER);
 
         log.info("User to be registered: " + user);

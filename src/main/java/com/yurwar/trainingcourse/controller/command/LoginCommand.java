@@ -2,6 +2,7 @@ package com.yurwar.trainingcourse.controller.command;
 
 import com.yurwar.trainingcourse.model.entity.User;
 import com.yurwar.trainingcourse.model.service.UserService;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,7 +37,7 @@ public class LoginCommand implements Command {
 
         User user = userOptional.get();
 
-        if (user.getPassword().equals(password)) {
+        if (user.getPassword().equals(DigestUtils.md5Hex(password))) {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
             session.setAttribute("username", user.getUsername());
