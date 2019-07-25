@@ -8,19 +8,21 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class JDBCUserDao implements UserDao {
     private Connection connection;
-    //TODO Replace queries in code on properties queries
+    private ResourceBundle resourceBundle;
 
     public JDBCUserDao(Connection connection) {
+        this.resourceBundle = ResourceBundle.getBundle("database.properties");
         this.connection = connection;
     }
 
     @Override
     public Optional<User> findByUsername(String username) {
         try (PreparedStatement ps =
-                connection.prepareStatement("select * from registered_users where username = ?")) {
+                connection.prepareStatement(resourceBundle.getString("query.user.find.by_username"))) {
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -35,8 +37,7 @@ public class JDBCUserDao implements UserDao {
     @Override
     public void create(User entity) {
         try (PreparedStatement ps =
-                    connection.prepareStatement(
-                            "insert into registered_users(id, first_name, last_name, password, username, role) values (nextval('registered_users_id_seq'), ?, ?, ?, ?, ?)")) {
+                    connection.prepareStatement(resourceBundle.getString("query.user.create"))) {
             ps.setString(1, entity.getFirstName());
             ps.setString(2, entity.getLastName());
             ps.setString(3, entity.getPassword());
@@ -51,7 +52,7 @@ public class JDBCUserDao implements UserDao {
     @Override
     public Optional<User> findById(long id) {
         try (PreparedStatement ps =
-                connection.prepareStatement("select * from registered_users where id = ?")) {
+                connection.prepareStatement(resourceBundle.getString("query.user.find.by_id"))) {
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -67,7 +68,7 @@ public class JDBCUserDao implements UserDao {
     public List<User> findAll() {
         List<User> users = new ArrayList<>();
         try (Statement statement = connection.createStatement()) {
-            ResultSet rs = statement.executeQuery("select * from registered_users");
+            ResultSet rs = statement.executeQuery(resourceBundle.getString("query.user.find.all"));
             while (rs.next()) {
                 users.add(fetchUserFromResultSet(rs));
             }
@@ -85,7 +86,7 @@ public class JDBCUserDao implements UserDao {
 
     @Override
     public void delete(long id) {
-        try (PreparedStatement ps = connection.prepareStatement("delete from registered_users where id = ?")) {
+        try (PreparedStatement ps = connection.prepareStatement(resourceBundle.getString("query.user.delete"))) {
             ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {

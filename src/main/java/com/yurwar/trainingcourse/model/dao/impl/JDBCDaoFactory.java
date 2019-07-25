@@ -2,12 +2,15 @@ package com.yurwar.trainingcourse.model.dao.impl;
 
 import com.yurwar.trainingcourse.model.dao.DaoFactory;
 import com.yurwar.trainingcourse.model.dao.UserDao;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public class JDBCDaoFactory extends DaoFactory {
+    private static final Logger log = LogManager.getLogger();
     private DataSource dataSource = ConnectionPoolHolder.getDataSource();
 
     @Override
@@ -19,7 +22,7 @@ public class JDBCDaoFactory extends DaoFactory {
         try {
             return dataSource.getConnection();
         } catch (SQLException e) {
-            //TODO Add log
+            log.error("Can not get connection to database");
             throw new RuntimeException(e);
         }
     }
