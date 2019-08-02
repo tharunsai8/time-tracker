@@ -9,7 +9,7 @@
 
     <error-page>
         <exception-type>java.lang.Throwable</exception-type>
-        <location>/WEB-INF/error/error.jsp</location>
+        <location>/WEB-INF/error/500.jsp</location>
     </error-page>
 
     <servlet>

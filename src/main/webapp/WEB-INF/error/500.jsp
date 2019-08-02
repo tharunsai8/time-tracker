@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
 
-    <title>403 Forbidden</title>
+    <title>500 Internal Server Error</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
@@ -18,7 +18,7 @@
 <main role="main">
     <div class="jumbotron">
         <div class="container">
-            <h1 class="display-4">403 Forbidden</h1>
+            <h1 class="display-4">500 Internal Server Error</h1>
         </div>
     </div>
 </main>
