@@ -49,6 +49,7 @@ public class UserUpdateCommand implements Command {
 
         //TODO Check on blank
         //TODO Validate input data
+        //TODO Check password
 
         User userDTO = new User();
         userDTO.setId(id);

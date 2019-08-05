@@ -20,6 +20,7 @@ public class CommandManager {
         commandMap.put("/users/delete", new UserDeleteCommand(new UserService()));
         commandMap.put("/users/update", new UserUpdateCommand(new UserService()));
         commandMap.put("/activities", new ActivitiesCommand(new ActivityService()));
+        commandMap.put("/profile", new UserProfileCommand(new UserService()));
     }
 
     public static CommandManager getInstance() {
