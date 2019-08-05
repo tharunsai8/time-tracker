@@ -47,11 +47,14 @@ public class JDBCActivityDao implements ActivityDao {
                 "       users.first_name             as \"users.first_name\",\n" +
                 "       users.last_name              as \"users.last_name\",\n" +
                 "       users.password               as \"users.password\",\n" +
-                "       users.username               as \"users.username\"\n" +
+                "       users.username               as \"users.username\",\n" +
+                "       user_authorities.user_id as \"user_authorities.user_id\",\n" +
+                "       user_authorities.authorities as \"user_authorities.authorities\"\n" +
                 "from activities\n" +
                 "         left join users_activities on activities.id = users_activities.activity_id\n" +
                 "         left join users on users_activities.user_id = users.id " +
-                "where users.id = ?")) {
+                "         left join user_authorities on users.id = user_authorities.user_id" +
+                " where activities.id = ?")) {
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
 
@@ -80,10 +83,13 @@ public class JDBCActivityDao implements ActivityDao {
                     "       users.first_name             as \"users.first_name\",\n" +
                     "       users.last_name              as \"users.last_name\",\n" +
                     "       users.password               as \"users.password\",\n" +
-                    "       users.username               as \"users.username\"\n" +
+                    "       users.username               as \"users.username\",\n" +
+                    "       user_authorities.user_id as \"user_authorities.user_id\",\n" +
+                    "       user_authorities.authorities as \"user_authorities.authorities\"\n" +
                     "from activities\n" +
                     "         left join users_activities on activities.id = users_activities.activity_id\n" +
-                    "         left join users on users_activities.user_id = users.id");
+                    "         left join users on users_activities.user_id = users.id " +
+                    "         left join user_authorities on users.id = user_authorities.user_id");
 
             Map<Long, Activity> activityMap = extractMappedActivities(rs);
             return new ArrayList<>(activityMap.values());
@@ -139,11 +145,15 @@ public class JDBCActivityDao implements ActivityDao {
         while (rs.next()) {
             Activity activity = activityMapper.extractFromResultSet(rs);
             User user = userMapper.extractFromResultSet(rs);
+            String authorityStr = rs.getString("user_authorities.authorities");
 
             user = userMapper.makeUnique(userMap, user);
             activity = activityMapper.makeUnique(activityMap, activity);
+            if (authorityStr != null) {
+                user.getAuthorities().add(Authority.valueOf(authorityStr));
+            }
 
-            if (user.getId() != 0) {
+            if (!activity.getUsers().contains(user)) {
                 activity.getUsers().add(user);
             }
         }

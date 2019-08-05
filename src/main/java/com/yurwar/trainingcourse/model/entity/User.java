@@ -67,7 +67,6 @@ public class User {
                 .append(firstName, user.firstName)
                 .append(lastName, user.lastName)
                 .append(password, user.password)
-                .append(authorities, user.authorities)
                 .isEquals();
     }
 
@@ -79,7 +78,6 @@ public class User {
                 .append(firstName)
                 .append(lastName)
                 .append(password)
-                .append(authorities)
                 .toHashCode();
     }
 

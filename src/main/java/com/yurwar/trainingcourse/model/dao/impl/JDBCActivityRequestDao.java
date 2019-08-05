@@ -33,7 +33,8 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
 
     @Override
     public Optional<ActivityRequest> findById(long id) {
-        try (PreparedStatement ps = connection.prepareStatement("select activity_requests.id as \"activity_requests.id\",\n" +
+        try (PreparedStatement ps = connection.prepareStatement("select " +
+                "       activity_requests.id as \"activity_requests.id\",\n" +
                 "       activity_requests.activity_id as \"activity_requests.id\",\n" +
                 "       activity_requests.user_id as \"activity_requests.user_id\",\n" +
                 "       activity_requests.request_date as \"activity_requests.request_date\",\n" +
@@ -58,7 +59,7 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
                 "         left join activities on activity_requests.activity_id = activities.id\n" +
                 "         left join users on activity_requests.user_id = users.id\n" +
                 "         left join user_authorities on users.id = user_authorities.user_id " +
-                "where users.id = ?")) {
+                "where activity_requests.id = ?")) {
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
 
@@ -161,8 +162,9 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
 
             user = userMapper.makeUnique(userMap, user);
             activity = activityMapper.makeUnique(activityMap, activity);
-            user.getAuthorities().add(authority);
             activityRequest = activityRequestMapper.makeUnique(activityRequestMap, activityRequest);
+
+            user.getAuthorities().add(authority);
             activityRequest.setUser(user);
             activityRequest.setActivity(activity);
         }

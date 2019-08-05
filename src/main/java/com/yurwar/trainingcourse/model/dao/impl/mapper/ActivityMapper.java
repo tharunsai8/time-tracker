@@ -25,8 +25,12 @@ public class ActivityMapper implements ObjectMapper<Activity> {
         activity.setEndTime(dbTimestamp != null ? dbTimestamp.toLocalDateTime() : null);
 
         activity.setDuration(Duration.ofSeconds(rs.getLong("activities.duration")));
-        activity.setImportance(ActivityImportance.valueOf(rs.getString("activities.importance")));
-        activity.setStatus(ActivityStatus.valueOf(rs.getString("activities.status")));
+
+        String importanceStr = rs.getString("activities.importance");
+        activity.setImportance(importanceStr != null ? ActivityImportance.valueOf(importanceStr) : null);
+
+        String statusStr = rs.getString("activities.status");
+        activity.setStatus(statusStr != null ? ActivityStatus.valueOf(statusStr) : null);
 
         return activity;
     }

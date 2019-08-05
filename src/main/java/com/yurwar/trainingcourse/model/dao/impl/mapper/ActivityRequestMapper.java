@@ -20,8 +20,11 @@ public class ActivityRequestMapper implements ObjectMapper<ActivityRequest> {
         Timestamp dbTimestamp = rs.getTimestamp("activity_requests.request_date");
         activityRequest.setRequestDate(dbTimestamp != null ? dbTimestamp.toLocalDateTime() : null);
 
-        activityRequest.setAction(ActivityRequestAction.valueOf(rs.getString("activity_requests.action")));
-        activityRequest.setStatus(ActivityRequestStatus.valueOf(rs.getString("activity_requests.status")));
+        String actionStr = rs.getString("activity_requests.action");
+        activityRequest.setAction(actionStr != null ? ActivityRequestAction.valueOf(actionStr) : null);
+
+        String statusStr = rs.getString("activity_requests.status");
+        activityRequest.setStatus(statusStr != null ? ActivityRequestStatus.valueOf(statusStr) : null);
 
         return activityRequest;
     }

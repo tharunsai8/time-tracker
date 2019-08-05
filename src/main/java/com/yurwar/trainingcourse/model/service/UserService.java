@@ -41,7 +41,7 @@ public class UserService {
         try (UserDao userDao = daoFactory.createUserDao()) {
             return userDao.findAll();
         } catch (Exception e) {
-            log.warn("Can not get all users");
+            log.warn("Can not get all users", e);
             return Collections.emptyList();
         }
     }

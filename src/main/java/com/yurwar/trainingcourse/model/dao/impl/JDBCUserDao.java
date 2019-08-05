@@ -47,6 +47,7 @@ public class JDBCUserDao implements UserDao {
                 }
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -83,7 +84,8 @@ public class JDBCUserDao implements UserDao {
                              "         left join user_authorities on users.id = user_authorities.user_id\n" +
                              "         left join users_activities on users.id = users_activities.user_id\n" +
                              "         left join activities on users_activities.activity_id = activities.id\n" +
-                             "         left join activity_requests on users.id = activity_requests.user_id   where username = ?")) {
+                             "         left join activity_requests on users.id = activity_requests.user_id   " +
+                             "where users.username = ?")) {
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
 
@@ -133,6 +135,7 @@ public class JDBCUserDao implements UserDao {
             Map<Long, User> userMap = extractMappedUsers(rs);
             return Optional.ofNullable(userMap.get(id));
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -200,6 +203,7 @@ public class JDBCUserDao implements UserDao {
                 }
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -210,6 +214,7 @@ public class JDBCUserDao implements UserDao {
             ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -241,8 +246,12 @@ public class JDBCUserDao implements UserDao {
             activity = activityMapper.makeUnique(activityMap, activity);
             activityRequest = activityRequestMapper.makeUnique(activityRequestMap, activityRequest);
 
-            user.getActivities().add(activity);
-            user.getActivityRequests().add(activityRequest);
+            if (!user.getActivities().contains(activity)) {
+                user.getActivities().add(activity);
+            }
+            if (!user.getActivityRequests().contains(activityRequest)) {
+                user.getActivityRequests().add(activityRequest);
+            }
             user.getAuthorities().add(authority);
         }
         return userMap;

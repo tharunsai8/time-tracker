@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class ActivityService {
     private final DaoFactory daoFactory = DaoFactory.getInstance();
@@ -35,6 +36,23 @@ public class ActivityService {
             activityDao.delete(activityId);
         } catch (Exception e) {
             log.warn("Can not delete activity", e);
+        }
+    }
+
+    public Optional<Activity> getActivityById(long activityId) {
+        try (ActivityDao activityDao = daoFactory.createActivityDao()) {
+            return activityDao.findById(activityId);
+        } catch (Exception e) {
+            log.warn("Can not get activity by id", e);
+        }
+        return Optional.empty();
+    }
+
+    public void updateActivity(Activity activity) {
+        try (ActivityDao activityDao = daoFactory.createActivityDao()) {
+            activityDao.update(activity);
+        } catch (Exception e) {
+            log.warn("Can not update activity");
         }
     }
 }
