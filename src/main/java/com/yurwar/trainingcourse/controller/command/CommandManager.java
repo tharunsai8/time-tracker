@@ -1,5 +1,6 @@
 package com.yurwar.trainingcourse.controller.command;
 
+import com.yurwar.trainingcourse.model.service.ActivityRequestService;
 import com.yurwar.trainingcourse.model.service.ActivityService;
 import com.yurwar.trainingcourse.model.service.UserService;
 
@@ -13,16 +14,18 @@ public class CommandManager {
     private CommandManager() {
         final UserService userService = new UserService();
         final ActivityService activityService = new ActivityService();
-        commandMap.put("/login", new LoginCommand(new UserService()));
+        final ActivityRequestService activityRequestService = new ActivityRequestService();
+        commandMap.put("/login", new LoginCommand(userService));
         commandMap.put("/logout", new LogoutCommand());
-        commandMap.put("/registration", new RegistrationCommand(new UserService()));
-        commandMap.put("/users", new UsersCommand(new UserService()));
+        commandMap.put("/registration", new RegistrationCommand(userService));
+        commandMap.put("/users", new UsersCommand(userService));
         commandMap.put("/index", new HomeCommand());
-        commandMap.put("/users/delete", new UserDeleteCommand(new UserService()));
-        commandMap.put("/users/update", new UserUpdateCommand(new UserService()));
-        commandMap.put("/activities", new ActivitiesCommand(new ActivityService()));
-        commandMap.put("/activities/add", new ActivityAddCommand(new ActivityService()));
-        commandMap.put("/profile", new UserProfileCommand(new UserService()));
+        commandMap.put("/users/delete", new UserDeleteCommand(userService));
+        commandMap.put("/users/update", new UserUpdateCommand(userService));
+        commandMap.put("/activities", new ActivitiesCommand(activityService));
+        commandMap.put("/activities/add", new ActivityAddCommand(activityService));
+        commandMap.put("/activities/request", new ActivityRequestsCommand(activityRequestService));
+        commandMap.put("/profile", new UserProfileCommand(userService));
     }
 
     public static CommandManager getInstance() {

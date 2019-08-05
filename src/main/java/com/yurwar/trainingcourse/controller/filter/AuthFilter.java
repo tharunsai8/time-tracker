@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class AuthFilter implements Filter {
     private static final Logger log = LogManager.getLogger();
-    private final List<String> adminPaths = Arrays.asList("/index", "/logout", "/users", "/users/delete", "/users/update", "/activities", "/activities/add", "/profile");
+    private final List<String> adminPaths = Arrays.asList("/index", "/logout", "/users", "/users/delete", "/users/update", "/activities", "/activities/add", "/activities/request", "/profile");
     private final List<String> userPaths = Arrays.asList("/index", "/logout", "/activities", "/profile");
     private final List<String> defaultPaths = Arrays.asList("/index", "/login", "/registration");
     private Map<Authority, List<String>> authPaths = new HashMap<>();
