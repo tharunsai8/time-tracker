@@ -29,4 +29,12 @@ public class ActivityService {
             log.warn("Can not create activity", e);
         }
     }
+
+    public void deleteActivity(long activityId) {
+        try (ActivityDao activityDao = daoFactory.createActivityDao()) {
+            activityDao.delete(activityId);
+        } catch (Exception e) {
+            log.warn("Can not delete activity", e);
+        }
+    }
 }
