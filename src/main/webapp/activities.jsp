@@ -23,7 +23,7 @@
                 <h1 class="display-4"><fmt:message key="activities.title"/></h1>
                 <hr>
             </c:if>
-            <c:if test="${!requestScope.activites.isEmpty()}">
+            <c:if test="${requestScope.activites.isEmpty()}">
                 <h1 class="display-4"><fmt:message key="activities.empty"/></h1>
                 <hr>
             </c:if>
@@ -51,13 +51,17 @@
                                 <p>
                                     <span><fmt:message key="activities.activity.start_time"/></span>
                                     <span>
-                                        <fmt:formatDate value="${activity.startTime}" pattern="dd.MM.yyyy HH:mm"/>
+                                        ${activity.startTime}
+<%--                                        fixme format localDateTime--%>
+<%--                                        <fmt:formatDate value="${activity.startTime}" pattern="dd.MM.yyyy HH:mm"/>--%>
                                     </span>
                                 </p>
                                 <p>
                                     <span><fmt:message key="activities.activity.end_time"/></span>
                                     <span>
-                                        <fmt:formatDate value="${activity.endTime}" pattern="dd.MM.yyyy HH:mm"/>
+                                        ${activity.endTime}
+<%--                                        fixme format localDateTime--%>
+<%--                                        <fmt:formatDate value="${activity.endTime}" pattern="dd.MM.yyyy HH:mm"/>--%>
                                     </span>
                                 </p>
                                 <p>
@@ -135,7 +139,6 @@
                                                         </div>
                                                         <input aria-label="days" class="form-control"
                                                                name="days"
-                                                               value="${activity.duration.days}"
                                                                type="number">
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text">
@@ -143,7 +146,7 @@
                                                             </span>
                                                         </div>
                                                         <input aria-label="hours" class="form-control"
-                                                               name="hours" value="${activity.duration.hours}"
+                                                               name="hours"
                                                                type="number">
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text">
@@ -151,7 +154,7 @@
                                                             </span>
                                                         </div>
                                                         <input aria-label="minutes" class="form-control"
-                                                               name="minutes" value="${activity.duration.minutes}"
+                                                               name="minutes"
                                                                type="number">
                                                     </div>
                                                 </div>

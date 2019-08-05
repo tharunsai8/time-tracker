@@ -14,19 +14,19 @@ public class ActivityMapper implements ObjectMapper<Activity> {
     @Override
     public Activity extractFromResultSet(ResultSet rs) throws SQLException {
         Activity activity = new Activity();
-        activity.setId(rs.getLong(10));
-        activity.setName(rs.getString(11));
-        activity.setDescription(rs.getString(12));
+        activity.setId(rs.getLong("activities.id"));
+        activity.setName(rs.getString("activities.name"));
+        activity.setDescription(rs.getString("activities.description"));
 
-        Timestamp dbTimestamp = rs.getTimestamp(13);
+        Timestamp dbTimestamp = rs.getTimestamp("activities.start_time");
         activity.setStartTime(dbTimestamp != null ? dbTimestamp.toLocalDateTime() : null);
 
-        dbTimestamp = rs.getTimestamp(14);
+        dbTimestamp = rs.getTimestamp("activities.end_time");
         activity.setEndTime(dbTimestamp != null ? dbTimestamp.toLocalDateTime() : null);
 
-        activity.setDuration(Duration.ofSeconds(rs.getLong(15)));
-        activity.setImportance(ActivityImportance.valueOf(rs.getString(16)));
-        activity.setStatus(ActivityStatus.valueOf(rs.getString(17)));
+        activity.setDuration(Duration.ofSeconds(rs.getLong("activities.duration")));
+        activity.setImportance(ActivityImportance.valueOf(rs.getString("activities.importance")));
+        activity.setStatus(ActivityStatus.valueOf(rs.getString("activities.status")));
 
         return activity;
     }

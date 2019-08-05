@@ -14,14 +14,14 @@ public class ActivityRequestMapper implements ObjectMapper<ActivityRequest> {
     @Override
     public ActivityRequest extractFromResultSet(ResultSet rs) throws SQLException {
         ActivityRequest activityRequest = new ActivityRequest();
-        activityRequest.setId(rs.getLong(18));
+        activityRequest.setId(rs.getLong("activity_requests.id"));
         //TODO Check on add activity_id and user_id
 
-        Timestamp dbTimestamp = rs.getTimestamp(21);
+        Timestamp dbTimestamp = rs.getTimestamp("activity_requests.request_date");
         activityRequest.setRequestDate(dbTimestamp != null ? dbTimestamp.toLocalDateTime() : null);
 
-        activityRequest.setAction(ActivityRequestAction.valueOf(rs.getString(22)));
-        activityRequest.setStatus(ActivityRequestStatus.valueOf(rs.getString(23)));
+        activityRequest.setAction(ActivityRequestAction.valueOf(rs.getString("activity_requests.action")));
+        activityRequest.setStatus(ActivityRequestStatus.valueOf(rs.getString("activity_requests.status")));
 
         return activityRequest;
     }
