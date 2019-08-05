@@ -1,6 +1,5 @@
 package com.yurwar.trainingcourse.controller.command;
 
-import com.yurwar.trainingcourse.model.entity.User;
 import com.yurwar.trainingcourse.model.service.ActivityService;
 import com.yurwar.trainingcourse.model.service.UserService;
 
@@ -12,6 +11,8 @@ public class CommandManager {
     private final Map<String, Command> commandMap = new HashMap<>();
 
     private CommandManager() {
+        final UserService userService = new UserService();
+        final ActivityService activityService = new ActivityService();
         commandMap.put("/login", new LoginCommand(new UserService()));
         commandMap.put("/logout", new LogoutCommand());
         commandMap.put("/registration", new RegistrationCommand(new UserService()));
@@ -20,6 +21,7 @@ public class CommandManager {
         commandMap.put("/users/delete", new UserDeleteCommand(new UserService()));
         commandMap.put("/users/update", new UserUpdateCommand(new UserService()));
         commandMap.put("/activities", new ActivitiesCommand(new ActivityService()));
+        commandMap.put("/activities/add", new ActivityAddCommand(new ActivityService()));
         commandMap.put("/profile", new UserProfileCommand(new UserService()));
     }
 

@@ -85,7 +85,7 @@
                     </a>
                     <%--TODO check authority admin--%>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/app/activities/add">
-                        <fmt:message key="link.all_activities"/>
+                        <fmt:message key="link.add_activity"/>
                     </a>
                     <%--TODO check authority admin--%>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/app/activities/request">

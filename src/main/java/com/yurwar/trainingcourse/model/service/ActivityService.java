@@ -21,4 +21,12 @@ public class ActivityService {
             return Collections.emptyList();
         }
     }
+
+    public void createActivity(Activity activity) {
+        try (ActivityDao activityDao = daoFactory.createActivityDao()) {
+            activityDao.create(activity);
+        } catch (Exception e) {
+            log.warn("Can not create activity", e);
+        }
+    }
 }
