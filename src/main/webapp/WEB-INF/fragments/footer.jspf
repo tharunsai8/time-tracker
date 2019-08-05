@@ -4,13 +4,13 @@
       <fmt:message key="footer.logged_user"/>
     </span>
         <span class="mr-4">
-            ${sessionScope.user.getUsername()}
+            ${sessionScope.authUser.getUsername()}
         </span>
         <span>
       <fmt:message key="footer.roles"/>
     </span>
         <span class="mr-4">
-            ${sessionScope.user.getRole()}
+            ${sessionScope.authUser.getAuthorities()}
         </span>
     </p>
     <span style="float: right">

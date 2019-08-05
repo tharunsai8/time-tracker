@@ -1,5 +1,6 @@
 package com.yurwar.trainingcourse.controller.command;
 
+import com.yurwar.trainingcourse.model.entity.User;
 import com.yurwar.trainingcourse.model.service.UserService;
 
 import java.util.HashMap;
@@ -16,6 +17,7 @@ public class CommandManager {
         commandMap.put("/users", new UsersCommand(new UserService()));
         commandMap.put("/index", new HomeCommand());
         commandMap.put("/users/delete", new UserDeleteCommand(new UserService()));
+        commandMap.put("/users/update", new UserUpdateCommand(new UserService()));
     }
 
     public static CommandManager getInstance() {

@@ -22,15 +22,16 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h1 class="display-4"><fmt:message key="users.header"/></h1>
-                    <hr>
+                    <c:if test="${!requestScope.users.isEmpty()}">
+                        <h1 class="display-4"><fmt:message key="users.header"/></h1>
+                        <hr>
+                    </c:if>
+                    <c:if test="${requestScope.users.isEmpty()}">
+                        <h1><fmt:message key="users.empty"/></h1>
+                        <hr>
+                    </c:if>
                 </div>
                 <div class="card-body">
-                    <c:if test="${requestScope.users.isEmpty()}">
-                        <p>
-                            <fmt:message key="users.empty"/>
-                        </p>
-                    </c:if>
                     <table class="table table-striped">
                         <thead>
                         <tr>
@@ -68,7 +69,7 @@
                                 <td>${user.lastName}</td>
                                 <td>${user.username}</td>
                                 <td>${user.password}</td>
-                                <td>${user.role}</td>
+                                <td>${user.authorities}</td>
                                 <td>
                                     <a href="${pageContext.request.contextPath}/app/users/update?id=${user.id}"
                                        class="btn btn-primary">

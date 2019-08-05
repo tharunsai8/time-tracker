@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class FrontServlet extends HttpServlet {
     private static final Logger log = LogManager.getLogger();
-    private CommandManager commandManager = CommandManager.getInstance();
+    private final CommandManager commandManager = CommandManager.getInstance();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

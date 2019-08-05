@@ -1,6 +1,12 @@
 package com.yurwar.trainingcourse.model.entity;
 
-import java.util.Objects;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class User {
     private long id;
@@ -8,53 +14,84 @@ public class User {
     private String firstName;
     private String lastName;
     private String password;
-    private Role role;
+    private Set<Authority> authorities = new HashSet<>();
+    private List<Activity> activities = new ArrayList<>();
+    private List<ActivityRequest> activityRequests = new ArrayList<>();
 
     public User() {}
 
-    public User(long id, String username, String firstName, String lastName, String password, Role role) {
+    public User(long id,
+                String username,
+                String firstName,
+                String lastName,
+                String password,
+                Set<Authority> authorities,
+                List<Activity> activities, List<ActivityRequest> activityRequests) {
         this.id = id;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
-        this.role = role;
+        this.authorities = authorities;
+        this.activities = activities;
+        this.activityRequests = activityRequests;
     }
 
-    public User(String username, String firstName, String lastName, String password, Role role) {
+    public User(String username,
+                String firstName,
+                String lastName,
+                String password,
+                Set<Authority> authorities,
+                List<Activity> activities,
+                List<ActivityRequest> activityRequests) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
-        this.role = role;
+        this.authorities = authorities;
+        this.activities = activities;
+        this.activityRequests = activityRequests;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
+
         if (!(o instanceof User)) return false;
+
         User user = (User) o;
-        return id == user.id &&
-                Objects.equals(username, user.username) &&
-                Objects.equals(firstName, user.firstName) &&
-                Objects.equals(lastName, user.lastName) &&
-                Objects.equals(password, user.password) &&
-                role == user.role;
+
+        return new EqualsBuilder()
+                .append(id, user.id)
+                .append(username, user.username)
+                .append(firstName, user.firstName)
+                .append(lastName, user.lastName)
+                .append(password, user.password)
+                .append(authorities, user.authorities)
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, firstName, lastName, password, role);
+        return new HashCodeBuilder(17, 37)
+                .append(id)
+                .append(username)
+                .append(firstName)
+                .append(lastName)
+                .append(password)
+                .append(authorities)
+                .toHashCode();
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "username='" + username + '\'' +
+                "id=" + id +
+                ", username='" + username + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", password='" + password + '\'' +
-                ", role=" + role +
+                ", authorities=" + authorities +
                 '}';
     }
 
@@ -98,11 +135,27 @@ public class User {
         this.password = password;
     }
 
-    public Role getRole() {
-        return role;
+    public Set<Authority> getAuthorities() {
+        return authorities;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
+    }
+
+    public List<Activity> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(List<Activity> activities) {
+        this.activities = activities;
+    }
+
+    public List<ActivityRequest> getActivityRequests() {
+        return activityRequests;
+    }
+
+    public void setActivityRequests(List<ActivityRequest> activityRequests) {
+        this.activityRequests = activityRequests;
     }
 }

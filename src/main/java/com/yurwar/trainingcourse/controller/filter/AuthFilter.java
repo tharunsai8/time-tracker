@@ -1,6 +1,6 @@
 package com.yurwar.trainingcourse.controller.filter;
 
-import com.yurwar.trainingcourse.model.entity.Role;
+import com.yurwar.trainingcourse.model.entity.Authority;
 import com.yurwar.trainingcourse.model.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,18 +11,19 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AuthFilter implements Filter {
     private static final Logger log = LogManager.getLogger();
-    private final List<String> adminPaths = Arrays.asList("/index", "/logout", "/users", "/users/delete");
-    private final List<String> userPaths = Arrays.asList("/index", "/logout");
+    private final List<String> adminPaths = Arrays.asList("/index", "/logout", "/users", "/users/delete", "/users/update", "/activities", "/profile");
+    private final List<String> userPaths = Arrays.asList("/index", "/logout", "/activities", "/profile");
     private final List<String> defaultPaths = Arrays.asList("/index", "/login", "/registration");
-    private Map<Role, List<String>> allowedPathPatterns = new HashMap<>();
+    private Map<Authority, List<String>> authPaths = new HashMap<>();
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        allowedPathPatterns.put(Role.USER, userPaths);
-        allowedPathPatterns.put(Role.ADMIN, adminPaths);
+        authPaths.put(Authority.USER, userPaths);
+        authPaths.put(Authority.ADMIN, adminPaths);
     }
 
     @Override
@@ -33,7 +34,7 @@ public class AuthFilter implements Filter {
         HttpSession session = request.getSession();
         String requestURI = request.getRequestURI().replaceAll(".*/app", "");
 
-        User user = (User) session.getAttribute("user");
+        User user = (User) session.getAttribute("authUser");
 
         if (Objects.isNull(user)) {
             if (defaultPaths.contains(requestURI)) {
@@ -47,7 +48,11 @@ public class AuthFilter implements Filter {
             }
         }
 
-        List<String> paths = allowedPathPatterns.getOrDefault(user.getRole(), defaultPaths);
+        List<String> paths = user.getAuthorities()
+                .stream()
+                .flatMap(authority -> authPaths.get(authority).stream())
+                .distinct()
+                .collect(Collectors.toList());
 
         if (paths.contains(requestURI)) {
             filterChain.doFilter(request, response);

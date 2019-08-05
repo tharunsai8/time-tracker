@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.Optional;
 
 public class UserService {
-    private DaoFactory daoFactory = DaoFactory.getInstance();
+    private final DaoFactory daoFactory = DaoFactory.getInstance();
     private static final Logger log = LogManager.getLogger();
 
-    public Optional<User> getUserByUsername(String username) {
+    public Optional<User> findUserByUsername(String username) {
         try (UserDao userDao = daoFactory.createUserDao()) {
             log.info("Trying to get user by username: " + username);
             return userDao.findByUsername(username);
@@ -51,6 +51,23 @@ public class UserService {
             userDao.delete(id);
         } catch (Exception e) {
             log.warn("Can not delete user");
+        }
+    }
+
+    public Optional<User> findUserById(long id) {
+        try (UserDao userDao = daoFactory.createUserDao()) {
+            return userDao.findById(id);
+        } catch (Exception e) {
+            log.warn("Can not find user with id: " + id);
+            return Optional.empty();
+        }
+    }
+
+    public void updateUser(User user) {
+        try (UserDao userDao = daoFactory.createUserDao()){
+            userDao.update(user);
+        } catch (Exception e) {
+            log.warn("Can not update user " + user.getUsername(), e);
         }
     }
 }

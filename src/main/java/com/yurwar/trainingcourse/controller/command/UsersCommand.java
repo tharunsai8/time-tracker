@@ -5,7 +5,7 @@ import com.yurwar.trainingcourse.model.service.UserService;
 import javax.servlet.http.HttpServletRequest;
 
 public class UsersCommand implements Command {
-    private UserService userService;
+    private final UserService userService;
 
     public UsersCommand(UserService userService) {
         this.userService = userService;

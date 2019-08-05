@@ -94,7 +94,7 @@
                 </div>
             </li>
         </ul>
-        <c:if test="${sessionScope.user == null}">
+        <c:if test="${sessionScope.authUser == null}">
             <div class="form-inline my-2 my-lg-0">
                 <a href="${pageContext.request.contextPath}/app/registration"
                    class="btn btn-outline-primary mr-3 my-2 my-sm-0">
@@ -105,7 +105,7 @@
                 </a>
             </div>
         </c:if>
-        <c:if test="${sessionScope.user != null}">
+        <c:if test="${sessionScope.authUser != null}">
             <div class="form-inline my-2 my-lg-0">
                 <a href="${pageContext.request.contextPath}/app/logout" class="btn btn-primary my-2 my-sm-0">
                     <fmt:message key="button.signout"/>

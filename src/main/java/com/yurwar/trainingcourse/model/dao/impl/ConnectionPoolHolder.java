@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 
 class ConnectionPoolHolder {
     private static volatile DataSource dataSource;
-    private static ResourceBundle resourceBundle = ResourceBundle.getBundle("database");
+    private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("database");
 
     static DataSource getDataSource() {
         if (dataSource == null) {

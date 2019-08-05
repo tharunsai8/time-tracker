@@ -1,6 +1,6 @@
 package com.yurwar.trainingcourse.model.entity;
 
-public enum Role {
+public enum Authority {
     USER,
     ADMIN
 }
