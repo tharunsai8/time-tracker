@@ -12,7 +12,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
-import java.time.Duration;
 import java.util.*;
 
 //TODO Add log
@@ -54,42 +53,33 @@ public class JDBCUserDao implements UserDao {
 
     @Override
     public Optional<User> findByUsername(String username) {
-        log.debug("Try to find user by username in dao");
-        try (PreparedStatement ps =
-                     connection.prepareStatement("select users.id                       as \"users.id\",\n" +
-                             "       users.first_name               as \"users.first_name\",\n" +
-                             "       users.last_name                as \"users.last_name\",\n" +
-                             "       users.password                 as \"users.password\",\n" +
-                             "       users.username                 as \"users.username\",\n" +
-                             "       user_authorities.user_id       as \"user_authorities.user_id\",\n" +
-                             "       user_authorities.authorities   as \"user_authorities.authorities\",\n" +
-                             "       users_activities.user_id       as \"users_activities.user_id\",\n" +
-                             "       users_activities.activity_id   as \"users_activities.activity_id\",\n" +
-                             "       activities.id                  as \"activities.id\",\n" +
-                             "       activities.name                as \"activities.name\",\n" +
-                             "       activities.description         as \"activities.description\",\n" +
-                             "       activities.start_time          as \"activities.start_time\",\n" +
-                             "       activities.end_time            as \"activities.end_time\",\n" +
-                             "       activities.duration            as \"activities.duration\",\n" +
-                             "       activities.importance          as \"activities.importance\",\n" +
-                             "       activities.status              as \"activities.status\",\n" +
-                             "       activity_requests.status       as \"activity_requests.status\",\n" +
-                             "       activity_requests.id           as \"activity_requests.id\",\n" +
-                             "       activity_requests.activity_id  as \"activity_requests.activity_id\",\n" +
-                             "       activity_requests.user_id      as \"activity_requests.user_id\",\n" +
-                             "       activity_requests.request_date as \"activity_requests.request_date\",\n" +
-                             "       activity_requests.action       as \"activity_requests.action\",\n" +
-                             "       activity_requests.status       as \"activity_requests.status\"\n" +
-                             "from users\n" +
-                             "         left join user_authorities on users.id = user_authorities.user_id\n" +
-                             "         left join users_activities on users.id = users_activities.user_id\n" +
-                             "         left join activities on users_activities.activity_id = activities.id\n" +
-                             "         left join activity_requests on users.id = activity_requests.user_id   " +
-                             "where users.username = ?")) {
+        try (PreparedStatement ps = connection.prepareStatement("select " +
+                "       users.id                     as \"users.id\",\n" +
+                "       users.first_name             as \"users.first_name\",\n" +
+                "       users.last_name              as \"users.last_name\",\n" +
+                "       users.password               as \"users.password\",\n" +
+                "       users.username               as \"users.username\",\n" +
+                "       user_authorities.user_id     as \"user_authorities.user_id\",\n" +
+                "       user_authorities.authorities as \"user_authorities.authorities\",\n" +
+                "       users_activities.user_id     as \"users_activities.user_id\",\n" +
+                "       users_activities.activity_id as \"users_activities.activity_id\",\n" +
+                "       activities.id                as \"activities.id\",\n" +
+                "       activities.name              as \"activities.name\",\n" +
+                "       activities.description       as \"activities.description\",\n" +
+                "       activities.start_time        as \"activities.start_time\",\n" +
+                "       activities.end_time          as \"activities.end_time\",\n" +
+                "       activities.duration          as \"activities.duration\",\n" +
+                "       activities.importance        as \"activities.importance\",\n" +
+                "       activities.status            as \"activities.status\"\n" +
+                "from users\n" +
+                "         left join user_authorities on users.id = user_authorities.user_id\n" +
+                "         left join users_activities on users.id = users_activities.user_id\n" +
+                "         left join activities on users_activities.activity_id = activities.id\n" +
+                "where users.username = ?")) {
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
+            Map<Long, User> userMap = extractUsersFromResultSet(rs);
 
-            Map<Long, User> userMap = extractMappedUsers(rs);
             return userMap.values().stream().findAny();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -99,41 +89,34 @@ public class JDBCUserDao implements UserDao {
 
     @Override
     public Optional<User> findById(long id) {
-        try (PreparedStatement ps =
-                     connection.prepareStatement("select users.id                       as \"users.id\",\n" +
-                             "       users.first_name               as \"users.first_name\",\n" +
-                             "       users.last_name                as \"users.last_name\",\n" +
-                             "       users.password                 as \"users.password\",\n" +
-                             "       users.username                 as \"users.username\",\n" +
-                             "       user_authorities.user_id       as \"user_authorities.user_id\",\n" +
-                             "       user_authorities.authorities   as \"user_authorities.authorities\",\n" +
-                             "       users_activities.user_id       as \"users_activities.user_id\",\n" +
-                             "       users_activities.activity_id   as \"users_activities.activity_id\",\n" +
-                             "       activities.id                  as \"activities.id\",\n" +
-                             "       activities.name                as \"activities.name\",\n" +
-                             "       activities.description         as \"activities.description\",\n" +
-                             "       activities.start_time          as \"activities.start_time\",\n" +
-                             "       activities.end_time            as \"activities.end_time\",\n" +
-                             "       activities.duration            as \"activities.duration\",\n" +
-                             "       activities.importance          as \"activities.importance\",\n" +
-                             "       activities.status              as \"activities.status\",\n" +
-                             "       activity_requests.status       as \"activity_requests.status\",\n" +
-                             "       activity_requests.id           as \"activity_requests.id\",\n" +
-                             "       activity_requests.activity_id  as \"activity_requests.activity_id\",\n" +
-                             "       activity_requests.user_id      as \"activity_requests.user_id\",\n" +
-                             "       activity_requests.request_date as \"activity_requests.request_date\",\n" +
-                             "       activity_requests.action       as \"activity_requests.action\",\n" +
-                             "       activity_requests.status       as \"activity_requests.status\"\n" +
-                             "from users\n" +
-                             "         left join user_authorities on users.id = user_authorities.user_id\n" +
-                             "         left join users_activities on users.id = users_activities.user_id\n" +
-                             "         left join activities on users_activities.activity_id = activities.id\n" +
-                             "         left join activity_requests on users.id = activity_requests.user_id where users.id = ?")) {
+        try (PreparedStatement ps = connection.prepareStatement("select " +
+                "       users.id                     as \"users.id\",\n" +
+                "       users.first_name             as \"users.first_name\",\n" +
+                "       users.last_name              as \"users.last_name\",\n" +
+                "       users.password               as \"users.password\",\n" +
+                "       users.username               as \"users.username\",\n" +
+                "       user_authorities.user_id     as \"user_authorities.user_id\",\n" +
+                "       user_authorities.authorities as \"user_authorities.authorities\",\n" +
+                "       users_activities.user_id     as \"users_activities.user_id\",\n" +
+                "       users_activities.activity_id as \"users_activities.activity_id\",\n" +
+                "       activities.id                as \"activities.id\",\n" +
+                "       activities.name              as \"activities.name\",\n" +
+                "       activities.description       as \"activities.description\",\n" +
+                "       activities.start_time        as \"activities.start_time\",\n" +
+                "       activities.end_time          as \"activities.end_time\",\n" +
+                "       activities.duration          as \"activities.duration\",\n" +
+                "       activities.importance        as \"activities.importance\",\n" +
+                "       activities.status            as \"activities.status\"\n" +
+                "from users\n" +
+                "         left join user_authorities on users.id = user_authorities.user_id\n" +
+                "         left join users_activities on users.id = users_activities.user_id\n" +
+                "         left join activities on users_activities.activity_id = activities.id\n" +
+                "where users.id = ?")) {
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
+            Map<Long, User> userMap = extractUsersFromResultSet(rs);
 
-            Map<Long, User> userMap = extractMappedUsers(rs);
-            return Optional.ofNullable(userMap.get(id));
+            return userMap.values().stream().findAny();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -142,38 +125,31 @@ public class JDBCUserDao implements UserDao {
 
     @Override
     public List<User> findAll() {
-        try (Statement st = connection.createStatement()) {
-            ResultSet rs = st.executeQuery("select users.id                       as \"users.id\",\n" +
-                    "       users.first_name               as \"users.first_name\",\n" +
-                    "       users.last_name                as \"users.last_name\",\n" +
-                    "       users.password                 as \"users.password\",\n" +
-                    "       users.username                 as \"users.username\",\n" +
-                    "       user_authorities.user_id       as \"user_authorities.user_id\",\n" +
-                    "       user_authorities.authorities   as \"user_authorities.authorities\",\n" +
-                    "       users_activities.user_id       as \"users_activities.user_id\",\n" +
-                    "       users_activities.activity_id   as \"users_activities.activity_id\",\n" +
-                    "       activities.id                  as \"activities.id\",\n" +
-                    "       activities.name                as \"activities.name\",\n" +
-                    "       activities.description         as \"activities.description\",\n" +
-                    "       activities.start_time          as \"activities.start_time\",\n" +
-                    "       activities.end_time            as \"activities.end_time\",\n" +
-                    "       activities.duration            as \"activities.duration\",\n" +
-                    "       activities.importance          as \"activities.importance\",\n" +
-                    "       activities.status              as \"activities.status\",\n" +
-                    "       activity_requests.status       as \"activity_requests.status\",\n" +
-                    "       activity_requests.id           as \"activity_requests.id\",\n" +
-                    "       activity_requests.activity_id  as \"activity_requests.activity_id\",\n" +
-                    "       activity_requests.user_id      as \"activity_requests.user_id\",\n" +
-                    "       activity_requests.request_date as \"activity_requests.request_date\",\n" +
-                    "       activity_requests.action       as \"activity_requests.action\",\n" +
-                    "       activity_requests.status       as \"activity_requests.status\"\n" +
-                    "from users\n" +
-                    "         left join user_authorities on users.id = user_authorities.user_id\n" +
-                    "         left join users_activities on users.id = users_activities.user_id\n" +
-                    "         left join activities on users_activities.activity_id = activities.id\n" +
-                    "         left join activity_requests on users.id = activity_requests.user_id");
+        try (PreparedStatement ps = connection.prepareStatement("select " +
+                "       users.id                     as \"users.id\",\n" +
+                "       users.first_name             as \"users.first_name\",\n" +
+                "       users.last_name              as \"users.last_name\",\n" +
+                "       users.password               as \"users.password\",\n" +
+                "       users.username               as \"users.username\",\n" +
+                "       user_authorities.user_id     as \"user_authorities.user_id\",\n" +
+                "       user_authorities.authorities as \"user_authorities.authorities\",\n" +
+                "       users_activities.user_id     as \"users_activities.user_id\",\n" +
+                "       users_activities.activity_id as \"users_activities.activity_id\",\n" +
+                "       activities.id                as \"activities.id\",\n" +
+                "       activities.name              as \"activities.name\",\n" +
+                "       activities.description       as \"activities.description\",\n" +
+                "       activities.start_time        as \"activities.start_time\",\n" +
+                "       activities.end_time          as \"activities.end_time\",\n" +
+                "       activities.duration          as \"activities.duration\",\n" +
+                "       activities.importance        as \"activities.importance\",\n" +
+                "       activities.status            as \"activities.status\"\n" +
+                "from users\n" +
+                "         left join user_authorities on users.id = user_authorities.user_id\n" +
+                "         left join users_activities on users.id = users_activities.user_id\n" +
+                "         left join activities on users_activities.activity_id = activities.id")) {
+            ResultSet rs = ps.executeQuery();
+            Map<Long, User> userMap = extractUsersFromResultSet(rs);
 
-            Map<Long, User> userMap = extractMappedUsers(rs);
             return new ArrayList<>(userMap.values());
         } catch (SQLException e) {
             e.printStackTrace();
@@ -224,10 +200,10 @@ public class JDBCUserDao implements UserDao {
         connection.close();
     }
 
-    private Map<Long, User> extractMappedUsers(ResultSet rs) throws SQLException {
-        Map<Long, User> userMap = new HashMap<>();
+    private Map<Long, User> extractUsersFromResultSet(ResultSet rs) throws SQLException {
         Map<Long, Activity> activityMap = new HashMap<>();
         Map<Long, ActivityRequest> activityRequestMap = new HashMap<>();
+        Map<Long, User> userMap = new HashMap<>();
 
         UserMapper userMapper = new UserMapper();
         ActivityMapper activityMapper = new ActivityMapper();
@@ -235,24 +211,56 @@ public class JDBCUserDao implements UserDao {
 
         while (rs.next()) {
             User user = userMapper.extractFromResultSet(rs);
+            Authority authority = Authority.valueOf(rs.getString("user_authorities.authorities"));
             Activity activity = activityMapper.extractFromResultSet(rs);
-            ActivityRequest activityRequest = activityRequestMapper.extractFromResultSet(rs);
-            activityRequest.setActivity(activity);
-            activityRequest.setUser(user);
-            Authority authority = Authority.valueOf(rs.getString(7));
 
             user = userMapper.makeUnique(userMap, user);
-            //fixme check same activity name for activity requests
             activity = activityMapper.makeUnique(activityMap, activity);
-            activityRequest = activityRequestMapper.makeUnique(activityRequestMap, activityRequest);
-
-            user.getAuthorities().add(authority);
 
             if (!user.getActivities().contains(activity) && activity.getId() != 0) {
                 user.getActivities().add(activity);
             }
-            if (!user.getActivityRequests().contains(activityRequest) && activity.getId() != 0) {
-                user.getActivityRequests().add(activityRequest);
+            user.getAuthorities().add(authority);
+        }
+
+        for (User user : userMap.values()) {
+            try (PreparedStatement activityRequestsPS = connection.prepareStatement("select " +
+                    "       users.id                       as \"users.id\",\n" +
+                    "       activity_requests.id           as \"activity_requests.id\",\n" +
+                    "       activity_requests.activity_id  as \"activity_requests.activity_id\",\n" +
+                    "       activity_requests.user_id      as \"activity_requests.user_id\",\n" +
+                    "       activity_requests.request_date as \"activity_requests.request_date\",\n" +
+                    "       activity_requests.action       as \"activity_requests.action\",\n" +
+                    "       activity_requests.status       as \"activity_requests.status\",\n" +
+                    "       activities.id                  as \"activities.id\",\n" +
+                    "       activities.name                as \"activities.name\",\n" +
+                    "       activities.description         as \"activities.description\",\n" +
+                    "       activities.start_time          as \"activities.start_time\",\n" +
+                    "       activities.end_time            as \"activities.end_time\",\n" +
+                    "       activities.duration            as \"activities.duration\",\n" +
+                    "       activities.importance          as \"activities.importance\",\n" +
+                    "       activities.status              as \"activities.status\"\n" +
+                    "from users\n" +
+                    "         left join user_authorities on users.id = user_authorities.user_id\n" +
+                    "         left join activity_requests on users.id = activity_requests.user_id\n" +
+                    "         left join activities on activity_requests.activity_id = activities.id\n" +
+                    "where users.id = ?")) {
+                activityRequestsPS.setLong(1, user.getId());
+                ResultSet activityRequestsRS = activityRequestsPS.executeQuery();
+
+                while (activityRequestsRS.next()) {
+                    ActivityRequest activityRequest = activityRequestMapper.extractFromResultSet(activityRequestsRS);
+                    Activity activity = activityMapper.extractFromResultSet(activityRequestsRS);
+
+                    activityRequest = activityRequestMapper.makeUnique(activityRequestMap, activityRequest);
+                    activity = activityMapper.makeUnique(activityMap, activity);
+
+                    if ((activityRequest.getId() != 0) && !user.getActivityRequests().contains(activityRequest)) {
+                        activityRequest.setUser(user);
+                        activityRequest.setActivity(activity);
+                        user.getActivityRequests().add(activityRequest);
+                    }
+                }
             }
         }
         return userMap;
