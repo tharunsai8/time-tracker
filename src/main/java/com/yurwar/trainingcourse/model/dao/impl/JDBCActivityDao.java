@@ -162,7 +162,7 @@ public class JDBCActivityDao implements ActivityDao {
                 user.getAuthorities().add(Authority.valueOf(authorityStr));
             }
 
-            if (!activity.getUsers().contains(user)) {
+            if (!activity.getUsers().contains(user) && user.getId() != 0) {
                 activity.getUsers().add(user);
             }
         }
