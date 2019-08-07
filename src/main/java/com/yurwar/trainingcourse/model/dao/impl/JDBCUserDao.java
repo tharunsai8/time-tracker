@@ -246,6 +246,8 @@ public class JDBCUserDao implements UserDao {
             activity = activityMapper.makeUnique(activityMap, activity);
             activityRequest = activityRequestMapper.makeUnique(activityRequestMap, activityRequest);
 
+            user.getAuthorities().add(authority);
+
             if (!user.getActivities().contains(activity) && activity.getId() != 0) {
                 user.getActivities().add(activity);
             }
@@ -255,21 +257,4 @@ public class JDBCUserDao implements UserDao {
         }
         return userMap;
     }
-
-//    public List<User> findByIdTest(long id) {
-//        try (PreparedStatement ps = connection.prepareStatement("select id as \"users.id\", " +
-//                "users.first_name as \"users.first_name\", " +
-//                "users.last_name as \"users.last_name\", " +
-//                "users.password as \"users.password\", " +
-//                "users.username as \"users.username\", " +
-//                "user_authorities.user_id as \".user_id\", " +
-//                "user_authorities.authorities as \"user_authorities.authorities\" " +
-//                "from users " +
-//                "left join user_authorities on users.id = user_authorities.user_id " +
-//                "where users.id = ?")) {
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
 }
