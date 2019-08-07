@@ -22,12 +22,16 @@ public class CommandManager {
         commandMap.put("/index", new HomeCommand());
         commandMap.put("/users/delete", new UserDeleteCommand(userService));
         commandMap.put("/users/update", new UserUpdateCommand(userService));
+        commandMap.put("/profile", new UserProfileCommand(userService));
         commandMap.put("/activities", new ActivitiesCommand(activityService));
         commandMap.put("/activities/add", new ActivityAddCommand(activityService));
         commandMap.put("/activities/request", new ActivityRequestsCommand(activityRequestService));
         commandMap.put("/activities/delete", new ActivityDeleteCommand(activityService));
         commandMap.put("/activities/mark-time", new MarkTimeCommand(activityService));
-        commandMap.put("/profile", new UserProfileCommand(userService));
+        commandMap.put("/activities/request/approve", new ActivityRequestApproveCommand(activityRequestService));
+        commandMap.put("/activities/request/reject", new ActivityRequestRejectCommand(activityRequestService));
+        commandMap.put("/activities/request/add", new ActivityRequestAddCommand(activityRequestService));
+        commandMap.put("/activities/request/complete", new ActivityRequestCompleteCommand(activityRequestService));
     }
 
     public static CommandManager getInstance() {

@@ -71,7 +71,7 @@
                                                 <fmt:message key="activity.request.button.approve"/>
                                             </a>
                                             <a class="btn btn-sm btn-secondary"
-                                               href="${pageContext.request.contextPath}/app/activities/request/reject/?id=${activityRequest.id}"
+                                               href="${pageContext.request.contextPath}/app/activities/request/reject?id=${activityRequest.id}"
                                             >
                                                 <fmt:message key="activity.request.button.reject"/>
                                             </a>

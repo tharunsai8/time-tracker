@@ -27,7 +27,7 @@ public class FrontServlet extends HttpServlet {
 
     private void process(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException  {
-        String path = request.getRequestURI().replaceAll(".*/app", "");
+        String path = request.getRequestURI().replaceFirst(request.getContextPath() + "/app", "");
         Command command = commandManager.getCommand(path);
 
         log.info("Current command: " + command.getClass().getSimpleName());

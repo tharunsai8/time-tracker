@@ -34,10 +34,6 @@ public class MarkTimeCommand implements Command {
 
 
 
-        activity.getUsers().forEach(System.out::println);
-        System.out.println();
-        System.out.println(user);
-
         if (activity.getStatus().equals(ActivityStatus.ACTIVE) && activity.getUsers().contains(user)) {
             Duration duration = activity.getDuration();
             duration = duration.plusDays(days);

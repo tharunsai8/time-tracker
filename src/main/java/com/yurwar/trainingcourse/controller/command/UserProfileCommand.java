@@ -17,6 +17,7 @@ public class UserProfileCommand implements Command {
     public String execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("authUser");
+        //fixme one name for all activity requests
         request.setAttribute("user", userService.findUserById(user.getId())
                 .orElseThrow(() ->
                         new IllegalArgumentException("Invalid user id: " + user.getId())));

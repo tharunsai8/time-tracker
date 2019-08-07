@@ -32,6 +32,47 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
     }
 
     @Override
+    public List<ActivityRequest> findByActivityIdAndUserId(long activityId, long userId) {
+        try (PreparedStatement ps = connection.prepareStatement("select " +
+                "       activity_requests.id as \"activity_requests.id\",\n" +
+                "       activity_requests.activity_id as \"activity_requests.id\",\n" +
+                "       activity_requests.user_id as \"activity_requests.user_id\",\n" +
+                "       activity_requests.request_date as \"activity_requests.request_date\",\n" +
+                "       activity_requests.action as \"activity_requests.action\",\n" +
+                "       activity_requests.status as \"activity_requests.status\",\n" +
+                "       activities.id as \"activities.id\",\n" +
+                "       activities.name as \"activities.name\",\n" +
+                "       activities.description as \"activities.description\",\n" +
+                "       activities.start_time as \"activities.start_time\",\n" +
+                "       activities.end_time as \"activities.end_time\",\n" +
+                "       activities.duration as \"activities.duration\",\n" +
+                "       activities.importance as \"activities.importance\",\n" +
+                "       activities.status as \"activities.status\",\n" +
+                "       users.id as \"users.id\",\n" +
+                "       users.first_name as \"users.first_name\",\n" +
+                "       users.last_name as \"users.last_name\",\n" +
+                "       users.password as \"users.password\",\n" +
+                "       users.username as \"users.username\",\n" +
+                "       user_authorities.user_id as \"user_authorities.user_id\",\n" +
+                "       user_authorities.authorities as \"user_authorities.authorities\"\n" +
+                "from activity_requests\n" +
+                "         left join activities on activity_requests.activity_id = activities.id\n" +
+                "         left join users on activity_requests.user_id = users.id\n" +
+                "         left join user_authorities on users.id = user_authorities.user_id " +
+                "where activities.id = ? and users.id = ?")) {
+            ps.setLong(1, activityId);
+            ps.setLong(2, userId);
+            ResultSet rs = ps.executeQuery();
+
+            Map<Long, ActivityRequest> activityRequestMap = extractMappedActivityRequests(rs);
+            return new ArrayList<>(activityRequestMap.values());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public Optional<ActivityRequest> findById(long id) {
         try (PreparedStatement ps = connection.prepareStatement("select " +
                 "       activity_requests.id as \"activity_requests.id\",\n" +

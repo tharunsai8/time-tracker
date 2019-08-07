@@ -11,6 +11,7 @@ import com.yurwar.trainingcourse.model.entity.User;
 
 import java.sql.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class JDBCActivityDao implements ActivityDao {
     private final Connection connection;
@@ -59,7 +60,7 @@ public class JDBCActivityDao implements ActivityDao {
             ResultSet rs = ps.executeQuery();
 
             Map<Long, Activity> activityMap = extractMappedActivities(rs);
-            return activityMap.values().stream().peek(activity -> System.out.println(activity.getName())).findAny();
+            return activityMap.values().stream().findAny();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -100,10 +101,18 @@ public class JDBCActivityDao implements ActivityDao {
 
     @Override
     public void update(Activity entity) {
-        try (PreparedStatement ps = connection.prepareStatement("update activities set name = ?, description = ?, start_time =  ?, end_time = ?, duration = ?, importance = ?, status = ? where id = ?")) {
-            fillStatement(entity, ps);
-            ps.setLong(8, entity.getId());
-            ps.executeUpdate();
+        try (PreparedStatement activityPS = connection.prepareStatement("update activities set name = ?, description = ?, start_time =  ?, end_time = ?, duration = ?, importance = ?, status = ? where id = ?")) {
+            fillStatement(entity, activityPS);
+            activityPS.setLong(8, entity.getId());
+            activityPS.executeUpdate();
+            try (PreparedStatement usersActivitiesPS = connection.prepareStatement("insert into users_activities values (?, ?) on conflict do nothing")) {
+                List<Long> userIdList = entity.getUsers().stream().map(User::getId).collect(Collectors.toList());
+                for (long userId : userIdList) {
+                    usersActivitiesPS.setLong(1, userId);
+                    usersActivitiesPS.setLong(2, entity.getId());
+                    usersActivitiesPS.executeUpdate();
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

@@ -26,13 +26,19 @@ public class AuthFilter implements Filter {
             "/activities/add",
             "/activities/request",
             "/activities/delete",
-            "/activities/mark-time");
+            "/activities/mark-time",
+            "/activities/request/approve",
+            "/activities/request/reject",
+            "/activities/request/add",
+            "/activities/request/complete");
     private final List<String> userPaths = Arrays.asList(
             "/index",
             "/logout",
             "/profile",
             "/activities",
-            "/activities/mark-time");
+            "/activities/mark-time",
+            "/activities/request/add",
+            "/activities/request/complete");
     private final List<String> defaultPaths = Arrays.asList(
             "/index",
             "/login",
@@ -51,7 +57,8 @@ public class AuthFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         HttpSession session = request.getSession();
-        String requestURI = request.getRequestURI().replaceAll(".*/app", "");
+        String requestURI = request.getRequestURI().replaceFirst(request.getContextPath() + "/app", "");
+        log.info("Current request URI: " + requestURI);
 
         User user = (User) session.getAttribute("authUser");
 
