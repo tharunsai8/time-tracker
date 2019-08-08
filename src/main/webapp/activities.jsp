@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="tt" uri="time-tracker-tags" %>
 
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="i18n.messages"/>
@@ -51,22 +52,21 @@
                                 <p>
                                     <span><fmt:message key="activities.activity.start_time"/></span>
                                     <span>
-                                        ${activity.startTime}
-<%--                                        fixme format localDateTime--%>
-<%--                                        <fmt:formatDate value="${activity.startTime}" pattern="dd.MM.yyyy HH:mm"/>--%>
+                                        <fmt:parseDate value="${activity.startTime}" pattern="yyyy-MM-dd'T'HH:mm"
+                                                       var="parsedDateTime" type="both"/>
+                                        <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }"/>
                                     </span>
                                 </p>
                                 <p>
                                     <span><fmt:message key="activities.activity.end_time"/></span>
                                     <span>
-                                        ${activity.endTime}
-<%--                                        fixme format localDateTime--%>
-<%--                                        <fmt:formatDate value="${activity.endTime}" pattern="dd.MM.yyyy HH:mm"/>--%>
+                                        <fmt:parseDate value="${activity.endTime}" pattern="yyyy-MM-dd'T'HH:mm"
+                                                       var="parsedDateTime" type="both"/>
+                                        <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }"/>
                                     </span>
                                 </p>
                                 <p>
                                     <span><fmt:message key="activities.activity.duration"/></span>
-                                        <%--TODO Check duration on null--%>
                                     <span>
                                             ${activity.duration.toDaysPart()}
                                     </span>
@@ -88,35 +88,29 @@
                                 </p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div aria-label="btn-group" class="btn-group" role="group">
-                                            <%--TODO Check isAdmin--%>
-                                        <c:if test="${sessionScope.authUser != null}">
+                                        <tt:hasAuthority authority="ADMIN">
                                             <a class="btn btn-sm btn-secondary"
-                                               href="${pageContext.request.contextPath}/app/activities/delete?id=${activity.id}"
-                                            >
+                                               href="${pageContext.request.contextPath}/app/activities/delete?id=${activity.id}">
                                                 <fmt:message key="activities.activity.button.delete"/>
                                             </a>
-                                        </c:if>
+                                        </tt:hasAuthority>
                                         <a class="btn btn-sm btn-secondary"
-                                           href="${pageContext.request.contextPath}/app/activities/request/add?id=${activity.id}"
-                                        >
+                                           href="${pageContext.request.contextPath}/app/activities/request/add?id=${activity.id}">
                                             <fmt:message key="activities.activity.button.request_to_add"/>
                                         </a>
                                         <a class="btn btn-sm btn-secondary"
-                                           href="${pageContext.request.contextPath}/app/activities/request/complete?id=${activity.id}"
-                                        >
+                                           href="${pageContext.request.contextPath}/app/activities/request/complete?id=${activity.id}">
                                             <fmt:message key="activities.activity.button.request_to_complete"/>
                                         </a>
                                         <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
-                                                data-target="#timeSpentModal${activity.id}"
-                                        >
+                                                data-target="#timeSpentModal${activity.id}">
                                             <fmt:message key="activities.activity.button.mark_time_spent"/>
                                         </button>
                                     </div>
                                 </div>
                                 <!--Start modal window-->
                                 <div aria-hidden="true" aria-labelledby="timeSpentModalTitle" class="modal fade"
-                                     id="timeSpentModal${activity.id}" role="dialog" tabindex="-1"
-                                >
+                                     id="timeSpentModal${activity.id}" role="dialog" tabindex="-1">
                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -139,6 +133,8 @@
                                                         </div>
                                                         <input aria-label="days" class="form-control"
                                                                name="days"
+                                                               min="0"
+                                                               required
                                                                type="number">
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text">
@@ -147,6 +143,8 @@
                                                         </div>
                                                         <input aria-label="hours" class="form-control"
                                                                name="hours"
+                                                               min="0"
+                                                               required
                                                                type="number">
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text">
@@ -155,6 +153,8 @@
                                                         </div>
                                                         <input aria-label="minutes" class="form-control"
                                                                name="minutes"
+                                                               min="0"
+                                                               required
                                                                type="number">
                                                     </div>
                                                 </div>

@@ -28,7 +28,6 @@
                     <h1 class="display-4"><fmt:message key="activity.request.title"/></h1>
                     <hr>
                 </c:if>
-                <%--                <div th:replace="~{/fragments/pagination.html::page-navigation(url='/activities/request',page=${activityRequests})}"></div>--%>
             </div>
         </div>
         <div class="card-body">
@@ -40,7 +39,11 @@
                                 <div class="card-header">
                                     <p>${activityRequest.activity.name}</p>
                                     <p>${activityRequest.user.username}</p>
-                                    <p>${activityRequest.requestDate}</p>
+                                    <p>
+                                        <fmt:parseDate value="${ activityRequest.requestDate }"
+                                                       pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
+                                        <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }"/>
+                                    </p>
                                 </div>
                                 <div class="card-body">
                                     <p>
