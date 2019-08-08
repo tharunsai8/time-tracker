@@ -58,26 +58,12 @@ public class JDBCUserDao implements UserDao {
                 "       users.first_name             as \"users.first_name\",\n" +
                 "       users.last_name              as \"users.last_name\",\n" +
                 "       users.password               as \"users.password\",\n" +
-                "       users.username               as \"users.username\",\n" +
-                "       user_authorities.user_id     as \"user_authorities.user_id\",\n" +
-                "       user_authorities.authorities as \"user_authorities.authorities\",\n" +
-                "       users_activities.user_id     as \"users_activities.user_id\",\n" +
-                "       users_activities.activity_id as \"users_activities.activity_id\",\n" +
-                "       activities.id                as \"activities.id\",\n" +
-                "       activities.name              as \"activities.name\",\n" +
-                "       activities.description       as \"activities.description\",\n" +
-                "       activities.start_time        as \"activities.start_time\",\n" +
-                "       activities.end_time          as \"activities.end_time\",\n" +
-                "       activities.duration          as \"activities.duration\",\n" +
-                "       activities.importance        as \"activities.importance\",\n" +
-                "       activities.status            as \"activities.status\"\n" +
+                "       users.username               as \"users.username\"\n" +
                 "from users\n" +
-                "         left join user_authorities on users.id = user_authorities.user_id\n" +
-                "         left join users_activities on users.id = users_activities.user_id\n" +
-                "         left join activities on users_activities.activity_id = activities.id\n" +
                 "where users.username = ?")) {
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
+
             Map<Long, User> userMap = extractUsersFromResultSet(rs);
 
             return userMap.values().stream().findAny();
@@ -94,26 +80,12 @@ public class JDBCUserDao implements UserDao {
                 "       users.first_name             as \"users.first_name\",\n" +
                 "       users.last_name              as \"users.last_name\",\n" +
                 "       users.password               as \"users.password\",\n" +
-                "       users.username               as \"users.username\",\n" +
-                "       user_authorities.user_id     as \"user_authorities.user_id\",\n" +
-                "       user_authorities.authorities as \"user_authorities.authorities\",\n" +
-                "       users_activities.user_id     as \"users_activities.user_id\",\n" +
-                "       users_activities.activity_id as \"users_activities.activity_id\",\n" +
-                "       activities.id                as \"activities.id\",\n" +
-                "       activities.name              as \"activities.name\",\n" +
-                "       activities.description       as \"activities.description\",\n" +
-                "       activities.start_time        as \"activities.start_time\",\n" +
-                "       activities.end_time          as \"activities.end_time\",\n" +
-                "       activities.duration          as \"activities.duration\",\n" +
-                "       activities.importance        as \"activities.importance\",\n" +
-                "       activities.status            as \"activities.status\"\n" +
+                "       users.username               as \"users.username\"\n" +
                 "from users\n" +
-                "         left join user_authorities on users.id = user_authorities.user_id\n" +
-                "         left join users_activities on users.id = users_activities.user_id\n" +
-                "         left join activities on users_activities.activity_id = activities.id\n" +
                 "where users.id = ?")) {
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
+
             Map<Long, User> userMap = extractUsersFromResultSet(rs);
 
             return userMap.values().stream().findAny();
@@ -125,29 +97,40 @@ public class JDBCUserDao implements UserDao {
 
     @Override
     public List<User> findAll() {
+        try (Statement st = connection.createStatement()) {
+            ResultSet rs = st.executeQuery("select " +
+                    "       users.id                     as \"users.id\",\n" +
+                    "       users.first_name             as \"users.first_name\",\n" +
+                    "       users.last_name              as \"users.last_name\",\n" +
+                    "       users.password               as \"users.password\",\n" +
+                    "       users.username               as \"users.username\"\n" +
+                    "from users");
+
+            Map<Long, User> userMap = extractUsersFromResultSet(rs);
+
+            return new ArrayList<>(userMap.values());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<User> findAllPageable(int page, int size) {
         try (PreparedStatement ps = connection.prepareStatement("select " +
                 "       users.id                     as \"users.id\",\n" +
                 "       users.first_name             as \"users.first_name\",\n" +
                 "       users.last_name              as \"users.last_name\",\n" +
                 "       users.password               as \"users.password\",\n" +
-                "       users.username               as \"users.username\",\n" +
-                "       user_authorities.user_id     as \"user_authorities.user_id\",\n" +
-                "       user_authorities.authorities as \"user_authorities.authorities\",\n" +
-                "       users_activities.user_id     as \"users_activities.user_id\",\n" +
-                "       users_activities.activity_id as \"users_activities.activity_id\",\n" +
-                "       activities.id                as \"activities.id\",\n" +
-                "       activities.name              as \"activities.name\",\n" +
-                "       activities.description       as \"activities.description\",\n" +
-                "       activities.start_time        as \"activities.start_time\",\n" +
-                "       activities.end_time          as \"activities.end_time\",\n" +
-                "       activities.duration          as \"activities.duration\",\n" +
-                "       activities.importance        as \"activities.importance\",\n" +
-                "       activities.status            as \"activities.status\"\n" +
+                "       users.username               as \"users.username\"\n" +
                 "from users\n" +
-                "         left join user_authorities on users.id = user_authorities.user_id\n" +
-                "         left join users_activities on users.id = users_activities.user_id\n" +
-                "         left join activities on users_activities.activity_id = activities.id")) {
+                "order by users.last_name, users.first_name\n" +
+                "limit ? offset ?")) {
+            ps.setLong(1, size);
+            ps.setLong(2, size * page);
+
             ResultSet rs = ps.executeQuery();
+
             Map<Long, User> userMap = extractUsersFromResultSet(rs);
 
             return new ArrayList<>(userMap.values());
@@ -201,9 +184,9 @@ public class JDBCUserDao implements UserDao {
     }
 
     private Map<Long, User> extractUsersFromResultSet(ResultSet rs) throws SQLException {
+        Map<Long, User> userMap = new LinkedHashMap<>();
         Map<Long, Activity> activityMap = new HashMap<>();
         Map<Long, ActivityRequest> activityRequestMap = new HashMap<>();
-        Map<Long, User> userMap = new HashMap<>();
 
         UserMapper userMapper = new UserMapper();
         ActivityMapper activityMapper = new ActivityMapper();
@@ -211,19 +194,54 @@ public class JDBCUserDao implements UserDao {
 
         while (rs.next()) {
             User user = userMapper.extractFromResultSet(rs);
-            Authority authority = Authority.valueOf(rs.getString("user_authorities.authorities"));
-            Activity activity = activityMapper.extractFromResultSet(rs);
-
-            user = userMapper.makeUnique(userMap, user);
-            activity = activityMapper.makeUnique(activityMap, activity);
-
-            if (!user.getActivities().contains(activity) && activity.getId() != 0) {
-                user.getActivities().add(activity);
-            }
-            user.getAuthorities().add(authority);
+            userMapper.makeUnique(userMap, user);
         }
 
         for (User user : userMap.values()) {
+            try (PreparedStatement userAuthoritiesPS = connection.prepareStatement("select " +
+                    "       users.id                     as \"users.id\",\n" +
+                    "       user_authorities.user_id     as \"user_authorities.user_id\",\n" +
+                    "       user_authorities.authorities as \"user_authorities.authorities\"\n" +
+                    "from users\n" +
+                    "         left join user_authorities on users.id = user_authorities.user_id\n " +
+                    "where users.id = ?")) {
+                userAuthoritiesPS.setLong(1, user.getId());
+                ResultSet userAuthoritiesResultSet = userAuthoritiesPS.executeQuery();
+
+                while (userAuthoritiesResultSet.next()) {
+                    Authority authority = Authority
+                            .valueOf(userAuthoritiesResultSet.getString("user_authorities.authorities"));
+                    user.getAuthorities().add(authority);
+                }
+            }
+            try (PreparedStatement userActivitiesPS = connection.prepareStatement("select " +
+                    "       users.id                     as \"users.id\",\n" +
+                    "       users_activities.user_id     as \"users_activities.user_id\",\n" +
+                    "       users_activities.activity_id as \"users_activities.activity_id\",\n" +
+                    "       activities.id                as \"activities.id\",\n" +
+                    "       activities.name              as \"activities.name\",\n" +
+                    "       activities.description       as \"activities.description\",\n" +
+                    "       activities.start_time        as \"activities.start_time\",\n" +
+                    "       activities.end_time          as \"activities.end_time\",\n" +
+                    "       activities.duration          as \"activities.duration\",\n" +
+                    "       activities.importance        as \"activities.importance\",\n" +
+                    "       activities.status            as \"activities.status\"\n" +
+                    "from users\n" +
+                    "         left join users_activities on users.id = users_activities.user_id\n" +
+                    "         left join activities on users_activities.activity_id = activities.id " +
+                    "where users.id = ?")) {
+                userActivitiesPS.setLong(1, user.getId());
+                ResultSet userActivitiesResultSet = userActivitiesPS.executeQuery();
+
+                while (userActivitiesResultSet.next()) {
+                    Activity activity = activityMapper.extractFromResultSet(userActivitiesResultSet);
+                    activity = activityMapper.makeUnique(activityMap, activity);
+
+                    if (activity.getId() != 0 && !user.getActivities().contains(activity)) {
+                        user.getActivities().add(activity);
+                    }
+                }
+            }
             try (PreparedStatement activityRequestsPS = connection.prepareStatement("select " +
                     "       users.id                       as \"users.id\",\n" +
                     "       activity_requests.id           as \"activity_requests.id\",\n" +
@@ -241,16 +259,15 @@ public class JDBCUserDao implements UserDao {
                     "       activities.importance          as \"activities.importance\",\n" +
                     "       activities.status              as \"activities.status\"\n" +
                     "from users\n" +
-                    "         left join user_authorities on users.id = user_authorities.user_id\n" +
                     "         left join activity_requests on users.id = activity_requests.user_id\n" +
                     "         left join activities on activity_requests.activity_id = activities.id\n" +
                     "where users.id = ?")) {
                 activityRequestsPS.setLong(1, user.getId());
-                ResultSet activityRequestsRS = activityRequestsPS.executeQuery();
+                ResultSet userActivityRequestsResultSet = activityRequestsPS.executeQuery();
 
-                while (activityRequestsRS.next()) {
-                    ActivityRequest activityRequest = activityRequestMapper.extractFromResultSet(activityRequestsRS);
-                    Activity activity = activityMapper.extractFromResultSet(activityRequestsRS);
+                while (userActivityRequestsResultSet.next()) {
+                    ActivityRequest activityRequest = activityRequestMapper.extractFromResultSet(userActivityRequestsResultSet);
+                    Activity activity = activityMapper.extractFromResultSet(userActivityRequestsResultSet);
 
                     activityRequest = activityRequestMapper.makeUnique(activityRequestMap, activityRequest);
                     activity = activityMapper.makeUnique(activityMap, activity);

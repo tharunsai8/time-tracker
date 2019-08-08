@@ -13,7 +13,18 @@ public class UsersCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
-        request.setAttribute("users", userService.getAllUsers());
+        int page = 0;
+        int size = 5;
+        if (request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+        if (request.getParameter("size") != null) {
+            size = Integer.parseInt(request.getParameter("size"));
+        }
+
+        request.setAttribute("users", userService.getAllUsersPageable(page, size));
+        request.setAttribute("page", page);
+        request.setAttribute("size", size);
         return "/users.jsp";
     }
 }

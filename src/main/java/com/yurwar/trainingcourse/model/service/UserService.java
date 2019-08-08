@@ -6,8 +6,6 @@ import com.yurwar.trainingcourse.model.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -37,9 +35,9 @@ public class UserService {
         }
     }
 
-    public List<User> getAllUsers() {
+    public List<User> getAllUsersPageable(int page, int size) {
         try (UserDao userDao = daoFactory.createUserDao()) {
-            return userDao.findAll();
+            return userDao.findAllPageable(page, size);
         } catch (Exception e) {
             log.warn("Can not get all users", e);
             return Collections.emptyList();
