@@ -13,7 +13,18 @@ public class ActivityRequestsCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
-        request.setAttribute("activityRequests", activityRequestService.getAllActivityRequests());
+        int page = 0;
+        int size = 5;
+        if (request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+        if (request.getParameter("size") != null) {
+            size = Integer.parseInt(request.getParameter("size"));
+        }
+
+        request.setAttribute("activityRequests", activityRequestService.getAllActivityRequestsPageable(page, size));
+        request.setAttribute("page", page);
+        request.setAttribute("size", size);
         return "/activity-requests.jsp";
     }
 }

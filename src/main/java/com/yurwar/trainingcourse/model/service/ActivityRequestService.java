@@ -16,9 +16,9 @@ public class ActivityRequestService {
     private static final Logger log = LogManager.getLogger();
     private final DaoFactory daoFactory = DaoFactory.getInstance();
 
-    public List<ActivityRequest> getAllActivityRequests() {
+    public List<ActivityRequest> getAllActivityRequestsPageable(int page, int size) {
         try (ActivityRequestDao activityRequestDao = daoFactory.createActivityRequestDao()) {
-            return activityRequestDao.findAll();
+            return activityRequestDao.findAllPageable(page, size);
         } catch (Exception e) {
             log.warn("Can not get all activity requests", e);
         }
