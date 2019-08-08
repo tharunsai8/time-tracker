@@ -1,10 +1,8 @@
 package com.yurwar.trainingcourse.controller.command;
 
-import com.yurwar.trainingcourse.model.entity.Activity;
 import com.yurwar.trainingcourse.model.service.ActivityService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 public class ActivitiesCommand implements Command {
     private final ActivityService activityService;
@@ -15,7 +13,18 @@ public class ActivitiesCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
-        request.setAttribute("activities", activityService.getAllActivities());
+        int page = 0;
+        int size = 5;
+        if (request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+        if (request.getParameter("size") != null) {
+            size = Integer.parseInt(request.getParameter("size"));
+        }
+
+        request.setAttribute("activities", activityService.getAllActivitiesPageable(page, size));
+        request.setAttribute("page", page);
+        request.setAttribute("size", size);
         return "/activities.jsp";
     }
 }

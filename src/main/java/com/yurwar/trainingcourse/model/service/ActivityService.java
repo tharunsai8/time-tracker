@@ -14,9 +14,9 @@ public class ActivityService {
     private final DaoFactory daoFactory = DaoFactory.getInstance();
     private static final Logger log = LogManager.getLogger();
 
-    public List<Activity> getAllActivities() {
+    public List<Activity> getAllActivitiesPageable(int page, int size) {
         try (ActivityDao activityDao = daoFactory.createActivityDao()) {
-            return activityDao.findAll();
+            return activityDao.findAllPageable(page, size);
         } catch (Exception e) {
             log.warn("Can not get all users", e);
             return Collections.emptyList();
