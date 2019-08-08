@@ -72,7 +72,7 @@
                                 <label class="col-form-label" for="password">
                                     <fmt:message key="users.update.password.label"/>
                                 </label>
-                                <input type="text"
+                                <input type="password"
                                        name="password"
                                        id="password"
                                        class="form-control"

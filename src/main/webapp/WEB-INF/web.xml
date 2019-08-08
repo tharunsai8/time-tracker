@@ -60,4 +60,11 @@
         <filter-name>AuthFilter</filter-name>
         <url-pattern>/app/*</url-pattern>
     </filter-mapping>
+
+    <jsp-config>
+        <taglib>
+            <taglib-uri>time-tracker-tags</taglib-uri>
+            <taglib-location>/WEB-INF/tags/time-tracker-tags.tld</taglib-location>
+        </taglib>
+    </jsp-config>
 </web-app>
