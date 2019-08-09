@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class AuthFilter implements Filter {
     private static final Logger log = LogManager.getLogger();
     private final List<String> adminPaths = Arrays.asList(
+            "/",
             "/index",
             "/logout",
             "/profile",
@@ -32,6 +33,7 @@ public class AuthFilter implements Filter {
             "/activities/request/add",
             "/activities/request/complete");
     private final List<String> userPaths = Arrays.asList(
+            "/",
             "/index",
             "/logout",
             "/profile",
@@ -40,6 +42,7 @@ public class AuthFilter implements Filter {
             "/activities/request/add",
             "/activities/request/complete");
     private final List<String> defaultPaths = Arrays.asList(
+            "/",
             "/index",
             "/login",
             "/registration");
