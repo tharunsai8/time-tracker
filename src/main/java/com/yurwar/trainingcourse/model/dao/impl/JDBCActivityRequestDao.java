@@ -144,6 +144,20 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
         connection.close();
     }
 
+    @Override
+    public long getNumbersOfRecords() {
+        try (Statement st = connection.createStatement()) {
+            ResultSet rs = st.executeQuery("select count(*) from activity_requests");
+
+            if (rs.next()) {
+                return rs.getLong(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
 
     private void fillActivityRequestStatement(ActivityRequest entity, PreparedStatement ps) throws SQLException {
         ps.setLong(1, entity.getActivity().getId());

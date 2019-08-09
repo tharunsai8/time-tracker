@@ -133,6 +133,21 @@ public class JDBCActivityDao implements ActivityDao {
         connection.close();
     }
 
+    @Override
+    public long getNumbersOfRecords() {
+        try (Statement st = connection.createStatement()) {
+            ResultSet rs = st.executeQuery("select count(*) from activities");
+
+            if (rs.next()) {
+                return rs.getLong(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
     private void fillStatement(Activity entity, PreparedStatement ps) throws SQLException {
         ps.setString(1, entity.getName());
         ps.setString(2, entity.getDescription());

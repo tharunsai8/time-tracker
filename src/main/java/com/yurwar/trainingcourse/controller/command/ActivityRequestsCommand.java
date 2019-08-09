@@ -21,10 +21,14 @@ public class ActivityRequestsCommand implements Command {
         if (request.getParameter("size") != null) {
             size = Integer.parseInt(request.getParameter("size"));
         }
+        long numberOfRecords = activityRequestService.getNumberOfRecords();
+        long totalPages = (long) Math.ceil((double) numberOfRecords / size);
+
 
         request.setAttribute("activityRequests", activityRequestService.getAllActivityRequestsPageable(page, size));
-        request.setAttribute("page", page);
-        request.setAttribute("size", size);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("pageSize", size);
+        request.setAttribute("totalPages", totalPages);
         return "/activity-requests.jsp";
     }
 }

@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@taglib prefix="tt" uri="time-tracker-tags" %>
+<%@ taglib prefix="tt" uri="time-tracker-tags" %>
 
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="i18n.messages"/>
@@ -23,6 +23,7 @@
             <c:if test="${!requestScope.activites.isEmpty()}">
                 <h1 class="display-4"><fmt:message key="activities.title"/></h1>
                 <hr>
+                <%@include file="/WEB-INF/fragments/activities-paginator.jspf" %>
             </c:if>
             <c:if test="${requestScope.activites.isEmpty()}">
                 <h1 class="display-4"><fmt:message key="activities.empty"/></h1>
@@ -47,7 +48,7 @@
                                 </p>
                                 <p>
                                     <span><fmt:message key="activities.activity.importance"/></span>
-                                    <span>${activity.importance}</span>
+                                    <span>${activity.importance.toString()}</span>
                                 </p>
                                 <p>
                                     <span><fmt:message key="activities.activity.start_time"/></span>
@@ -175,7 +176,7 @@
                                 <small>
                                     <span><fmt:message key="activities.activity.status"/></span>
                                     <span>
-                                            ${activity.status}
+                                            ${activity.status.toString()}
                                     </span>
                                 </small>
                             </div>
@@ -185,6 +186,7 @@
             </div>
         </div>
         <div class="card-footer">
+            <%@include file="/WEB-INF/fragments/activities-paginator.jspf" %>
         </div>
     </div>
 </div>

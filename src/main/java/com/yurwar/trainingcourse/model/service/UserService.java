@@ -68,4 +68,13 @@ public class UserService {
             log.warn("Can not update user " + user.getUsername(), e);
         }
     }
+
+    public long getNumberOfRecords() {
+        try (UserDao userDao = daoFactory.createUserDao()) {
+            return userDao.getNumbersOfRecords();
+        } catch (Exception e) {
+            log.warn("Can not get number of users", e);
+        }
+        return 0;
+    }
 }

@@ -183,6 +183,21 @@ public class JDBCUserDao implements UserDao {
         connection.close();
     }
 
+    @Override
+    public long getNumbersOfRecords() {
+        try (Statement st = connection.createStatement()) {
+            ResultSet rs = st.executeQuery("select count(*) from users");
+
+            if (rs.next()) {
+                return rs.getLong(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
     private Map<Long, User> extractUsersFromResultSet(ResultSet rs) throws SQLException {
         Map<Long, User> userMap = new LinkedHashMap<>();
         Map<Long, Activity> activityMap = new HashMap<>();

@@ -8,7 +8,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 import java.util.Objects;
 
 public class HasAuthorityTag extends TagSupport {
-    String authority = "";
+    private String authority = "";
 
     public void setAuthority(String authority) {
         this.authority = authority;

@@ -229,4 +229,13 @@ public class ActivityRequestService {
             e.printStackTrace();
         }
     }
+
+    public long getNumberOfRecords() {
+        try (ActivityRequestDao activityRequestDao = daoFactory.createActivityRequestDao()) {
+            return activityRequestDao.getNumbersOfRecords();
+        } catch (Exception e) {
+            log.warn("Can not get number of activity requests", e);
+        }
+        return 0;
+    }
 }

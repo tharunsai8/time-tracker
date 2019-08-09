@@ -21,10 +21,13 @@ public class UsersCommand implements Command {
         if (request.getParameter("size") != null) {
             size = Integer.parseInt(request.getParameter("size"));
         }
+        long numberOfRecords = userService.getNumberOfRecords();
+        long totalPages = (long) Math.ceil((double) numberOfRecords / size);
 
         request.setAttribute("users", userService.getAllUsersPageable(page, size));
-        request.setAttribute("page", page);
-        request.setAttribute("size", size);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("pageSize", size);
+        request.setAttribute("totalPages", totalPages);
         return "/users.jsp";
     }
 }

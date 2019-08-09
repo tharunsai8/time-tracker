@@ -9,4 +9,6 @@ public interface UserDao extends GenericDao<User> {
     Optional<User> findByUsername(String username);
 
     List<User> findAllPageable(int page, int size);
+
+    long getNumbersOfRecords();
 }

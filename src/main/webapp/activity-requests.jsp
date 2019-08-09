@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="tt" uri="time-tracker-tags" %>
 
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="i18n.messages"/>
@@ -27,6 +28,7 @@
                 <c:if test="${!requestScope.activityRequests.isEmpty()}">
                     <h1 class="display-4"><fmt:message key="activity.request.title"/></h1>
                     <hr>
+                    <%@include file="WEB-INF/fragments/activity-requests-paginator.jspf" %>
                 </c:if>
             </div>
         </div>
@@ -88,6 +90,7 @@
             </c:if>
         </div>
         <div class="card-footer">
+            <%@include file="WEB-INF/fragments/activity-requests-paginator.jspf" %>
         </div>
     </div>
 </div>

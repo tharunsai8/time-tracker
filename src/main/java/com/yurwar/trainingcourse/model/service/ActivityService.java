@@ -48,6 +48,15 @@ public class ActivityService {
         return Optional.empty();
     }
 
+    public long getNumberOfRecords() {
+        try (ActivityDao activityDao = daoFactory.createActivityDao()) {
+            return activityDao.getNumbersOfRecords();
+        } catch (Exception e) {
+            log.warn("Can not get number of activities", e);
+        }
+        return 0;
+    }
+
     public void updateActivity(Activity activity) {
         try (ActivityDao activityDao = daoFactory.createActivityDao()) {
             activityDao.update(activity);
