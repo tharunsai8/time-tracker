@@ -126,16 +126,22 @@ public class JDBCUserDao implements UserDao {
                 "from users\n" +
                 "order by users.last_name, users.first_name\n" +
                 "limit ? offset ?")) {
+            connection.setAutoCommit(false);
             ps.setLong(1, size);
             ps.setLong(2, size * page);
-
             ResultSet rs = ps.executeQuery();
 
             Map<Long, User> userMap = extractUsersFromResultSet(rs);
 
+            connection.commit();
             return new ArrayList<>(userMap.values());
         } catch (SQLException e) {
             e.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             throw new RuntimeException(e);
         }
     }
@@ -176,11 +182,6 @@ public class JDBCUserDao implements UserDao {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public void close() throws SQLException {
-        connection.close();
     }
 
     @Override

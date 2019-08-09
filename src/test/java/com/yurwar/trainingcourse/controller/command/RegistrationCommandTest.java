@@ -1,10 +1,7 @@
 package com.yurwar.trainingcourse.controller.command;
 
-import com.yurwar.trainingcourse.model.entity.ActivityStatus;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class RegistrationCommandTest {
 
@@ -17,7 +14,6 @@ public class RegistrationCommandTest {
 
     @Test
     public void testEnum() {
-        System.out.println(ActivityStatus.valueOf(null));
     }
 
 }

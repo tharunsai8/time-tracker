@@ -140,11 +140,6 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
     }
 
     @Override
-    public void close() throws Exception {
-        connection.close();
-    }
-
-    @Override
     public long getNumbersOfRecords() {
         try (Statement st = connection.createStatement()) {
             ResultSet rs = st.executeQuery("select count(*) from activity_requests");

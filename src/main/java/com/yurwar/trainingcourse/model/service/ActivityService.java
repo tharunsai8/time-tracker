@@ -1,11 +1,15 @@
 package com.yurwar.trainingcourse.model.service;
 
 import com.yurwar.trainingcourse.model.dao.ActivityDao;
+import com.yurwar.trainingcourse.model.dao.DaoConnection;
 import com.yurwar.trainingcourse.model.dao.DaoFactory;
 import com.yurwar.trainingcourse.model.entity.Activity;
+import com.yurwar.trainingcourse.model.entity.ActivityStatus;
+import com.yurwar.trainingcourse.model.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -15,16 +19,18 @@ public class ActivityService {
     private static final Logger log = LogManager.getLogger();
 
     public List<Activity> getAllActivitiesPageable(int page, int size) {
-        try (ActivityDao activityDao = daoFactory.createActivityDao()) {
+        try (DaoConnection connection = daoFactory.getConnection()) {
+            ActivityDao activityDao = daoFactory.createActivityDao(connection);
             return activityDao.findAllPageable(page, size);
         } catch (Exception e) {
             log.warn("Can not get all users", e);
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 
     public void createActivity(Activity activity) {
-        try (ActivityDao activityDao = daoFactory.createActivityDao()) {
+        try (DaoConnection connection = daoFactory.getConnection()) {
+            ActivityDao activityDao = daoFactory.createActivityDao(connection);
             activityDao.create(activity);
         } catch (Exception e) {
             log.warn("Can not create activity", e);
@@ -32,7 +38,8 @@ public class ActivityService {
     }
 
     public void deleteActivity(long activityId) {
-        try (ActivityDao activityDao = daoFactory.createActivityDao()) {
+        try (DaoConnection connection = daoFactory.getConnection()) {
+            ActivityDao activityDao = daoFactory.createActivityDao(connection);
             activityDao.delete(activityId);
         } catch (Exception e) {
             log.warn("Can not delete activity", e);
@@ -40,7 +47,8 @@ public class ActivityService {
     }
 
     public Optional<Activity> getActivityById(long activityId) {
-        try (ActivityDao activityDao = daoFactory.createActivityDao()) {
+        try (DaoConnection connection = daoFactory.getConnection()) {
+            ActivityDao activityDao = daoFactory.createActivityDao(connection);
             return activityDao.findById(activityId);
         } catch (Exception e) {
             log.warn("Can not get activity by id", e);
@@ -49,7 +57,8 @@ public class ActivityService {
     }
 
     public long getNumberOfRecords() {
-        try (ActivityDao activityDao = daoFactory.createActivityDao()) {
+        try (DaoConnection connection = daoFactory.getConnection()) {
+            ActivityDao activityDao = daoFactory.createActivityDao(connection);
             return activityDao.getNumbersOfRecords();
         } catch (Exception e) {
             log.warn("Can not get number of activities", e);
@@ -57,11 +66,27 @@ public class ActivityService {
         return 0;
     }
 
-    public void updateActivity(Activity activity) {
-        try (ActivityDao activityDao = daoFactory.createActivityDao()) {
-            activityDao.update(activity);
-        } catch (Exception e) {
-            log.warn("Can not update activity");
+    public void markTimeSpent(long activityId, User user, int days, int hours, int minutes) {
+        try (DaoConnection connection = daoFactory.getConnection()) {
+            ActivityDao activityDao = daoFactory.createActivityDao(connection);
+
+            connection.beginTransaction();
+
+            Activity activity = getActivityById(activityId).orElseThrow(() ->
+                    new IllegalArgumentException("Invalid activity id: " + activityId));
+
+            if (activity.getStatus().equals(ActivityStatus.ACTIVE) && activity.getUsers().contains(user)) {
+                Duration duration = activity.getDuration();
+                duration = duration
+                        .plusDays(days)
+                        .plusHours(hours)
+                        .plusMinutes(minutes);
+
+                activity.setDuration(duration);
+                activityDao.update(activity);
+            }
+
+            connection.commit();
         }
     }
 }
