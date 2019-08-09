@@ -1,6 +1,5 @@
 package com.yurwar.trainingcourse.model.dao.impl.mapper;
 
-import com.yurwar.trainingcourse.model.entity.Activity;
 import com.yurwar.trainingcourse.model.entity.ActivityRequest;
 import com.yurwar.trainingcourse.model.entity.ActivityRequestAction;
 import com.yurwar.trainingcourse.model.entity.ActivityRequestStatus;

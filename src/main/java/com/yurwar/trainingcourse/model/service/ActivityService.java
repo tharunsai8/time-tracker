@@ -15,9 +15,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+@SuppressWarnings("WeakerAccess")
 public class ActivityService {
-    private final DaoFactory daoFactory = DaoFactory.getInstance();
     private static final Logger log = LogManager.getLogger();
+    private final DaoFactory daoFactory = DaoFactory.getInstance();
 
     public List<Activity> getAllActivitiesPageable(int page, int size) {
         try (DaoConnection connection = daoFactory.getConnection()) {
@@ -88,6 +89,8 @@ public class ActivityService {
             }
 
             connection.commit();
+        } catch (DaoException e) {
+            log.warn("Can not mark time", e);
         }
     }
 }

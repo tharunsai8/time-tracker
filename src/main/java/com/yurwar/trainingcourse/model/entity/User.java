@@ -18,7 +18,8 @@ public class User {
     private List<Activity> activities = new ArrayList<>();
     private List<ActivityRequest> activityRequests = new ArrayList<>();
 
-    public User() {}
+    public User() {
+    }
 
     public User(long id,
                 String username,

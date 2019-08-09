@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 public class ActivityRequestAddCommand implements Command {
-    private ActivityRequestService activityRequestService;
+    private final ActivityRequestService activityRequestService;
 
     public ActivityRequestAddCommand(ActivityRequestService activityRequestService) {
         this.activityRequestService = activityRequestService;

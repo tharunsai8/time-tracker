@@ -169,8 +169,7 @@ public class JDBCUserDao implements UserDao {
             ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new DaoException(e);
+            throw new DaoException("Can not delete user", e);
         }
     }
 

@@ -46,7 +46,7 @@ public class AuthFilter implements Filter {
             "/index",
             "/login",
             "/registration");
-    private Map<Authority, List<String>> authPaths = new HashMap<>();
+    private final Map<Authority, List<String>> authPaths = new HashMap<>();
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

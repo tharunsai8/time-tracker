@@ -63,9 +63,9 @@
                                        id="username"
                                        class="form-control"
                                        placeholder="<fmt:message key="users.update.username.placeholder"/>">
-                                <c:if test="${usernameErrorMessage != null}">
+                                <c:if test="${requestScope.usernameErrorMessage != null}">
                                 <span class="text-danger">
-                                        ${usernameErrorMessage}
+                                        ${requestScope.usernameErrorMessage}
                                 </span>
                                 </c:if>
                             </div>

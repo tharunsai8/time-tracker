@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class UserService {
-    private final DaoFactory daoFactory = DaoFactory.getInstance();
     private static final Logger log = LogManager.getLogger();
+    private final DaoFactory daoFactory = DaoFactory.getInstance();
 
     public Optional<User> findUserByUsername(String username) {
         try (DaoConnection connection = daoFactory.getConnection()) {

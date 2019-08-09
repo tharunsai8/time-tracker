@@ -9,7 +9,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Objects;
 import java.util.Optional;
 
 public class LoginCommand implements Command {
@@ -27,7 +26,7 @@ public class LoginCommand implements Command {
         if (!ObjectUtils.allNotNull(username, password)) {
             return "/login.jsp";
         }
-        log.info("User try to log in with username: " + username + " and password: " + password );
+        log.info("User try to log in with username: " + username + " and password: " + password);
 
         Optional<User> userOptional = userService.findUserByUsername(username);
         if (userOptional.isEmpty()) {

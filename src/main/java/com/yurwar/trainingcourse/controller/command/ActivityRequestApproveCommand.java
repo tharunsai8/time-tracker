@@ -7,7 +7,7 @@ import com.yurwar.trainingcourse.model.service.ActivityRequestService;
 import javax.servlet.http.HttpServletRequest;
 
 public class ActivityRequestApproveCommand implements Command {
-    private ActivityRequestService activityRequestService;
+    private final ActivityRequestService activityRequestService;
 
     public ActivityRequestApproveCommand(ActivityRequestService activityRequestService) {
         this.activityRequestService = activityRequestService;

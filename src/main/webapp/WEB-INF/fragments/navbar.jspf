@@ -1,7 +1,8 @@
+<%--suppress CheckImageSize, CheckImageSize --%>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/app/index">
         <img src="${pageContext.request.contextPath}/images/stopwatch-white.png" class="d-inline-block align-top"
-             width="30" height="30">
+             width="30" height="30" alt="icon">
         Time-Tracker
     </a>
     <div class="collapse navbar-collapse" id="navbars">

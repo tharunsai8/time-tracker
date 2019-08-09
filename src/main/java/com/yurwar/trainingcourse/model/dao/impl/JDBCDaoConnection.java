@@ -9,8 +9,8 @@ import java.sql.SQLException;
 
 public class JDBCDaoConnection implements DaoConnection {
     private static final Logger log = LogManager.getLogger();
+    private final Connection connection;
     private boolean inTransaction;
-    private Connection connection;
 
     public JDBCDaoConnection(Connection connection) {
         this.connection = connection;

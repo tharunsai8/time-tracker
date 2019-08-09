@@ -12,8 +12,4 @@ public class RegistrationCommandTest {
         }
     }
 
-    @Test
-    public void testEnum() {
-    }
-
 }

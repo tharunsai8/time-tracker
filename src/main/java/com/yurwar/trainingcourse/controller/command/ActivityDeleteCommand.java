@@ -5,7 +5,7 @@ import com.yurwar.trainingcourse.model.service.ActivityService;
 import javax.servlet.http.HttpServletRequest;
 
 public class ActivityDeleteCommand implements Command {
-    private ActivityService activityService;
+    private final ActivityService activityService;
 
     public ActivityDeleteCommand(ActivityService activityService) {
         this.activityService = activityService;
