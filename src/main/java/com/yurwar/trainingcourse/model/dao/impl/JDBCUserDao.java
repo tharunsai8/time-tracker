@@ -8,6 +8,7 @@ import com.yurwar.trainingcourse.model.entity.Activity;
 import com.yurwar.trainingcourse.model.entity.ActivityRequest;
 import com.yurwar.trainingcourse.model.entity.Authority;
 import com.yurwar.trainingcourse.model.entity.User;
+import com.yurwar.trainingcourse.util.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,8 +47,7 @@ public class JDBCUserDao implements UserDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new DaoException("Can not create user", e);
         }
     }
 
@@ -68,8 +68,7 @@ public class JDBCUserDao implements UserDao {
 
             return userMap.values().stream().findAny();
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new DaoException("Can not find user by username", e);
         }
     }
 
@@ -90,8 +89,7 @@ public class JDBCUserDao implements UserDao {
 
             return userMap.values().stream().findAny();
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new DaoException("Can not find user by id", e);
         }
     }
 
@@ -110,8 +108,7 @@ public class JDBCUserDao implements UserDao {
 
             return new ArrayList<>(userMap.values());
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new DaoException("Can not find all users", e);
         }
     }
 
@@ -136,13 +133,7 @@ public class JDBCUserDao implements UserDao {
             connection.commit();
             return new ArrayList<>(userMap.values());
         } catch (SQLException e) {
-            e.printStackTrace();
-            try {
-                connection.rollback();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-            throw new RuntimeException(e);
+            throw new DaoException("Can not find all users", e);
         }
     }
 
@@ -168,8 +159,7 @@ public class JDBCUserDao implements UserDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new DaoException("Can not update user", e);
         }
     }
 
@@ -180,12 +170,12 @@ public class JDBCUserDao implements UserDao {
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new DaoException(e);
         }
     }
 
     @Override
-    public long getNumbersOfRecords() {
+    public long getNumberOfRecords() {
         try (Statement st = connection.createStatement()) {
             ResultSet rs = st.executeQuery("select count(*) from users");
 
@@ -194,8 +184,7 @@ public class JDBCUserDao implements UserDao {
             }
             return 0;
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new DaoException("Can not get numbers of records", e);
         }
     }
 

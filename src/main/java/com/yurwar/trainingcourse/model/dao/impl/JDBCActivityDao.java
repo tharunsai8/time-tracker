@@ -6,6 +6,7 @@ import com.yurwar.trainingcourse.model.dao.impl.mapper.UserMapper;
 import com.yurwar.trainingcourse.model.entity.Activity;
 import com.yurwar.trainingcourse.model.entity.Authority;
 import com.yurwar.trainingcourse.model.entity.User;
+import com.yurwar.trainingcourse.util.exception.DaoException;
 
 import java.sql.*;
 import java.util.*;
@@ -25,8 +26,7 @@ public class JDBCActivityDao implements ActivityDao {
             fillStatement(entity, ps);
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new DaoException("Can not create activity", e);
         }
     }
 
@@ -49,7 +49,7 @@ public class JDBCActivityDao implements ActivityDao {
             Map<Long, Activity> activityMap = extractActivitiesFromResultSet(rs);
             return activityMap.values().stream().findAny();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Can not find activity by id", e);
         }
     }
 
@@ -69,7 +69,7 @@ public class JDBCActivityDao implements ActivityDao {
             Map<Long, Activity> activityMap = extractActivitiesFromResultSet(rs);
             return new ArrayList<>(activityMap.values());
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Can not find all activities", e);
         }
     }
 
@@ -94,7 +94,7 @@ public class JDBCActivityDao implements ActivityDao {
 
             return new ArrayList<>(activityMap.values());
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Can not find all activities", e);
         }
     }
 
@@ -113,8 +113,7 @@ public class JDBCActivityDao implements ActivityDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new DaoException("Can not update activity", e);
         }
     }
 
@@ -124,12 +123,12 @@ public class JDBCActivityDao implements ActivityDao {
             ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Can not delete activity", e);
         }
     }
 
     @Override
-    public long getNumbersOfRecords() {
+    public long getNumberOfRecords() {
         try (Statement st = connection.createStatement()) {
             ResultSet rs = st.executeQuery("select count(*) from activities");
 
@@ -138,8 +137,7 @@ public class JDBCActivityDao implements ActivityDao {
             }
             return 0;
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new DaoException("Can not get number of records", e);
         }
     }
 

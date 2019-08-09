@@ -6,6 +6,7 @@ import com.yurwar.trainingcourse.model.dao.DaoFactory;
 import com.yurwar.trainingcourse.model.entity.Activity;
 import com.yurwar.trainingcourse.model.entity.ActivityStatus;
 import com.yurwar.trainingcourse.model.entity.User;
+import com.yurwar.trainingcourse.util.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,7 +23,7 @@ public class ActivityService {
         try (DaoConnection connection = daoFactory.getConnection()) {
             ActivityDao activityDao = daoFactory.createActivityDao(connection);
             return activityDao.findAllPageable(page, size);
-        } catch (Exception e) {
+        } catch (DaoException e) {
             log.warn("Can not get all users", e);
         }
         return Collections.emptyList();
@@ -32,7 +33,7 @@ public class ActivityService {
         try (DaoConnection connection = daoFactory.getConnection()) {
             ActivityDao activityDao = daoFactory.createActivityDao(connection);
             activityDao.create(activity);
-        } catch (Exception e) {
+        } catch (DaoException e) {
             log.warn("Can not create activity", e);
         }
     }
@@ -41,7 +42,7 @@ public class ActivityService {
         try (DaoConnection connection = daoFactory.getConnection()) {
             ActivityDao activityDao = daoFactory.createActivityDao(connection);
             activityDao.delete(activityId);
-        } catch (Exception e) {
+        } catch (DaoException e) {
             log.warn("Can not delete activity", e);
         }
     }
@@ -50,7 +51,7 @@ public class ActivityService {
         try (DaoConnection connection = daoFactory.getConnection()) {
             ActivityDao activityDao = daoFactory.createActivityDao(connection);
             return activityDao.findById(activityId);
-        } catch (Exception e) {
+        } catch (DaoException e) {
             log.warn("Can not get activity by id", e);
         }
         return Optional.empty();
@@ -59,8 +60,8 @@ public class ActivityService {
     public long getNumberOfRecords() {
         try (DaoConnection connection = daoFactory.getConnection()) {
             ActivityDao activityDao = daoFactory.createActivityDao(connection);
-            return activityDao.getNumbersOfRecords();
-        } catch (Exception e) {
+            return activityDao.getNumberOfRecords();
+        } catch (DaoException e) {
             log.warn("Can not get number of activities", e);
         }
         return 0;

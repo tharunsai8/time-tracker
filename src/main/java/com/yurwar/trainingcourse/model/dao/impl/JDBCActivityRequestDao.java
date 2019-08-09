@@ -8,6 +8,7 @@ import com.yurwar.trainingcourse.model.entity.Activity;
 import com.yurwar.trainingcourse.model.entity.ActivityRequest;
 import com.yurwar.trainingcourse.model.entity.Authority;
 import com.yurwar.trainingcourse.model.entity.User;
+import com.yurwar.trainingcourse.util.exception.DaoException;
 
 import java.sql.*;
 import java.util.*;
@@ -26,8 +27,7 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
             fillActivityRequestStatement(entity, ps);
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new DaoException("Can not create activity request", e);
         }
     }
 
@@ -48,8 +48,7 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
             Map<Long, ActivityRequest> activityRequestMap = extractActivityRequestsFromResultSet(rs);
             return new ArrayList<>(activityRequestMap.values());
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new DaoException("Can not find activity request", e);
         }
     }
 
@@ -69,8 +68,7 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
             Map<Long, ActivityRequest> activityRequestMap = extractActivityRequestsFromResultSet(rs);
             return activityRequestMap.values().stream().findAny();
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new DaoException("Can not find activity request", e);
         }
     }
 
@@ -88,8 +86,7 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
             Map<Long, ActivityRequest> activityRequestMap = extractActivityRequestsFromResultSet(rs);
             return new ArrayList<>(activityRequestMap.values());
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new DaoException("Can not find all activity requests", e);
         }
     }
 
@@ -111,8 +108,7 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
             Map<Long, ActivityRequest> activityRequestMap = extractActivityRequestsFromResultSet(rs);
             return new ArrayList<>(activityRequestMap.values());
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new DaoException("Can not find all activity requests", e);
         }
     }
 
@@ -123,8 +119,7 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
             ps.setLong(6, entity.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new DaoException("Can not update activity request", e);
         }
     }
 
@@ -134,13 +129,12 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
             ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new DaoException("Can not delete activity", e);
         }
     }
 
     @Override
-    public long getNumbersOfRecords() {
+    public long getNumberOfRecords() {
         try (Statement st = connection.createStatement()) {
             ResultSet rs = st.executeQuery("select count(*) from activity_requests");
 
@@ -149,8 +143,7 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
             }
             return 0;
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new DaoException("Can not get number of records", e);
         }
     }
 

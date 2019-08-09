@@ -9,5 +9,5 @@ public interface ActivityRequestDao extends GenericDao<ActivityRequest> {
 
     List<ActivityRequest> findAllPageable(int page, int size);
 
-    long getNumbersOfRecords();
+    long getNumberOfRecords();
 }

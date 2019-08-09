@@ -4,6 +4,7 @@ import com.yurwar.trainingcourse.model.dao.DaoConnection;
 import com.yurwar.trainingcourse.model.dao.DaoFactory;
 import com.yurwar.trainingcourse.model.dao.UserDao;
 import com.yurwar.trainingcourse.model.entity.User;
+import com.yurwar.trainingcourse.util.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,7 +21,7 @@ public class UserService {
             UserDao userDao = daoFactory.createUserDao(connection);
             log.info("Trying to get user by username: " + username);
             return userDao.findByUsername(username);
-        } catch (Exception e) {
+        } catch (DaoException e) {
             log.warn("Can not find user with username: " + username);
             return Optional.empty();
         }
@@ -33,7 +34,7 @@ public class UserService {
             log.info("Trying to create new user: " + user);
             userDao.create(user);
             return true;
-        } catch (Exception e) {
+        } catch (DaoException e) {
             log.warn("Can not register user: " + user);
             return false;
         }
@@ -43,7 +44,7 @@ public class UserService {
         try (DaoConnection connection = daoFactory.getConnection()) {
             UserDao userDao = daoFactory.createUserDao(connection);
             return userDao.findAllPageable(page, size);
-        } catch (Exception e) {
+        } catch (DaoException e) {
             log.warn("Can not get all users", e);
             return Collections.emptyList();
         }
@@ -53,7 +54,7 @@ public class UserService {
         try (DaoConnection connection = daoFactory.getConnection()) {
             UserDao userDao = daoFactory.createUserDao(connection);
             userDao.delete(id);
-        } catch (Exception e) {
+        } catch (DaoException e) {
             log.warn("Can not delete user");
         }
     }
@@ -62,7 +63,7 @@ public class UserService {
         try (DaoConnection connection = daoFactory.getConnection()) {
             UserDao userDao = daoFactory.createUserDao(connection);
             return userDao.findById(id);
-        } catch (Exception e) {
+        } catch (DaoException e) {
             log.warn("Can not find user with id: " + id);
             return Optional.empty();
         }
@@ -72,7 +73,7 @@ public class UserService {
         try (DaoConnection connection = daoFactory.getConnection()) {
             UserDao userDao = daoFactory.createUserDao(connection);
             userDao.update(user);
-        } catch (Exception e) {
+        } catch (DaoException e) {
             log.warn("Can not update user " + user.getUsername(), e);
         }
     }
@@ -80,8 +81,8 @@ public class UserService {
     public long getNumberOfRecords() {
         try (DaoConnection connection = daoFactory.getConnection()) {
             UserDao userDao = daoFactory.createUserDao(connection);
-            return userDao.getNumbersOfRecords();
-        } catch (Exception e) {
+            return userDao.getNumberOfRecords();
+        } catch (DaoException e) {
             log.warn("Can not get number of users", e);
         }
         return 0;

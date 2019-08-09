@@ -2,6 +2,7 @@ package com.yurwar.trainingcourse.model.service;
 
 import com.yurwar.trainingcourse.model.dao.*;
 import com.yurwar.trainingcourse.model.entity.*;
+import com.yurwar.trainingcourse.util.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +18,7 @@ public class ActivityRequestService {
         try (DaoConnection connection = daoFactory.getConnection()) {
             ActivityRequestDao activityRequestDao = daoFactory.createActivityRequestDao(connection);
             return activityRequestDao.findAllPageable(page, size);
-        } catch (Exception e) {
+        } catch (DaoException e) {
             log.warn("Can not get all activity requests", e);
         }
         return Collections.emptyList();
@@ -82,7 +83,7 @@ public class ActivityRequestService {
             }
 
             connection.commit();
-        } catch (Exception e) {
+        } catch (DaoException e) {
             log.warn("Can not make add activity request", e);
         }
     }
@@ -135,7 +136,7 @@ public class ActivityRequestService {
             }
 
             connection.commit();
-        } catch (Exception e) {
+        } catch (DaoException e) {
             log.warn("Can not make complete activity request", e);
         }
     }
@@ -146,7 +147,7 @@ public class ActivityRequestService {
 
             return activityRequestDao.findById(activityRequestId).orElseThrow(() ->
                     new IllegalArgumentException("Invalid activity request id: " + activityRequestId));
-        } catch (Exception e) {
+        } catch (DaoException e) {
             log.warn("Can not find activity request");
         }
         return null;
@@ -191,7 +192,7 @@ public class ActivityRequestService {
             activityRequestDao.update(activityRequest);
 
             connection.commit();
-        } catch (Exception e) {
+        } catch (DaoException e) {
             log.warn("Can not approve add activity request", e);
         }
     }
@@ -228,7 +229,7 @@ public class ActivityRequestService {
             }
 
             connection.commit();
-        } catch (Exception e) {
+        } catch (DaoException e) {
             log.warn("Can not approve complete activity request", e);
         }
     }
@@ -244,7 +245,7 @@ public class ActivityRequestService {
             activityRequestDao.update(activityRequest);
 
             connection.commit();
-        } catch (Exception e) {
+        } catch (DaoException e) {
             log.warn("Can not reject activity request", e);
         }
     }
@@ -253,8 +254,8 @@ public class ActivityRequestService {
         try (DaoConnection connection = daoFactory.getConnection()) {
             ActivityRequestDao activityRequestDao = daoFactory.createActivityRequestDao(connection);
 
-            return activityRequestDao.getNumbersOfRecords();
-        } catch (Exception e) {
+            return activityRequestDao.getNumberOfRecords();
+        } catch (DaoException e) {
             log.warn("Can not get number of activity requests", e);
         }
         return 0;
