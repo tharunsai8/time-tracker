@@ -39,6 +39,7 @@
                                        placeholder="<fmt:message key="activities.add.activity_name.placeholder"/>"
                                        type="text"
                                        required/>
+                                <span>${requestScope.validationNameMessage}</span>
                             </div>
                             <div class="form-group col-md-12">
                                 <label class="col-form-label" for="description">
