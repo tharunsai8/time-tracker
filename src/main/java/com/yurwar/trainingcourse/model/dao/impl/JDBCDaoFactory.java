@@ -4,12 +4,12 @@ import com.yurwar.trainingcourse.model.dao.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.sql.ConnectionPoolDataSource;
+import javax.sql.DataSource;
 import java.sql.SQLException;
 
 public class JDBCDaoFactory extends DaoFactory {
     private static final Logger log = LogManager.getLogger();
-    private final ConnectionPoolDataSource dataSource = ConnectionPoolHolder.getDataSource();
+    private final DataSource dataSource = ConnectionPoolHolder.getDataSource();
 
     @Override
     public UserDao createUserDao(DaoConnection connection) {
@@ -29,7 +29,7 @@ public class JDBCDaoFactory extends DaoFactory {
     @Override
     public DaoConnection getConnection() {
         try {
-            return new JDBCDaoConnection(dataSource.getPooledConnection().getConnection());
+            return new JDBCDaoConnection(dataSource.getConnection());
         } catch (SQLException e) {
             log.error("Can not get connection to database", e);
             throw new RuntimeException(e);

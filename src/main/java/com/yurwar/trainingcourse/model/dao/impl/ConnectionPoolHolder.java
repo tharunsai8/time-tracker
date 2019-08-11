@@ -1,22 +1,23 @@
 package com.yurwar.trainingcourse.model.dao.impl;
 
-import org.postgresql.ds.PGConnectionPoolDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 
-import javax.sql.ConnectionPoolDataSource;
+import javax.sql.DataSource;
 import java.util.ResourceBundle;
 
 class ConnectionPoolHolder {
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("database");
-    private static volatile ConnectionPoolDataSource dataSource;
+    private static volatile DataSource dataSource;
 
-    static ConnectionPoolDataSource getDataSource() {
+    static DataSource getDataSource() {
         if (dataSource == null) {
             synchronized (ConnectionPoolHolder.class) {
                 if (dataSource == null) {
-                    PGConnectionPoolDataSource ds = new PGConnectionPoolDataSource();
+                    BasicDataSource ds = new BasicDataSource();
                     ds.setUrl(resourceBundle.getString("database.url"));
-                    ds.setUser(resourceBundle.getString("database.user"));
+                    ds.setUsername(resourceBundle.getString("database.user"));
                     ds.setPassword(resourceBundle.getString("database.password"));
+                    ds.setDriverClassName(resourceBundle.getString("database.driver"));
                     dataSource = ds;
                 }
             }
