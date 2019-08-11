@@ -110,6 +110,7 @@ public class ActivityRequestService {
                     .count();
             if (currentActivityRequestsCount > 0) {
                 log.info("User {} already sent activity request", user.getUsername());
+                connection.commit();
                 return;
             }
 
@@ -127,7 +128,6 @@ public class ActivityRequestService {
                         activityRequest.setRequestDate(LocalDateTime.now());
 
                         activityRequestDao.create(activityRequest);
-                        return;
                     }
                     break;
                 case PENDING:
@@ -138,6 +138,8 @@ public class ActivityRequestService {
             connection.commit();
         } catch (DaoException e) {
             log.warn("Can not make complete activity request", e);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

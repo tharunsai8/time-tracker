@@ -12,7 +12,7 @@ public class JDBCDaoConnection implements DaoConnection {
     private final Connection connection;
     private boolean inTransaction;
 
-    public JDBCDaoConnection(Connection connection) {
+    JDBCDaoConnection(Connection connection) {
         this.connection = connection;
     }
 
@@ -40,9 +40,11 @@ public class JDBCDaoConnection implements DaoConnection {
     @Override
     public void rollback() {
         try {
+            log.debug("Try to rollback transaction");
             connection.rollback();
             inTransaction = false;
             connection.setAutoCommit(true);
+            log.debug("Transaction rollback successfully");
         } catch (SQLException e) {
             log.error("Can not rollback transaction", e);
         }
@@ -58,7 +60,6 @@ public class JDBCDaoConnection implements DaoConnection {
         } catch (SQLException e) {
             log.error("Can not close connection", e);
         }
-
     }
 
     @Override
