@@ -22,7 +22,7 @@ public class JDBCActivityDao implements ActivityDao {
 
     @Override
     public void create(Activity entity) {
-        try (PreparedStatement ps = connection.prepareStatement("insert into activities values (nextval('activities_id_seq'), ?, ?, ?, ?, ?, ?, ?)")) {
+        try (PreparedStatement ps = connection.prepareStatement(resourceBundle.getString("query.activity.create"))) {
             fillStatement(entity, ps);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -32,16 +32,7 @@ public class JDBCActivityDao implements ActivityDao {
 
     @Override
     public Optional<Activity> findById(long id) {
-        try (PreparedStatement ps = connection.prepareStatement("select activities.id                as \"activities.id\",\n" +
-                "       activities.name              as \"activities.name\",\n" +
-                "       activities.description       as \"activities.description\",\n" +
-                "       activities.start_time        as \"activities.start_time\",\n" +
-                "       activities.end_time          as \"activities.end_time\",\n" +
-                "       activities.duration          as \"activities.duration\",\n" +
-                "       activities.importance        as \"activities.importance\",\n" +
-                "       activities.status            as \"activities.status\"\n" +
-                "from activities\n" +
-                "where activities.id = ?")) {
+        try (PreparedStatement ps = connection.prepareStatement(resourceBundle.getString("query.activity.find.by_id"))) {
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
 
@@ -56,15 +47,7 @@ public class JDBCActivityDao implements ActivityDao {
     @Override
     public List<Activity> findAll() {
         try (Statement ps = connection.createStatement()) {
-            ResultSet rs = ps.executeQuery("select activities.id                as \"activities.id\",\n" +
-                    "       activities.name              as \"activities.name\",\n" +
-                    "       activities.description       as \"activities.description\",\n" +
-                    "       activities.start_time        as \"activities.start_time\",\n" +
-                    "       activities.end_time          as \"activities.end_time\",\n" +
-                    "       activities.duration          as \"activities.duration\",\n" +
-                    "       activities.importance        as \"activities.importance\",\n" +
-                    "       activities.status            as \"activities.status\"\n" +
-                    "from activities\n");
+            ResultSet rs = ps.executeQuery(resourceBundle.getString("query.activity.find.all"));
 
             Map<Long, Activity> activityMap = extractActivitiesFromResultSet(rs);
             return new ArrayList<>(activityMap.values());
@@ -75,17 +58,7 @@ public class JDBCActivityDao implements ActivityDao {
 
     @Override
     public List<Activity> findAllPageable(int page, int size) {
-        try (PreparedStatement ps = connection.prepareStatement("select activities.id                as \"activities.id\",\n" +
-                "       activities.name              as \"activities.name\",\n" +
-                "       activities.description       as \"activities.description\",\n" +
-                "       activities.start_time        as \"activities.start_time\",\n" +
-                "       activities.end_time          as \"activities.end_time\",\n" +
-                "       activities.duration          as \"activities.duration\",\n" +
-                "       activities.importance        as \"activities.importance\",\n" +
-                "       activities.status            as \"activities.status\"\n" +
-                "from activities\n" +
-                "order by activities.id desc " +
-                "limit ? offset ?")) {
+        try (PreparedStatement ps = connection.prepareStatement(resourceBundle.getString("query.activity.find.all.pageable"))) {
             ps.setInt(1, size);
             ps.setInt(2, size * page);
             ResultSet rs = ps.executeQuery();
@@ -100,11 +73,11 @@ public class JDBCActivityDao implements ActivityDao {
 
     @Override
     public void update(Activity entity) {
-        try (PreparedStatement activityPS = connection.prepareStatement("update activities set name = ?, description = ?, start_time =  ?, end_time = ?, duration = ?, importance = ?, status = ? where id = ?")) {
+        try (PreparedStatement activityPS = connection.prepareStatement(resourceBundle.getString("query.activity.update"))) {
             fillStatement(entity, activityPS);
             activityPS.setLong(8, entity.getId());
             activityPS.executeUpdate();
-            try (PreparedStatement usersActivitiesPS = connection.prepareStatement("insert into users_activities values (?, ?) on conflict do nothing")) {
+            try (PreparedStatement usersActivitiesPS = connection.prepareStatement(resourceBundle.getString("query.activity.update.users"))) {
                 List<Long> userIdList = entity.getUsers().stream().map(User::getId).collect(Collectors.toList());
                 for (long userId : userIdList) {
                     usersActivitiesPS.setLong(1, userId);
@@ -119,7 +92,7 @@ public class JDBCActivityDao implements ActivityDao {
 
     @Override
     public void delete(long id) {
-        try (PreparedStatement ps = connection.prepareStatement("delete from activities where id = ?")) {
+        try (PreparedStatement ps = connection.prepareStatement(resourceBundle.getString("query.activity.delete"))) {
             ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -130,7 +103,7 @@ public class JDBCActivityDao implements ActivityDao {
     @Override
     public long getNumberOfRecords() {
         try (Statement st = connection.createStatement()) {
-            ResultSet rs = st.executeQuery("select count(*) from activities");
+            ResultSet rs = st.executeQuery(resourceBundle.getString("query.activity.find.rows"));
 
             if (rs.next()) {
                 return rs.getLong(1);
@@ -163,22 +136,7 @@ public class JDBCActivityDao implements ActivityDao {
             activityMapper.makeUnique(activityMap, activity);
         }
         for (Activity activity : activityMap.values()) {
-            try (PreparedStatement activityUsersPS = connection.prepareStatement("select " +
-                    "       activities.id                as \"activities.id\",\n" +
-                    "       users_activities.user_id     as \"users_activities.user_id\",\n" +
-                    "       users_activities.activity_id as \"users_activities.activity_id\",\n" +
-                    "       users.id                     as \"users.id\",\n" +
-                    "       users.first_name             as \"users.first_name\",\n" +
-                    "       users.last_name              as \"users.last_name\",\n" +
-                    "       users.password               as \"users.password\",\n" +
-                    "       users.username               as \"users.username\",\n" +
-                    "       user_authorities.user_id as \"user_authorities.user_id\",\n" +
-                    "       user_authorities.authorities as \"user_authorities.authorities\"\n" +
-                    "from activities\n" +
-                    "         left join users_activities on activities.id = users_activities.activity_id\n" +
-                    "         left join users on users_activities.user_id = users.id " +
-                    "         left join user_authorities on users.id = user_authorities.user_id " +
-                    "where activities.id = ?")) {
+            try (PreparedStatement activityUsersPS = connection.prepareStatement(resourceBundle.getString("query.activity.join.users"))) {
                 activityUsersPS.setLong(1, activity.getId());
                 ResultSet activityUsersRS = activityUsersPS.executeQuery();
 

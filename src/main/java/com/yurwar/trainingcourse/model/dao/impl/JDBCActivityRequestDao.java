@@ -17,13 +17,13 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
     private final Connection connection;
     private ResourceBundle resourceBundle = ResourceBundle.getBundle("database");
 
-    public JDBCActivityRequestDao(Connection connection) {
+    JDBCActivityRequestDao(Connection connection) {
         this.connection = connection;
     }
 
     @Override
     public void create(ActivityRequest entity) {
-        try (PreparedStatement ps = connection.prepareStatement("insert into activity_requests values (nextval('activity_requests_id_seq'), ?, ?, ?, ?, ?)")) {
+        try (PreparedStatement ps = connection.prepareStatement(resourceBundle.getString("query.activity_request.create"))) {
             fillActivityRequestStatement(entity, ps);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -33,14 +33,7 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
 
     @Override
     public List<ActivityRequest> findByActivityIdAndUserId(long activityId, long userId) {
-        try (PreparedStatement ps = connection.prepareStatement("select activity_requests.id as \"activity_requests.id\",\n" +
-                "       activity_requests.activity_id as \"activity_requests.id\",\n" +
-                "       activity_requests.user_id as \"activity_requests.user_id\",\n" +
-                "       activity_requests.request_date as \"activity_requests.request_date\",\n" +
-                "       activity_requests.action as \"activity_requests.action\",\n" +
-                "       activity_requests.status as \"activity_requests.status\"\n" +
-                "from activity_requests " +
-                "where activity_requests.activity_id = ? and activity_requests.user_id = ?")) {
+        try (PreparedStatement ps = connection.prepareStatement(resourceBundle.getString("query.activity_request.find.by_activity_id_and_user_id"))) {
             ps.setLong(1, activityId);
             ps.setLong(2, userId);
             ResultSet rs = ps.executeQuery();
@@ -54,14 +47,7 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
 
     @Override
     public Optional<ActivityRequest> findById(long id) {
-        try (PreparedStatement ps = connection.prepareStatement("select activity_requests.id as \"activity_requests.id\",\n" +
-                "       activity_requests.activity_id as \"activity_requests.id\",\n" +
-                "       activity_requests.user_id as \"activity_requests.user_id\",\n" +
-                "       activity_requests.request_date as \"activity_requests.request_date\",\n" +
-                "       activity_requests.action as \"activity_requests.action\",\n" +
-                "       activity_requests.status as \"activity_requests.status\"\n" +
-                "from activity_requests " +
-                "where activity_requests.id = ?")) {
+        try (PreparedStatement ps = connection.prepareStatement(resourceBundle.getString("query.activity_request.find.by_id"))) {
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
 
@@ -75,13 +61,7 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
     @Override
     public List<ActivityRequest> findAll() {
         try (Statement st = connection.createStatement()) {
-            ResultSet rs = st.executeQuery("select activity_requests.id as \"activity_requests.id\",\n" +
-                    "       activity_requests.activity_id as \"activity_requests.id\",\n" +
-                    "       activity_requests.user_id as \"activity_requests.user_id\",\n" +
-                    "       activity_requests.request_date as \"activity_requests.request_date\",\n" +
-                    "       activity_requests.action as \"activity_requests.action\",\n" +
-                    "       activity_requests.status as \"activity_requests.status\"\n" +
-                    "from activity_requests ");
+            ResultSet rs = st.executeQuery(resourceBundle.getString("query.activity_request.find.all"));
 
             Map<Long, ActivityRequest> activityRequestMap = extractActivityRequestsFromResultSet(rs);
             return new ArrayList<>(activityRequestMap.values());
@@ -92,15 +72,7 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
 
     @Override
     public List<ActivityRequest> findAllPageable(int page, int size) {
-        try (PreparedStatement ps = connection.prepareStatement("select activity_requests.id as \"activity_requests.id\",\n" +
-                "       activity_requests.activity_id as \"activity_requests.id\",\n" +
-                "       activity_requests.user_id as \"activity_requests.user_id\",\n" +
-                "       activity_requests.request_date as \"activity_requests.request_date\",\n" +
-                "       activity_requests.action as \"activity_requests.action\",\n" +
-                "       activity_requests.status as \"activity_requests.status\"\n" +
-                "from activity_requests " +
-                "order by activity_requests.id desc " +
-                "limit ? offset ?")) {
+        try (PreparedStatement ps = connection.prepareStatement(resourceBundle.getString("query.activity_request.find.all.pageable"))) {
             ps.setLong(1, size);
             ps.setLong(2, size * page);
             ResultSet rs = ps.executeQuery();
@@ -114,7 +86,7 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
 
     @Override
     public void update(ActivityRequest entity) {
-        try (PreparedStatement ps = connection.prepareStatement("update activity_requests set activity_id = ?, user_id = ?, request_date = ?, action = ?, status = ? where id = ?")) {
+        try (PreparedStatement ps = connection.prepareStatement(resourceBundle.getString("query.activity_request.update"))) {
             fillActivityRequestStatement(entity, ps);
             ps.setLong(6, entity.getId());
             ps.executeUpdate();
@@ -125,7 +97,7 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
 
     @Override
     public void delete(long id) {
-        try (PreparedStatement ps = connection.prepareStatement("delete from activity_requests where id = ?")) {
+        try (PreparedStatement ps = connection.prepareStatement(resourceBundle.getString("query.activity_request.delete"))) {
             ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -136,7 +108,7 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
     @Override
     public long getNumberOfRecords() {
         try (Statement st = connection.createStatement()) {
-            ResultSet rs = st.executeQuery("select count(*) from activity_requests");
+            ResultSet rs = st.executeQuery(resourceBundle.getString("query.activity_request.find.rows"));
 
             if (rs.next()) {
                 return rs.getLong(1);
@@ -170,19 +142,7 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
         }
 
         for (ActivityRequest activityRequest : activityRequestMap.values()) {
-            try (PreparedStatement activitiesPS = connection.prepareStatement("select " +
-                    "       activity_requests.id as \"activity_requests.id\",\n" +
-                    "       activities.id as \"activities.id\",\n" +
-                    "       activities.name as \"activities.name\",\n" +
-                    "       activities.description as \"activities.description\",\n" +
-                    "       activities.start_time as \"activities.start_time\",\n" +
-                    "       activities.end_time as \"activities.end_time\",\n" +
-                    "       activities.duration as \"activities.duration\",\n" +
-                    "       activities.importance as \"activities.importance\",\n" +
-                    "       activities.status as \"activities.status\"\n" +
-                    "from activity_requests\n" +
-                    "         left join activities on activity_requests.activity_id = activities.id" +
-                    " where activity_requests.id = ?")) {
+            try (PreparedStatement activitiesPS = connection.prepareStatement(resourceBundle.getString("query.activity_request.join.activity"))) {
                 activitiesPS.setLong(1, activityRequest.getId());
                 ResultSet activitiesResultSet = activitiesPS.executeQuery();
 
@@ -196,19 +156,7 @@ public class JDBCActivityRequestDao implements ActivityRequestDao {
                 }
             }
 
-            try (PreparedStatement usersPS = connection.prepareStatement("select" +
-                    "       activity_requests.id as \"activity_requests.id\",\n" +
-                    "       users.id as \"users.id\",\n" +
-                    "       users.first_name as \"users.first_name\",\n" +
-                    "       users.last_name as \"users.last_name\",\n" +
-                    "       users.password as \"users.password\",\n" +
-                    "       users.username as \"users.username\",\n" +
-                    "       user_authorities.user_id as \"user_authorities.user_id\",\n" +
-                    "       user_authorities.authorities as \"user_authorities.authorities\"\n" +
-                    "from activity_requests\n" +
-                    "         left join users on activity_requests.user_id = users.id\n" +
-                    "         left join user_authorities on users.id = user_authorities.user_id " +
-                    "where activity_requests.id = ?")) {
+            try (PreparedStatement usersPS = connection.prepareStatement(resourceBundle.getString("query.activity_request.join.user"))) {
                 usersPS.setLong(1, activityRequest.getId());
                 ResultSet usersResultSet = usersPS.executeQuery();
 

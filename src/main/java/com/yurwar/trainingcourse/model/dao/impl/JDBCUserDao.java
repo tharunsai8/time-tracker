@@ -39,7 +39,7 @@ public class JDBCUserDao implements UserDao {
             if (rs.next()) {
                 entity.setId(rs.getLong(1));
             }
-            try (PreparedStatement authorityPS = connection.prepareStatement("insert into user_authorities (user_id, authorities) values (?, ?)")) {
+            try (PreparedStatement authorityPS = connection.prepareStatement(resourceBundle.getString("query.authority.create"))) {
                 for (Authority authority : entity.getAuthorities()) {
                     authorityPS.setLong(1, entity.getId());
                     authorityPS.setString(2, authority.name());
@@ -53,14 +53,7 @@ public class JDBCUserDao implements UserDao {
 
     @Override
     public Optional<User> findByUsername(String username) {
-        try (PreparedStatement ps = connection.prepareStatement("select " +
-                "       users.id                     as \"users.id\",\n" +
-                "       users.first_name             as \"users.first_name\",\n" +
-                "       users.last_name              as \"users.last_name\",\n" +
-                "       users.password               as \"users.password\",\n" +
-                "       users.username               as \"users.username\"\n" +
-                "from users\n" +
-                "where users.username = ?")) {
+        try (PreparedStatement ps = connection.prepareStatement(resourceBundle.getString("query.user.find.by_username"))) {
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
 
@@ -74,14 +67,7 @@ public class JDBCUserDao implements UserDao {
 
     @Override
     public Optional<User> findById(long id) {
-        try (PreparedStatement ps = connection.prepareStatement("select " +
-                "       users.id                     as \"users.id\",\n" +
-                "       users.first_name             as \"users.first_name\",\n" +
-                "       users.last_name              as \"users.last_name\",\n" +
-                "       users.password               as \"users.password\",\n" +
-                "       users.username               as \"users.username\"\n" +
-                "from users\n" +
-                "where users.id = ?")) {
+        try (PreparedStatement ps = connection.prepareStatement(resourceBundle.getString("query.user.find.by_id"))) {
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
 
@@ -96,13 +82,7 @@ public class JDBCUserDao implements UserDao {
     @Override
     public List<User> findAll() {
         try (Statement st = connection.createStatement()) {
-            ResultSet rs = st.executeQuery("select " +
-                    "       users.id                     as \"users.id\",\n" +
-                    "       users.first_name             as \"users.first_name\",\n" +
-                    "       users.last_name              as \"users.last_name\",\n" +
-                    "       users.password               as \"users.password\",\n" +
-                    "       users.username               as \"users.username\"\n" +
-                    "from users");
+            ResultSet rs = st.executeQuery(resourceBundle.getString("query.user.find.all"));
 
             Map<Long, User> userMap = extractUsersFromResultSet(rs);
 
@@ -114,23 +94,13 @@ public class JDBCUserDao implements UserDao {
 
     @Override
     public List<User> findAllPageable(int page, int size) {
-        try (PreparedStatement ps = connection.prepareStatement("select " +
-                "       users.id                     as \"users.id\",\n" +
-                "       users.first_name             as \"users.first_name\",\n" +
-                "       users.last_name              as \"users.last_name\",\n" +
-                "       users.password               as \"users.password\",\n" +
-                "       users.username               as \"users.username\"\n" +
-                "from users\n" +
-                "order by users.last_name, users.first_name\n" +
-                "limit ? offset ?")) {
-            connection.setAutoCommit(false);
+        try (PreparedStatement ps = connection.prepareStatement(resourceBundle.getString("query.user.find.all.pageable"))) {
             ps.setLong(1, size);
             ps.setLong(2, size * page);
             ResultSet rs = ps.executeQuery();
 
             Map<Long, User> userMap = extractUsersFromResultSet(rs);
 
-            connection.commit();
             return new ArrayList<>(userMap.values());
         } catch (SQLException e) {
             throw new DaoException("Can not find all users", e);
@@ -139,7 +109,7 @@ public class JDBCUserDao implements UserDao {
 
     @Override
     public void update(User entity) {
-        try (PreparedStatement userPS = connection.prepareStatement("update users set first_name = ?, last_name = ?, password = ?, username = ? where id = ?")) {
+        try (PreparedStatement userPS = connection.prepareStatement(resourceBundle.getString("query.user.update"))) {
             userPS.setString(1, entity.getFirstName());
             userPS.setString(2, entity.getLastName());
             userPS.setString(3, entity.getPassword());
@@ -147,11 +117,11 @@ public class JDBCUserDao implements UserDao {
             userPS.setLong(5, entity.getId());
             userPS.executeUpdate();
 
-            try (PreparedStatement authorityDeletePS = connection.prepareStatement("delete from user_authorities where user_id = ?")) {
+            try (PreparedStatement authorityDeletePS = connection.prepareStatement(resourceBundle.getString("query.authority.delete.by_id"))) {
                 authorityDeletePS.setLong(1, entity.getId());
                 authorityDeletePS.executeUpdate();
             }
-            try (PreparedStatement authorityInsertPS = connection.prepareStatement("insert into user_authorities values (?, ?)")) {
+            try (PreparedStatement authorityInsertPS = connection.prepareStatement(resourceBundle.getString("query.authority.create"))) {
                 for (Authority authority : entity.getAuthorities()) {
                     authorityInsertPS.setLong(1, entity.getId());
                     authorityInsertPS.setString(2, authority.name());
@@ -176,7 +146,7 @@ public class JDBCUserDao implements UserDao {
     @Override
     public long getNumberOfRecords() {
         try (Statement st = connection.createStatement()) {
-            ResultSet rs = st.executeQuery("select count(*) from users");
+            ResultSet rs = st.executeQuery(resourceBundle.getString("query.user.find.rows"));
 
             if (rs.next()) {
                 return rs.getLong(1);
@@ -202,13 +172,7 @@ public class JDBCUserDao implements UserDao {
         }
 
         for (User user : userMap.values()) {
-            try (PreparedStatement userAuthoritiesPS = connection.prepareStatement("select " +
-                    "       users.id                     as \"users.id\",\n" +
-                    "       user_authorities.user_id     as \"user_authorities.user_id\",\n" +
-                    "       user_authorities.authorities as \"user_authorities.authorities\"\n" +
-                    "from users\n" +
-                    "         left join user_authorities on users.id = user_authorities.user_id\n " +
-                    "where users.id = ?")) {
+            try (PreparedStatement userAuthoritiesPS = connection.prepareStatement(resourceBundle.getString("query.user.join.authorities"))) {
                 userAuthoritiesPS.setLong(1, user.getId());
                 ResultSet userAuthoritiesResultSet = userAuthoritiesPS.executeQuery();
 
@@ -218,22 +182,7 @@ public class JDBCUserDao implements UserDao {
                     user.getAuthorities().add(authority);
                 }
             }
-            try (PreparedStatement userActivitiesPS = connection.prepareStatement("select " +
-                    "       users.id                     as \"users.id\",\n" +
-                    "       users_activities.user_id     as \"users_activities.user_id\",\n" +
-                    "       users_activities.activity_id as \"users_activities.activity_id\",\n" +
-                    "       activities.id                as \"activities.id\",\n" +
-                    "       activities.name              as \"activities.name\",\n" +
-                    "       activities.description       as \"activities.description\",\n" +
-                    "       activities.start_time        as \"activities.start_time\",\n" +
-                    "       activities.end_time          as \"activities.end_time\",\n" +
-                    "       activities.duration          as \"activities.duration\",\n" +
-                    "       activities.importance        as \"activities.importance\",\n" +
-                    "       activities.status            as \"activities.status\"\n" +
-                    "from users\n" +
-                    "         left join users_activities on users.id = users_activities.user_id\n" +
-                    "         left join activities on users_activities.activity_id = activities.id " +
-                    "where users.id = ?")) {
+            try (PreparedStatement userActivitiesPS = connection.prepareStatement(resourceBundle.getString("query.user.join.activities"))) {
                 userActivitiesPS.setLong(1, user.getId());
                 ResultSet userActivitiesResultSet = userActivitiesPS.executeQuery();
 
@@ -246,26 +195,7 @@ public class JDBCUserDao implements UserDao {
                     }
                 }
             }
-            try (PreparedStatement activityRequestsPS = connection.prepareStatement("select " +
-                    "       users.id                       as \"users.id\",\n" +
-                    "       activity_requests.id           as \"activity_requests.id\",\n" +
-                    "       activity_requests.activity_id  as \"activity_requests.activity_id\",\n" +
-                    "       activity_requests.user_id      as \"activity_requests.user_id\",\n" +
-                    "       activity_requests.request_date as \"activity_requests.request_date\",\n" +
-                    "       activity_requests.action       as \"activity_requests.action\",\n" +
-                    "       activity_requests.status       as \"activity_requests.status\",\n" +
-                    "       activities.id                  as \"activities.id\",\n" +
-                    "       activities.name                as \"activities.name\",\n" +
-                    "       activities.description         as \"activities.description\",\n" +
-                    "       activities.start_time          as \"activities.start_time\",\n" +
-                    "       activities.end_time            as \"activities.end_time\",\n" +
-                    "       activities.duration            as \"activities.duration\",\n" +
-                    "       activities.importance          as \"activities.importance\",\n" +
-                    "       activities.status              as \"activities.status\"\n" +
-                    "from users\n" +
-                    "         left join activity_requests on users.id = activity_requests.user_id\n" +
-                    "         left join activities on activity_requests.activity_id = activities.id\n" +
-                    "where users.id = ?")) {
+            try (PreparedStatement activityRequestsPS = connection.prepareStatement(resourceBundle.getString("query.user.join.activity_requests"))) {
                 activityRequestsPS.setLong(1, user.getId());
                 ResultSet userActivityRequestsResultSet = activityRequestsPS.executeQuery();
 
