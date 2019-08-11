@@ -2,6 +2,7 @@ package com.yurwar.trainingcourse.controller.command;
 
 import com.yurwar.trainingcourse.controller.dto.RegistrationUserDTO;
 import com.yurwar.trainingcourse.model.service.UserService;
+import com.yurwar.trainingcourse.util.CommandUtils;
 import com.yurwar.trainingcourse.util.exception.UsernameNotUniqueException;
 import com.yurwar.trainingcourse.util.validator.CompositeValidator;
 import com.yurwar.trainingcourse.util.validator.NotBlankValidator;
@@ -19,7 +20,7 @@ import java.util.ResourceBundle;
 public class RegistrationCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private final UserService userService;
-    private final ResourceBundle rb = ResourceBundle.getBundle("i18n.messages");
+    private ResourceBundle rb;
 
     public RegistrationCommand(UserService userService) {
         this.userService = userService;
@@ -27,6 +28,7 @@ public class RegistrationCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
+        rb = ResourceBundle.getBundle("i18n.messages", CommandUtils.getLocaleFromSession(request));
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
         String username = request.getParameter("username");

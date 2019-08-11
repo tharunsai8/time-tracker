@@ -141,7 +141,7 @@ public class ActivityRequestService {
         }
     }
 
-    public ActivityRequest findActivityRequestById(long activityRequestId) {
+    public ActivityRequest getActivityRequestById(long activityRequestId) {
         try (DaoConnection connection = daoFactory.getConnection()) {
             ActivityRequestDao activityRequestDao = daoFactory.createActivityRequestDao(connection);
 
@@ -160,7 +160,7 @@ public class ActivityRequestService {
 
             connection.beginTransaction();
 
-            ActivityRequest activityRequest = findActivityRequestById(activityRequestId);
+            ActivityRequest activityRequest = getActivityRequestById(activityRequestId);
             Activity activity = activityRequest.getActivity();
             User user = activityRequest.getUser();
 
@@ -204,7 +204,7 @@ public class ActivityRequestService {
 
             connection.beginTransaction();
 
-            ActivityRequest activityRequest = findActivityRequestById(activityRequestId);
+            ActivityRequest activityRequest = getActivityRequestById(activityRequestId);
             Activity activity = activityRequest.getActivity();
 
             switch (activity.getStatus()) {
@@ -240,7 +240,7 @@ public class ActivityRequestService {
 
             connection.beginTransaction();
 
-            ActivityRequest activityRequest = findActivityRequestById(activityRequestId);
+            ActivityRequest activityRequest = getActivityRequestById(activityRequestId);
             activityRequest.setStatus(ActivityRequestStatus.REJECTED);
             activityRequestDao.update(activityRequest);
 

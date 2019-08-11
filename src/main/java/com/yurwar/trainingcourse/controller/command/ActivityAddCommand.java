@@ -5,6 +5,7 @@ import com.yurwar.trainingcourse.model.entity.Activity;
 import com.yurwar.trainingcourse.model.entity.ActivityImportance;
 import com.yurwar.trainingcourse.model.entity.ActivityStatus;
 import com.yurwar.trainingcourse.model.service.ActivityService;
+import com.yurwar.trainingcourse.util.CommandUtils;
 import com.yurwar.trainingcourse.util.validator.CompositeValidator;
 import com.yurwar.trainingcourse.util.validator.NotBlankValidator;
 import com.yurwar.trainingcourse.util.validator.Result;
@@ -21,7 +22,7 @@ import java.util.ResourceBundle;
 public class ActivityAddCommand implements Command {
     public static final Logger log = LogManager.getLogger();
     private final ActivityService activityService;
-    private final ResourceBundle rb = ResourceBundle.getBundle("i18n.messages");
+    private ResourceBundle rb;
 
     public ActivityAddCommand(ActivityService activityService) {
         this.activityService = activityService;
@@ -29,6 +30,7 @@ public class ActivityAddCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
+        rb = ResourceBundle.getBundle("i18n.messages", CommandUtils.getLocaleFromSession(request));
         String name = request.getParameter("name");
         String description = request.getParameter("description");
         String importance = request.getParameter("importance");

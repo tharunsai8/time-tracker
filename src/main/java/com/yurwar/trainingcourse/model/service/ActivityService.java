@@ -15,9 +15,7 @@ import org.apache.logging.log4j.Logger;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
-@SuppressWarnings("WeakerAccess")
 public class ActivityService {
     private static final Logger log = LogManager.getLogger();
     private final DaoFactory daoFactory = DaoFactory.getInstance();
@@ -56,14 +54,15 @@ public class ActivityService {
         }
     }
 
-    public Optional<Activity> getActivityById(long activityId) {
+    public Activity getActivityById(long activityId) {
         try (DaoConnection connection = daoFactory.getConnection()) {
             ActivityDao activityDao = daoFactory.createActivityDao(connection);
-            return activityDao.findById(activityId);
+            return activityDao.findById(activityId).orElseThrow(() ->
+                    new IllegalArgumentException("Invalid activity id: " + activityId));
         } catch (DaoException e) {
             log.warn("Can not get activity by id", e);
         }
-        return Optional.empty();
+        return null;
     }
 
     public long getNumberOfRecords() {
@@ -82,8 +81,7 @@ public class ActivityService {
 
             connection.beginTransaction();
 
-            Activity activity = getActivityById(activityId).orElseThrow(() ->
-                    new IllegalArgumentException("Invalid activity id: " + activityId));
+            Activity activity = getActivityById(activityId);
 
             if (activity.getStatus().equals(ActivityStatus.ACTIVE) && activity.getUsers().contains(user)) {
                 Duration duration = activity.getDuration();

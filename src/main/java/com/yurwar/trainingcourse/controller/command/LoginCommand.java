@@ -26,7 +26,8 @@ public class LoginCommand implements Command {
         if (!ObjectUtils.allNotNull(username, password)) {
             return "/login.jsp";
         }
-        log.info("User try to log in with username: " + username + " and password: " + password);
+
+        log.info("User try to log in with username: " + username);
 
         Optional<User> userOptional = userService.findUserByUsername(username);
         if (userOptional.isEmpty()) {

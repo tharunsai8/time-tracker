@@ -17,7 +17,7 @@ public class ActivityRequestRejectCommand implements Command {
     public String execute(HttpServletRequest request) {
         long activityRequestId = Long.parseLong(request.getParameter("id"));
 
-        ActivityRequest activityRequest = activityRequestService.findActivityRequestById(activityRequestId);
+        ActivityRequest activityRequest = activityRequestService.getActivityRequestById(activityRequestId);
 
         if (!activityRequest.getStatus().equals(ActivityRequestStatus.PENDING)) {
             return "redirect:/activities/request";

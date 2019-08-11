@@ -3,6 +3,7 @@ package com.yurwar.trainingcourse.controller.command;
 import com.yurwar.trainingcourse.controller.dto.ActivityDurationDTO;
 import com.yurwar.trainingcourse.model.entity.User;
 import com.yurwar.trainingcourse.model.service.ActivityService;
+import com.yurwar.trainingcourse.util.CommandUtils;
 import com.yurwar.trainingcourse.util.validator.CompositeValidator;
 import com.yurwar.trainingcourse.util.validator.PositiveOrZeroValidator;
 import com.yurwar.trainingcourse.util.validator.Result;
@@ -10,7 +11,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
 public class MarkTimeCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private final ActivityService activityService;
-    private final ResourceBundle rb = ResourceBundle.getBundle("i18n.messages");
+    private ResourceBundle rb;
 
     public MarkTimeCommand(ActivityService activityService) {
         this.activityService = activityService;
@@ -26,8 +26,8 @@ public class MarkTimeCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("authUser");
+        rb = ResourceBundle.getBundle("i18n.messages", CommandUtils.getLocaleFromSession(request));
+        User user = CommandUtils.getUserFromSession(request);
 
         long activityId;
         int days;
@@ -49,7 +49,7 @@ public class MarkTimeCommand implements Command {
         Map<String, String[]> validationErrorsMap = getValidationErrorsMap(activityDurationDTO);
         if (!validationErrorsMap.isEmpty()) {
             request.setAttribute("errors", validationErrorsMap);
-            return new ActivitiesCommand(activityService).execute(request);
+            return CommandManager.getInstance().getCommand("/activities").execute(request);
         }
 
         activityService.markTimeSpent(activityId, user, activityDurationDTO);

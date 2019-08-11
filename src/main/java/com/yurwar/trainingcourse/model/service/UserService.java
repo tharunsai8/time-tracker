@@ -78,14 +78,15 @@ public class UserService {
         }
     }
 
-    public Optional<User> findUserById(long id) {
+    public User getUserById(long id) {
         try (DaoConnection connection = daoFactory.getConnection()) {
             UserDao userDao = daoFactory.createUserDao(connection);
-            return userDao.findById(id);
+            return userDao.findById(id).orElseThrow(() ->
+                    new IllegalArgumentException("Invalid user id: " + id));
         } catch (DaoException e) {
             log.warn("Can not find user with id: " + id);
-            return Optional.empty();
         }
+        return null;
     }
 
     public void updateUser(UpdateUserDTO userDTO) throws UsernameNotUniqueException {
@@ -97,15 +98,12 @@ public class UserService {
                 .username(userDTO.getUsername())
                 .authorities(userDTO.getAuthorities())
                 .build();
-        System.out.println(userDTO.getPassword());
         try (DaoConnection connection = daoFactory.getConnection()) {
             UserDao userDao = daoFactory.createUserDao(connection);
             if (userDTO.getPassword().isBlank()) {
-                String oldPassword = userDao.findById(userDTO.getId()).orElseThrow(() ->
-                        new IllegalArgumentException("Invalid user id: " + userDTO.getId())).getPassword();
+                String oldPassword = getUserById(userDTO.getId()).getPassword();
                 user.setPassword(oldPassword);
             }
-
             userDao.update(user);
         } catch (DaoException e) {
             log.warn("Can not update user " + user.getUsername(), e);

@@ -4,6 +4,7 @@ import com.yurwar.trainingcourse.controller.dto.UpdateUserDTO;
 import com.yurwar.trainingcourse.model.entity.Authority;
 import com.yurwar.trainingcourse.model.entity.User;
 import com.yurwar.trainingcourse.model.service.UserService;
+import com.yurwar.trainingcourse.util.CommandUtils;
 import com.yurwar.trainingcourse.util.exception.UsernameNotUniqueException;
 import com.yurwar.trainingcourse.util.validator.*;
 import org.apache.commons.lang3.ObjectUtils;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 public class UserUpdateCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private final UserService userService;
-    private final ResourceBundle rb = ResourceBundle.getBundle("i18n.messages");
+    private ResourceBundle rb;
 
     public UserUpdateCommand(UserService userService) {
         this.userService = userService;
@@ -26,19 +27,24 @@ public class UserUpdateCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
-        long id = Long.parseLong(request.getParameter("id"));
+        rb = ResourceBundle.getBundle("i18n.messages", CommandUtils.getLocaleFromSession(request));
+
+        long id;
+        try {
+            id = Long.parseLong(request.getParameter("id"));
+        } catch (NumberFormatException e) {
+            log.warn("Can not parse number from request parameter");
+            return "/WEB-INF/error/404.jsp";
+        }
+
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String[] authorities = request.getParameterValues("authorities");
 
-        log.info("First name: {}, Last name: {}, Username: {}, Password: {}, Authorities: {}",
-                firstName, lastName, username, password, authorities);
-
-
         if (!ObjectUtils.allNotNull(firstName, lastName, username, password)) {
-            User user = userService.findUserById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user id: " + id));
+            User user = userService.getUserById(id);
             request.setAttribute("user", user);
             request.setAttribute("authorities", Authority.values());
             return "/update-user.jsp";
