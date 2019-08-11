@@ -18,7 +18,7 @@ public class SizeValidator implements Validator<String> {
 
     @Override
     public Result validate(String value) {
-        if (value.length() > minSize && value.length() < maxSize) {
+        if (value.length() >= minSize && value.length() <= maxSize) {
             return new SimpleResult(true);
         } else {
             return new SimpleResult(false, message);

@@ -20,9 +20,9 @@
 <div class="container">
     <div class="card">
         <div class="card-header">
-            <h2 class="display-4">
+            <h1 class="display-4">
                 <fmt:message key="users.update.title"/>
-            </h2>
+            </h1>
             <hr>
         </div>
         <div class="card-body">
@@ -41,6 +41,11 @@
                                        id="firstName"
                                        class="form-control"
                                        placeholder="<fmt:message key="users.update.first_name.placeholder"/>">
+                                <span class="text-danger">
+                                    <c:forEach items="${requestScope.errors.firstNameErrors}" var="error">
+                                        ${error}<br>
+                                    </c:forEach>
+                                </span>
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="col-form-label" for="lastName">
@@ -52,6 +57,11 @@
                                        id="lastName"
                                        class="form-control"
                                        placeholder="<fmt:message key="users.update.last_name.placeholder"/>">
+                                <span class="text-danger">
+                                    <c:forEach items="${requestScope.errors.lastNameErrors}" var="error">
+                                        ${error}<br>
+                                    </c:forEach>
+                                </span>
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="col-form-label" for="username">
@@ -63,11 +73,12 @@
                                        id="username"
                                        class="form-control"
                                        placeholder="<fmt:message key="users.update.username.placeholder"/>">
-                                <c:if test="${requestScope.usernameErrorMessage != null}">
                                 <span class="text-danger">
-                                        ${requestScope.usernameErrorMessage}
+                                    <c:forEach items="${requestScope.errors.usernameErrors}" var="error">
+                                        ${error}<br>
+                                    </c:forEach>
+                                    ${requestScope.usernameUniqueError}
                                 </span>
-                                </c:if>
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="col-form-label" for="password">
@@ -78,6 +89,11 @@
                                        id="password"
                                        class="form-control"
                                        placeholder="<fmt:message key="users.update.password.placeholder"/>">
+                                <span class="text-danger">
+                                    <c:forEach items="${requestScope.errors.passwordErrors}" var="error">
+                                        ${error}<br>
+                                    </c:forEach>
+                                </span>
                             </div>
                             <div class="form-group form-check col-md-6">
                                 <ul>
@@ -96,6 +112,11 @@
                                             </label>
                                         </li>
                                     </c:forEach>
+                                    <span class="text-danger">
+                                        <c:forEach items="${requestScope.errors.authoritiesErrors}" var="error">
+                                            ${error}<br>
+                                        </c:forEach>
+                                    </span>
                                 </ul>
                             </div>
                         </div>

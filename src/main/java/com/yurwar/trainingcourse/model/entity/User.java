@@ -54,6 +54,76 @@ public class User {
         this.activityRequests = activityRequests;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private long id;
+        private String username;
+        private String password;
+        private String firstName;
+        private String lastName;
+        private Set<Authority> authorities = new HashSet<>();
+        private List<Activity> activities = new ArrayList<>();
+        private List<ActivityRequest> activityRequests = new ArrayList<>();
+
+        public Builder id(long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder username(String username) {
+            this.username = username;
+            return this;
+        }
+
+        public Builder password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder firstName(String firstName) {
+            this.firstName = firstName;
+            return this;
+        }
+
+        public Builder lastName(String lastName) {
+            this.lastName = lastName;
+            return this;
+        }
+
+        public Builder authorities(Set<Authority> authorities) {
+            this.authorities = authorities;
+            return this;
+        }
+
+        public Builder activities(List<Activity> activities) {
+            this.activities = activities;
+            return this;
+        }
+
+        public Builder activityRequests(List<ActivityRequest> activityRequests) {
+            this.activityRequests = activityRequests;
+            return this;
+        }
+
+        public User build() {
+            User user = new User();
+            user.setId(id);
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setAuthorities(authorities);
+            user.setActivities(activities);
+            user.setActivityRequests(activityRequests);
+
+            return user;
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

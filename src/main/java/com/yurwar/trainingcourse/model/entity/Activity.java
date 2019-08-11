@@ -36,6 +36,10 @@ public class Activity {
         this.activityRequests = activityRequests;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -69,7 +73,6 @@ public class Activity {
                 .append(status)
                 .toHashCode();
     }
-
 
     @Override
     public String toString() {
@@ -163,5 +166,83 @@ public class Activity {
 
     public void setActivityRequests(List<ActivityRequest> activityRequests) {
         this.activityRequests = activityRequests;
+    }
+
+    public static class Builder {
+        private long id;
+        private String name;
+        private String description;
+        private LocalDateTime startTime;
+        private LocalDateTime endTime;
+        private Duration duration;
+        private ActivityImportance importance;
+        private ActivityStatus status;
+        private List<User> users = new ArrayList<>();
+        private List<ActivityRequest> activityRequests = new ArrayList<>();
+
+        public Builder id(long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder startTime(LocalDateTime startTime) {
+            this.startTime = startTime;
+            return this;
+        }
+
+        public Builder endTime(LocalDateTime endTime) {
+            this.endTime = endTime;
+            return this;
+        }
+
+        public Builder duration(Duration duration) {
+            this.duration = duration;
+            return this;
+        }
+
+        public Builder importance(ActivityImportance importance) {
+            this.importance = importance;
+            return this;
+        }
+
+        public Builder status(ActivityStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        public Builder users(List<User> users) {
+            this.users = users;
+            return this;
+        }
+
+        public Builder activityRequests(List<ActivityRequest> activityRequests) {
+            this.activityRequests = activityRequests;
+            return this;
+        }
+
+        public Activity build() {
+            Activity activity = new Activity();
+            activity.setId(id);
+            activity.setName(name);
+            activity.setDescription(description);
+            activity.setStartTime(startTime);
+            activity.setEndTime(endTime);
+            activity.setDuration(duration);
+            activity.setImportance(importance);
+            activity.setStatus(status);
+            activity.setUsers(users);
+            activity.setActivityRequests(activityRequests);
+            return activity;
+        }
     }
 }

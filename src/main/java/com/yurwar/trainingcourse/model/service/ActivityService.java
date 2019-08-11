@@ -1,5 +1,7 @@
 package com.yurwar.trainingcourse.model.service;
 
+import com.yurwar.trainingcourse.controller.dto.ActivityDTO;
+import com.yurwar.trainingcourse.controller.dto.ActivityDurationDTO;
 import com.yurwar.trainingcourse.model.dao.ActivityDao;
 import com.yurwar.trainingcourse.model.dao.DaoConnection;
 import com.yurwar.trainingcourse.model.dao.DaoFactory;
@@ -30,7 +32,13 @@ public class ActivityService {
         return Collections.emptyList();
     }
 
-    public void createActivity(Activity activity) {
+    public void createActivity(ActivityDTO activityDTO) {
+        Activity activity = Activity.builder()
+                .name(activityDTO.getName())
+                .description(activityDTO.getDescription())
+                .importance(activityDTO.getImportance())
+                .status(ActivityStatus.PENDING)
+                .build();
         try (DaoConnection connection = daoFactory.getConnection()) {
             ActivityDao activityDao = daoFactory.createActivityDao(connection);
             activityDao.create(activity);
@@ -68,7 +76,7 @@ public class ActivityService {
         return 0;
     }
 
-    public void markTimeSpent(long activityId, User user, int days, int hours, int minutes) {
+    public void markTimeSpent(long activityId, User user, ActivityDurationDTO activityDurationDTO) {
         try (DaoConnection connection = daoFactory.getConnection()) {
             ActivityDao activityDao = daoFactory.createActivityDao(connection);
 
@@ -80,9 +88,9 @@ public class ActivityService {
             if (activity.getStatus().equals(ActivityStatus.ACTIVE) && activity.getUsers().contains(user)) {
                 Duration duration = activity.getDuration();
                 duration = duration
-                        .plusDays(days)
-                        .plusHours(hours)
-                        .plusMinutes(minutes);
+                        .plusDays(activityDurationDTO.getDays())
+                        .plusHours(activityDurationDTO.getHours())
+                        .plusMinutes(activityDurationDTO.getMinutes());
 
                 activity.setDuration(duration);
                 activityDao.update(activity);

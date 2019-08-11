@@ -1,6 +1,6 @@
 package com.yurwar.trainingcourse.util.validator;
 
-public class PositiveOrZeroValidator implements Validator<Double> {
+public class PositiveOrZeroValidator implements Validator<Integer> {
     private String message = "Value must be positive or zero";
 
     public PositiveOrZeroValidator(String message) {
@@ -11,7 +11,7 @@ public class PositiveOrZeroValidator implements Validator<Double> {
     }
 
     @Override
-    public Result validate(Double value) {
+    public Result validate(Integer value) {
         if (value >= 0) {
             return new SimpleResult(true);
         } else {

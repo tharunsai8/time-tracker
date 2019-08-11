@@ -39,7 +39,11 @@
                                        placeholder="<fmt:message key="activities.add.activity_name.placeholder"/>"
                                        type="text"
                                        required/>
-                                <span>${requestScope.validationNameMessage}</span>
+                                <span class="text-danger">
+                                    <c:forEach items="${requestScope.errors.nameErrors}" var="error">
+                                        ${error}<br>
+                                    </c:forEach>
+                                </span>
                             </div>
                             <div class="form-group col-md-12">
                                 <label class="col-form-label" for="description">
@@ -49,6 +53,11 @@
                                           name="description"
                                           placeholder="<fmt:message key="activities.add.description.placeholder"/>"
                                           class="form-control">${requestScope.activity.description}</textarea>
+                                <span class="text-danger">
+                                    <c:forEach items="${requestScope.errors.descriptionErrors}" var="error">
+                                        ${error}<br>
+                                    </c:forEach>
+                                </span>
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="col-form-label" for="importanceLevel">

@@ -1,6 +1,3 @@
-<%--suppress CheckImageSize --%>
-<%--suppress CheckImageSize --%>
-<%--suppress CheckImageSize --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="tt" uri="time-tracker-tags" %>

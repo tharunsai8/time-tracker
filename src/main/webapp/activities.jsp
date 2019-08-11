@@ -134,7 +134,6 @@
                                                         </div>
                                                         <input aria-label="days" class="form-control"
                                                                name="days"
-                                                               min="0"
                                                                required
                                                                type="number">
                                                         <div class="input-group-prepend">
@@ -144,7 +143,6 @@
                                                         </div>
                                                         <input aria-label="hours" class="form-control"
                                                                name="hours"
-                                                               min="0"
                                                                required
                                                                type="number">
                                                         <div class="input-group-prepend">
@@ -154,10 +152,23 @@
                                                         </div>
                                                         <input aria-label="minutes" class="form-control"
                                                                name="minutes"
-                                                               min="0"
                                                                required
                                                                type="number">
                                                     </div>
+                                                    <span class="text-danger">
+                                                        <c:forEach items="${requestScope.errors.daysErrors}"
+                                                                   var="error">
+                                                            ${error}<br>
+                                                        </c:forEach>
+                                                        <c:forEach items="${requestScope.errors.hoursErrors}"
+                                                                   var="error">
+                                                            ${error}<br>
+                                                        </c:forEach>
+                                                        <c:forEach items="${requestScope.errors.minutesErrors}"
+                                                                   var="error">
+                                                            ${error}<br>
+                                                        </c:forEach>
+                                                    </span>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button class="btn btn-secondary" data-dismiss="modal"
