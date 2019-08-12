@@ -10,7 +10,7 @@ public class ActivityDeleteCommand implements Command {
     private final ActivityService activityService;
     private static final Logger log = LogManager.getLogger();
 
-    public ActivityDeleteCommand(ActivityService activityService) {
+    ActivityDeleteCommand(ActivityService activityService) {
         this.activityService = activityService;
     }
 

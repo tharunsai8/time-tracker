@@ -12,7 +12,7 @@ public class ActivityRequestApproveCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private final ActivityRequestService activityRequestService;
 
-    public ActivityRequestApproveCommand(ActivityRequestService activityRequestService) {
+    ActivityRequestApproveCommand(ActivityRequestService activityRequestService) {
         this.activityRequestService = activityRequestService;
     }
 

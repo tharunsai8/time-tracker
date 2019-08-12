@@ -12,7 +12,7 @@ public class ActivityRequestCompleteCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private final ActivityRequestService activityRequestService;
 
-    public ActivityRequestCompleteCommand(ActivityRequestService activityRequestService) {
+    ActivityRequestCompleteCommand(ActivityRequestService activityRequestService) {
         this.activityRequestService = activityRequestService;
     }
 

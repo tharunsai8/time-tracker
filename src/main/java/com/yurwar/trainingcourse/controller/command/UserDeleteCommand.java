@@ -10,7 +10,7 @@ public class UserDeleteCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private final UserService userService;
 
-    public UserDeleteCommand(UserService userService) {
+    UserDeleteCommand(UserService userService) {
         this.userService = userService;
     }
 

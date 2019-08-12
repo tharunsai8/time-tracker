@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class JDBCActivityDao implements ActivityDao {
     private final Connection connection;
-    private ResourceBundle resourceBundle = ResourceBundle.getBundle("database");
+    private final ResourceBundle rb = ResourceBundle.getBundle("database");
 
     JDBCActivityDao(Connection connection) {
         this.connection = connection;
@@ -22,7 +22,7 @@ public class JDBCActivityDao implements ActivityDao {
 
     @Override
     public void create(Activity entity) {
-        try (PreparedStatement ps = connection.prepareStatement(resourceBundle.getString("query.activity.create"))) {
+        try (PreparedStatement ps = connection.prepareStatement(rb.getString("query.activity.create"))) {
             fillStatement(entity, ps);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -32,7 +32,7 @@ public class JDBCActivityDao implements ActivityDao {
 
     @Override
     public Optional<Activity> findById(long id) {
-        try (PreparedStatement ps = connection.prepareStatement(resourceBundle.getString("query.activity.find.by_id"))) {
+        try (PreparedStatement ps = connection.prepareStatement(rb.getString("query.activity.find.by_id"))) {
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
 
@@ -47,7 +47,7 @@ public class JDBCActivityDao implements ActivityDao {
     @Override
     public List<Activity> findAll() {
         try (Statement ps = connection.createStatement()) {
-            ResultSet rs = ps.executeQuery(resourceBundle.getString("query.activity.find.all"));
+            ResultSet rs = ps.executeQuery(rb.getString("query.activity.find.all"));
 
             Map<Long, Activity> activityMap = extractActivitiesFromResultSet(rs);
             return new ArrayList<>(activityMap.values());
@@ -58,7 +58,7 @@ public class JDBCActivityDao implements ActivityDao {
 
     @Override
     public List<Activity> findAllPageable(int page, int size) {
-        try (PreparedStatement ps = connection.prepareStatement(resourceBundle.getString("query.activity.find.all.pageable"))) {
+        try (PreparedStatement ps = connection.prepareStatement(rb.getString("query.activity.find.all.pageable"))) {
             ps.setInt(1, size);
             ps.setInt(2, size * page);
             ResultSet rs = ps.executeQuery();
@@ -73,11 +73,11 @@ public class JDBCActivityDao implements ActivityDao {
 
     @Override
     public void update(Activity entity) {
-        try (PreparedStatement activityPS = connection.prepareStatement(resourceBundle.getString("query.activity.update"))) {
+        try (PreparedStatement activityPS = connection.prepareStatement(rb.getString("query.activity.update"))) {
             fillStatement(entity, activityPS);
             activityPS.setLong(8, entity.getId());
             activityPS.executeUpdate();
-            try (PreparedStatement usersActivitiesPS = connection.prepareStatement(resourceBundle.getString("query.activity.update.users"))) {
+            try (PreparedStatement usersActivitiesPS = connection.prepareStatement(rb.getString("query.activity.update.users"))) {
                 List<Long> userIdList = entity.getUsers().stream().map(User::getId).collect(Collectors.toList());
                 for (long userId : userIdList) {
                     usersActivitiesPS.setLong(1, userId);
@@ -92,7 +92,7 @@ public class JDBCActivityDao implements ActivityDao {
 
     @Override
     public void delete(long id) {
-        try (PreparedStatement ps = connection.prepareStatement(resourceBundle.getString("query.activity.delete"))) {
+        try (PreparedStatement ps = connection.prepareStatement(rb.getString("query.activity.delete"))) {
             ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -103,7 +103,7 @@ public class JDBCActivityDao implements ActivityDao {
     @Override
     public long getNumberOfRecords() {
         try (Statement st = connection.createStatement()) {
-            ResultSet rs = st.executeQuery(resourceBundle.getString("query.activity.find.rows"));
+            ResultSet rs = st.executeQuery(rb.getString("query.activity.find.rows"));
 
             if (rs.next()) {
                 return rs.getLong(1);
@@ -136,7 +136,7 @@ public class JDBCActivityDao implements ActivityDao {
             activityMapper.makeUnique(activityMap, activity);
         }
         for (Activity activity : activityMap.values()) {
-            try (PreparedStatement activityUsersPS = connection.prepareStatement(resourceBundle.getString("query.activity.join.users"))) {
+            try (PreparedStatement activityUsersPS = connection.prepareStatement(rb.getString("query.activity.join.users"))) {
                 activityUsersPS.setLong(1, activity.getId());
                 ResultSet activityUsersRS = activityUsersPS.executeQuery();
 

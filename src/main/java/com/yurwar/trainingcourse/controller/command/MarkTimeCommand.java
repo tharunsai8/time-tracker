@@ -20,7 +20,7 @@ public class MarkTimeCommand implements Command {
     private final ActivityService activityService;
     private ResourceBundle rb;
 
-    public MarkTimeCommand(ActivityService activityService) {
+    MarkTimeCommand(ActivityService activityService) {
         this.activityService = activityService;
     }
 

@@ -21,7 +21,7 @@ public class UserUpdateCommand implements Command {
     private final UserService userService;
     private ResourceBundle rb;
 
-    public UserUpdateCommand(UserService userService) {
+    UserUpdateCommand(UserService userService) {
         this.userService = userService;
     }
 

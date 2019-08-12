@@ -5,6 +5,9 @@ import javax.servlet.http.HttpSession;
 
 public class LogoutCommand implements Command {
 
+    LogoutCommand() {
+    }
+
     @Override
     public String execute(HttpServletRequest request) {
         HttpSession session = request.getSession();

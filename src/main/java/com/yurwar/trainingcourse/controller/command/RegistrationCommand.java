@@ -22,7 +22,7 @@ public class RegistrationCommand implements Command {
     private final UserService userService;
     private ResourceBundle rb;
 
-    public RegistrationCommand(UserService userService) {
+    RegistrationCommand(UserService userService) {
         this.userService = userService;
     }
 

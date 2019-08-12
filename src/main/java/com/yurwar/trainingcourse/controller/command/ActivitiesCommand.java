@@ -10,7 +10,7 @@ public class ActivitiesCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private final ActivityService activityService;
 
-    public ActivitiesCommand(ActivityService activityService) {
+    ActivitiesCommand(ActivityService activityService) {
         this.activityService = activityService;
     }
 

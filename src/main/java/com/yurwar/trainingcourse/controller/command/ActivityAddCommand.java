@@ -24,7 +24,7 @@ public class ActivityAddCommand implements Command {
     private final ActivityService activityService;
     private ResourceBundle rb;
 
-    public ActivityAddCommand(ActivityService activityService) {
+    ActivityAddCommand(ActivityService activityService) {
         this.activityService = activityService;
     }
 

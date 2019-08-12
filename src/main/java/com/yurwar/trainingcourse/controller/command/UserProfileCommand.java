@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 public class UserProfileCommand implements Command {
     private final UserService userService;
 
-    public UserProfileCommand(UserService userService) {
+    UserProfileCommand(UserService userService) {
         this.userService = userService;
     }
 

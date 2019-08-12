@@ -18,7 +18,7 @@ import java.util.*;
 public class JDBCUserDao implements UserDao {
     public static final Logger log = LogManager.getLogger();
     private final Connection connection;
-    private final ResourceBundle resourceBundle = ResourceBundle.getBundle("database");
+    private final ResourceBundle rb = ResourceBundle.getBundle("database");
 
     JDBCUserDao(Connection connection) {
         this.connection = connection;
@@ -27,7 +27,7 @@ public class JDBCUserDao implements UserDao {
     @Override
     public void create(User entity) {
         try (PreparedStatement userPS =
-                     connection.prepareStatement(resourceBundle.getString("query.user.create"), Statement.RETURN_GENERATED_KEYS)) {
+                     connection.prepareStatement(rb.getString("query.user.create"), Statement.RETURN_GENERATED_KEYS)) {
             userPS.setString(1, entity.getFirstName());
             userPS.setString(2, entity.getLastName());
             userPS.setString(3, entity.getPassword());
@@ -38,7 +38,7 @@ public class JDBCUserDao implements UserDao {
             if (rs.next()) {
                 entity.setId(rs.getLong(1));
             }
-            try (PreparedStatement authorityPS = connection.prepareStatement(resourceBundle.getString("query.authority.create"))) {
+            try (PreparedStatement authorityPS = connection.prepareStatement(rb.getString("query.authority.create"))) {
                 for (Authority authority : entity.getAuthorities()) {
                     authorityPS.setLong(1, entity.getId());
                     authorityPS.setString(2, authority.name());
@@ -52,7 +52,7 @@ public class JDBCUserDao implements UserDao {
 
     @Override
     public Optional<User> findByUsername(String username) {
-        try (PreparedStatement ps = connection.prepareStatement(resourceBundle.getString("query.user.find.by_username"))) {
+        try (PreparedStatement ps = connection.prepareStatement(rb.getString("query.user.find.by_username"))) {
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
 
@@ -66,7 +66,7 @@ public class JDBCUserDao implements UserDao {
 
     @Override
     public Optional<User> findById(long id) {
-        try (PreparedStatement ps = connection.prepareStatement(resourceBundle.getString("query.user.find.by_id"))) {
+        try (PreparedStatement ps = connection.prepareStatement(rb.getString("query.user.find.by_id"))) {
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
 
@@ -81,7 +81,7 @@ public class JDBCUserDao implements UserDao {
     @Override
     public List<User> findAll() {
         try (Statement st = connection.createStatement()) {
-            ResultSet rs = st.executeQuery(resourceBundle.getString("query.user.find.all"));
+            ResultSet rs = st.executeQuery(rb.getString("query.user.find.all"));
 
             Map<Long, User> userMap = extractUsersFromResultSet(rs);
 
@@ -93,7 +93,7 @@ public class JDBCUserDao implements UserDao {
 
     @Override
     public List<User> findAllPageable(int page, int size) {
-        try (PreparedStatement ps = connection.prepareStatement(resourceBundle.getString("query.user.find.all.pageable"))) {
+        try (PreparedStatement ps = connection.prepareStatement(rb.getString("query.user.find.all.pageable"))) {
             ps.setLong(1, size);
             ps.setLong(2, size * page);
             ResultSet rs = ps.executeQuery();
@@ -108,7 +108,7 @@ public class JDBCUserDao implements UserDao {
 
     @Override
     public void update(User entity) {
-        try (PreparedStatement userPS = connection.prepareStatement(resourceBundle.getString("query.user.update"))) {
+        try (PreparedStatement userPS = connection.prepareStatement(rb.getString("query.user.update"))) {
             userPS.setString(1, entity.getFirstName());
             userPS.setString(2, entity.getLastName());
             userPS.setString(3, entity.getPassword());
@@ -116,11 +116,11 @@ public class JDBCUserDao implements UserDao {
             userPS.setLong(5, entity.getId());
             userPS.executeUpdate();
 
-            try (PreparedStatement authorityDeletePS = connection.prepareStatement(resourceBundle.getString("query.authority.delete.by_id"))) {
+            try (PreparedStatement authorityDeletePS = connection.prepareStatement(rb.getString("query.authority.delete.by_id"))) {
                 authorityDeletePS.setLong(1, entity.getId());
                 authorityDeletePS.executeUpdate();
             }
-            try (PreparedStatement authorityInsertPS = connection.prepareStatement(resourceBundle.getString("query.authority.create"))) {
+            try (PreparedStatement authorityInsertPS = connection.prepareStatement(rb.getString("query.authority.create"))) {
                 for (Authority authority : entity.getAuthorities()) {
                     authorityInsertPS.setLong(1, entity.getId());
                     authorityInsertPS.setString(2, authority.name());
@@ -134,7 +134,7 @@ public class JDBCUserDao implements UserDao {
 
     @Override
     public void delete(long id) {
-        try (PreparedStatement ps = connection.prepareStatement(resourceBundle.getString("query.user.delete"))) {
+        try (PreparedStatement ps = connection.prepareStatement(rb.getString("query.user.delete"))) {
             ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -145,7 +145,7 @@ public class JDBCUserDao implements UserDao {
     @Override
     public long getNumberOfRecords() {
         try (Statement st = connection.createStatement()) {
-            ResultSet rs = st.executeQuery(resourceBundle.getString("query.user.find.rows"));
+            ResultSet rs = st.executeQuery(rb.getString("query.user.find.rows"));
 
             if (rs.next()) {
                 return rs.getLong(1);
@@ -171,7 +171,7 @@ public class JDBCUserDao implements UserDao {
         }
 
         for (User user : userMap.values()) {
-            try (PreparedStatement userAuthoritiesPS = connection.prepareStatement(resourceBundle.getString("query.user.join.authorities"))) {
+            try (PreparedStatement userAuthoritiesPS = connection.prepareStatement(rb.getString("query.user.join.authorities"))) {
                 userAuthoritiesPS.setLong(1, user.getId());
                 ResultSet userAuthoritiesResultSet = userAuthoritiesPS.executeQuery();
 
@@ -181,7 +181,7 @@ public class JDBCUserDao implements UserDao {
                     user.getAuthorities().add(authority);
                 }
             }
-            try (PreparedStatement userActivitiesPS = connection.prepareStatement(resourceBundle.getString("query.user.join.activities"))) {
+            try (PreparedStatement userActivitiesPS = connection.prepareStatement(rb.getString("query.user.join.activities"))) {
                 userActivitiesPS.setLong(1, user.getId());
                 ResultSet userActivitiesResultSet = userActivitiesPS.executeQuery();
 
@@ -194,7 +194,7 @@ public class JDBCUserDao implements UserDao {
                     }
                 }
             }
-            try (PreparedStatement activityRequestsPS = connection.prepareStatement(resourceBundle.getString("query.user.join.activity_requests"))) {
+            try (PreparedStatement activityRequestsPS = connection.prepareStatement(rb.getString("query.user.join.activity_requests"))) {
                 activityRequestsPS.setLong(1, user.getId());
                 ResultSet userActivityRequestsResultSet = activityRequestsPS.executeQuery();
 

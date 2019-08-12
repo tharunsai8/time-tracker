@@ -10,7 +10,7 @@ public class UsersCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private final UserService userService;
 
-    public UsersCommand(UserService userService) {
+    UsersCommand(UserService userService) {
         this.userService = userService;
     }
 

@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 public class ActivityRequestRejectCommand implements Command {
     private final ActivityRequestService activityRequestService;
 
-    public ActivityRequestRejectCommand(ActivityRequestService activityRequestService) {
+    ActivityRequestRejectCommand(ActivityRequestService activityRequestService) {
         this.activityRequestService = activityRequestService;
     }
 
