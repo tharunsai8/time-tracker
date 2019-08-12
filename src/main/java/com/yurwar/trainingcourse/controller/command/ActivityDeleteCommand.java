@@ -6,14 +6,26 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Command that response to user requests and delete activity from database using activity service
+ *
+ * @author Yurii Matora
+ * @see Command
+ * @see com.yurwar.trainingcourse.model.entity.Activity
+ * @see ActivityService
+ */
 public class ActivityDeleteCommand implements Command {
-    private final ActivityService activityService;
     private static final Logger log = LogManager.getLogger();
+    private final ActivityService activityService;
 
     ActivityDeleteCommand(ActivityService activityService) {
         this.activityService = activityService;
     }
 
+    /**
+     * @param request User http request to server
+     * @return name of page or redirect
+     */
     @Override
     public String execute(HttpServletRequest request) {
         long activityId;

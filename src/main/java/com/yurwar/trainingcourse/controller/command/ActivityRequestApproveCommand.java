@@ -8,6 +8,13 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Approve activity request of user
+ *
+ * @author Yurii Matora
+ * @see ActivityRequest
+ * @see ActivityRequestService
+ */
 public class ActivityRequestApproveCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private final ActivityRequestService activityRequestService;
@@ -16,6 +23,10 @@ public class ActivityRequestApproveCommand implements Command {
         this.activityRequestService = activityRequestService;
     }
 
+    /**
+     * @param request User http request to server
+     * @return name of page or redirect
+     */
     @Override
     public String execute(HttpServletRequest request) {
         long activityRequestId;

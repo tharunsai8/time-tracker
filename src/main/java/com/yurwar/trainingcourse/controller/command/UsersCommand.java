@@ -6,6 +6,11 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Get page with all users pageable on it
+ *
+ * @author Yurii Matora
+ */
 public class UsersCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private final UserService userService;
@@ -14,6 +19,10 @@ public class UsersCommand implements Command {
         this.userService = userService;
     }
 
+    /**
+     * @param request User http request to server
+     * @return name of page or redirect
+     */
     @Override
     public String execute(HttpServletRequest request) {
         int page = 0;

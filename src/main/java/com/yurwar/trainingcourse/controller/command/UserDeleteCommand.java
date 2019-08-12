@@ -6,6 +6,13 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Delete user from system
+ *
+ * @author Yurii Matora
+ * @see com.yurwar.trainingcourse.model.entity.User
+ * @see UserService
+ */
 public class UserDeleteCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private final UserService userService;
@@ -14,6 +21,10 @@ public class UserDeleteCommand implements Command {
         this.userService = userService;
     }
 
+    /**
+     * @param request User http request to server
+     * @return name of page or redirect
+     */
     @Override
     public String execute(HttpServletRequest request) {
         long id;

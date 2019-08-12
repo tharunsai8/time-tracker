@@ -10,6 +10,11 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Service with business logic for managing activity requests
+ *
+ * @author Yurii Matora
+ */
 public class ActivityRequestService {
     private static final Logger log = LogManager.getLogger();
     private final DaoFactory daoFactory = DaoFactory.getInstance();

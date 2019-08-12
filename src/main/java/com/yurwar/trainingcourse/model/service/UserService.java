@@ -18,6 +18,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service with business logic for managing users
+ *
+ * @author Yurii Matora
+ */
 public class UserService {
     private static final Logger log = LogManager.getLogger();
     private final DaoFactory daoFactory = DaoFactory.getInstance();

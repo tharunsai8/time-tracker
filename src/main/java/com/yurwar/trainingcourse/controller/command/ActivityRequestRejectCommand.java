@@ -6,6 +6,13 @@ import com.yurwar.trainingcourse.model.service.ActivityRequestService;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Reject user activity request
+ *
+ * @author Yurii Matora
+ * @see ActivityRequest
+ * @see ActivityRequestService
+ */
 public class ActivityRequestRejectCommand implements Command {
     private final ActivityRequestService activityRequestService;
 
@@ -13,6 +20,10 @@ public class ActivityRequestRejectCommand implements Command {
         this.activityRequestService = activityRequestService;
     }
 
+    /**
+     * @param request User http request to server
+     * @return name of page or redirect
+     */
     @Override
     public String execute(HttpServletRequest request) {
         long activityRequestId = Long.parseLong(request.getParameter("id"));

@@ -16,6 +16,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
+/**
+ * Get update page with all user data and update user
+ *
+ * @author Yurii Matora
+ * @see User
+ * @see UserService
+ */
 public class UserUpdateCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private final UserService userService;
@@ -25,6 +32,10 @@ public class UserUpdateCommand implements Command {
         this.userService = userService;
     }
 
+    /**
+     * @param request User http request to server
+     * @return name of page or redirect
+     */
     @Override
     public String execute(HttpServletRequest request) {
         rb = ResourceBundle.getBundle("i18n.messages", CommandUtils.getLocaleFromSession(request));

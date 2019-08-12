@@ -2,6 +2,13 @@ package com.yurwar.trainingcourse.controller.dto;
 
 import com.yurwar.trainingcourse.model.entity.ActivityImportance;
 
+/**
+ * Data transfer object to move activity data from command to service
+ *
+ * @author Yurii Matora
+ * @see com.yurwar.trainingcourse.model.entity.Activity
+ * @see com.yurwar.trainingcourse.controller.command.Command
+ */
 public class ActivityDTO {
     private String name;
     private String description;
@@ -35,6 +42,11 @@ public class ActivityDTO {
         this.importance = importance;
     }
 
+    /**
+     * Builder for activity dto class
+     *
+     * @see ActivityDTO
+     */
     public static class Builder {
         private String name;
         private String description;

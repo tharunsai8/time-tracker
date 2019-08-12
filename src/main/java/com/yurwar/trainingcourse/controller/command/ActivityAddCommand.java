@@ -19,6 +19,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+/**
+ * Command that response to user requests and add activity to database using activity service
+ *
+ * @author Yurii Matora
+ * @see Command
+ * @see com.yurwar.trainingcourse.model.entity.Activity
+ * @see ActivityService
+ */
 public class ActivityAddCommand implements Command {
     public static final Logger log = LogManager.getLogger();
     private final ActivityService activityService;
@@ -28,6 +36,10 @@ public class ActivityAddCommand implements Command {
         this.activityService = activityService;
     }
 
+    /**
+     * @param request User http request to server
+     * @return name of page or redirect
+     */
     @Override
     public String execute(HttpServletRequest request) {
         rb = ResourceBundle.getBundle("i18n.messages", CommandUtils.getLocaleFromSession(request));
@@ -63,6 +75,15 @@ public class ActivityAddCommand implements Command {
         return "redirect:/activities";
     }
 
+    /**
+     * Check activity dto on errors by validator
+     *
+     * @param activityDTO activity dto filled with user input data
+     * @return map with error path in jsp and error messages from validator
+     * @see com.yurwar.trainingcourse.util.validator.CompositeValidator
+     * @see com.yurwar.trainingcourse.util.validator.Validator
+     * @see Result
+     */
     private Map<String, String[]> getValidationErrorsMap(ActivityDTO activityDTO) {
         Map<String, String[]> validationErrorMap = new HashMap<>();
         CompositeValidator<String> activityDescriptionValidator = new CompositeValidator<>(

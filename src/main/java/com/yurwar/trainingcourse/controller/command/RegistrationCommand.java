@@ -17,6 +17,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+/**
+ * Check credentials and register user into the system
+ *
+ * @author Yurii Matora
+ * @see com.yurwar.trainingcourse.model.entity.User
+ * @see UserService
+ */
 public class RegistrationCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private final UserService userService;
@@ -26,6 +33,10 @@ public class RegistrationCommand implements Command {
         this.userService = userService;
     }
 
+    /**
+     * @param request User http request to server
+     * @return name of page or redirect
+     */
     @Override
     public String execute(HttpServletRequest request) {
         rb = ResourceBundle.getBundle("i18n.messages", CommandUtils.getLocaleFromSession(request));

@@ -5,6 +5,15 @@ import com.yurwar.trainingcourse.model.entity.Authority;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Data transfer object to transport user data from update command to service
+ *
+ * @author Yurii Matora
+ * @see com.yurwar.trainingcourse.model.entity.User
+ * @see com.yurwar.trainingcourse.controller.command.Command
+ * @see com.yurwar.trainingcourse.controller.command.UserUpdateCommand
+ * @see com.yurwar.trainingcourse.controller.command.UserProfileUpdateCommand
+ */
 public class UpdateUserDTO {
     private long id;
     private String username;
@@ -65,6 +74,11 @@ public class UpdateUserDTO {
         this.authorities = authorities;
     }
 
+    /**
+     * Builder for class
+     *
+     * @see UpdateUserDTO
+     */
     public static class Builder {
 
         private long id;

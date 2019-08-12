@@ -11,6 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
+/**
+ * Check user credentials and login user into the system using user service
+ *
+ * @author Yurii Matora
+ * @see UserService
+ */
 public class LoginCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private final UserService userService;
@@ -19,6 +25,10 @@ public class LoginCommand implements Command {
         this.userService = userService;
     }
 
+    /**
+     * @param request User http request to server
+     * @return name of page or redirect
+     */
     @Override
     public String execute(HttpServletRequest request) {
         String username = request.getParameter("username");

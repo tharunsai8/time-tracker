@@ -1,5 +1,12 @@
 package com.yurwar.trainingcourse.controller.dto;
 
+/**
+ * Data transfer object to transport activity duration data from command to service
+ *
+ * @author Yurii Matora
+ * @see com.yurwar.trainingcourse.model.entity.Activity
+ * @see com.yurwar.trainingcourse.controller.command.Command
+ */
 public class ActivityDurationDTO {
     private int days;
     private int hours;

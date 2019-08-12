@@ -7,6 +7,11 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.util.Objects;
 
+/**
+ * Tag that checks if user has authority to get access to tag body
+ *
+ * @author Yurii Matora
+ */
 public class HasAuthorityTag extends TagSupport {
     private String authority = "";
 

@@ -1,5 +1,13 @@
 package com.yurwar.trainingcourse.controller.dto;
 
+/**
+ * Data transfer object to transport user data from registration command to service
+ *
+ * @author Yurii Matora
+ * @see com.yurwar.trainingcourse.model.entity.User
+ * @see com.yurwar.trainingcourse.controller.command.Command
+ * @see com.yurwar.trainingcourse.controller.command.RegistrationCommand
+ */
 public class RegistrationUserDTO {
     private String username;
     private String firstName;
@@ -42,6 +50,11 @@ public class RegistrationUserDTO {
         this.lastName = lastName;
     }
 
+    /**
+     * Builder for class
+     *
+     * @see RegistrationUserDTO
+     */
     public static class Builder {
 
         private String username;

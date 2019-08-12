@@ -6,7 +6,19 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Command that response to user requests and give page with all activities paginated
+ * using activity service
+ *
+ * @author Yurii Matora
+ * @see Command
+ * @see com.yurwar.trainingcourse.model.entity.Activity
+ * @see ActivityService
+ */
 public class ActivitiesCommand implements Command {
+    /**
+     * Log4j2 logger
+     */
     private static final Logger log = LogManager.getLogger();
     private final ActivityService activityService;
 
@@ -14,6 +26,10 @@ public class ActivitiesCommand implements Command {
         this.activityService = activityService;
     }
 
+    /**
+     * @param request User http request to server
+     * @return name of page or redirect
+     */
     @Override
     public String execute(HttpServletRequest request) {
         int page = 0;

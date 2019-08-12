@@ -5,6 +5,11 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import javax.sql.DataSource;
 import java.util.ResourceBundle;
 
+/**
+ * Connection pool holder class that handle connection using basic data source and return it on demand
+ *
+ * @see BasicDataSource
+ */
 class ConnectionPoolHolder {
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("database");
     private static volatile DataSource dataSource;

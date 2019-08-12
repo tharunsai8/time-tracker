@@ -16,6 +16,11 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Service with business logic for managing activities
+ *
+ * @author Yurii Matora
+ */
 public class ActivityService {
     private static final Logger log = LogManager.getLogger();
     private final DaoFactory daoFactory = DaoFactory.getInstance();

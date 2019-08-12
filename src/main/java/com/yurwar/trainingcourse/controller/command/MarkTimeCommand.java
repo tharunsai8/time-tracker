@@ -15,6 +15,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+/**
+ * Mark time that user spent on his activity
+ *
+ * @author Yurii Matora
+ * @see com.yurwar.trainingcourse.model.entity.Activity
+ * @see ActivityService
+ */
 public class MarkTimeCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private final ActivityService activityService;
@@ -24,6 +31,10 @@ public class MarkTimeCommand implements Command {
         this.activityService = activityService;
     }
 
+    /**
+     * @param request User http request to server
+     * @return name of page or redirect
+     */
     @Override
     public String execute(HttpServletRequest request) {
         rb = ResourceBundle.getBundle("i18n.messages", CommandUtils.getLocaleFromSession(request));

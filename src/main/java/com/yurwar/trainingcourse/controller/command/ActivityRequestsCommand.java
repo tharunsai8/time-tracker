@@ -6,6 +6,13 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Return all activity requests pageable to user
+ *
+ * @author Yurii Matora
+ * @see com.yurwar.trainingcourse.model.entity.ActivityRequest
+ * @see ActivityRequestService
+ */
 public class ActivityRequestsCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private final ActivityRequestService activityRequestService;
@@ -14,6 +21,10 @@ public class ActivityRequestsCommand implements Command {
         this.activityRequestService = activityRequestService;
     }
 
+    /**
+     * @param request User http request to server
+     * @return name of page or redirect
+     */
     @Override
     public String execute(HttpServletRequest request) {
         int page = 0;
