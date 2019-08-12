@@ -41,6 +41,6 @@ public class UsersCommand implements Command {
         request.setAttribute("currentPage", page);
         request.setAttribute("pageSize", size);
         request.setAttribute("totalPages", totalPages);
-        return "/users.jsp";
+        return "/WEB-INF/pages/users.jsp";
     }
 }

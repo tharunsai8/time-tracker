@@ -15,7 +15,7 @@
 </head>
 <body>
 
-<%@include file="WEB-INF/fragments/navbar.jspf" %>
+<%@include file="/WEB-INF/fragments/navbar.jspf" %>
 
 <div class="container">
     <div class="card">
@@ -28,7 +28,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
-                    <form action="${pageContext.request.contextPath}/app/users/update?id=${requestScope.user.id}"
+                    <form action="${pageContext.request.contextPath}/app/profile/update"
                           method="post">
                         <div class="row">
                             <div class="form-group col-md-6">
@@ -95,30 +95,6 @@
                                     </c:forEach>
                                 </span>
                             </div>
-                            <div class="form-group form-check col-md-6">
-                                <ul>
-                                    <c:forEach items="${requestScope.authorities}" var="authority">
-                                        <li>
-                                            <input type="checkbox"
-                                                   class="form-check-input"
-                                                   name="authorities"
-                                                    <c:if test="${requestScope.user.getAuthorities().contains(authority)}">
-                                                        checked
-                                                    </c:if>
-                                                   value="${authority.name()}"
-                                                   id="authority${authority.ordinal()}"/>
-                                            <label for="authority${authority.ordinal()}" class="form-check-label">
-                                                    ${authority}
-                                            </label>
-                                        </li>
-                                    </c:forEach>
-                                    <span class="text-danger">
-                                        <c:forEach items="${requestScope.errors.authoritiesErrors}" var="error">
-                                            ${error}<br>
-                                        </c:forEach>
-                                    </span>
-                                </ul>
-                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -134,7 +110,7 @@
     </div>
 </div>
 
-<%@include file="WEB-INF/fragments/footer.jspf" %>
+<%@include file="/WEB-INF/fragments/footer.jspf" %>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

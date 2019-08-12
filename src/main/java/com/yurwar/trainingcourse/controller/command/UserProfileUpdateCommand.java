@@ -41,7 +41,7 @@ public class UserProfileUpdateCommand implements Command {
         if (!ObjectUtils.allNotNull(firstName, lastName, username, password)) {
             request.setAttribute("user", user);
             request.setAttribute("authorities", Authority.values());
-            return "/profile-update.jsp";
+            return "/WEB-INF/pages/profile-update.jsp";
         }
 
         UpdateUserDTO userDTO = UpdateUserDTO.builder()
@@ -57,7 +57,7 @@ public class UserProfileUpdateCommand implements Command {
         if (!validationErrorsMap.isEmpty()) {
             request.setAttribute("user", userDTO);
             request.setAttribute("errors", validationErrorsMap);
-            return "/profile-update.jsp";
+            return "/WEB-INF/pages/profile-update.jsp";
         }
 
         try {
@@ -66,7 +66,7 @@ public class UserProfileUpdateCommand implements Command {
             e.printStackTrace();
             request.setAttribute("user", userDTO);
             request.setAttribute("usernameUniqueError", rb.getString("users.registration.login.not_unique"));
-            return "/profile-update.jsp";
+            return "/WEB-INF/pages/profile-update.jsp";
         }
         return "redirect:/profile";
     }

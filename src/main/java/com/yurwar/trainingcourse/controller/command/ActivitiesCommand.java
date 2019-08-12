@@ -41,6 +41,6 @@ public class ActivitiesCommand implements Command {
         request.setAttribute("currentPage", page);
         request.setAttribute("pageSize", size);
         request.setAttribute("totalPages", totalPages);
-        return "/activities.jsp";
+        return "/WEB-INF/pages/activities.jsp";
     }
 }

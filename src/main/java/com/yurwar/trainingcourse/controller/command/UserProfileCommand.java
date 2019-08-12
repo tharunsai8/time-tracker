@@ -17,6 +17,6 @@ public class UserProfileCommand implements Command {
     public String execute(HttpServletRequest request) {
         User user = CommandUtils.getUserFromSession(request);
         request.setAttribute("user", userService.getUserById(user.getId()));
-        return "/profile.jsp";
+        return "/WEB-INF/pages/profile.jsp";
     }
 }

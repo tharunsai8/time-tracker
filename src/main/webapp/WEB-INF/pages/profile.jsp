@@ -25,8 +25,7 @@
                 <span>${requestScope.user.firstName}</span>
                 <a href="${pageContext.request.contextPath}/app/profile/update"
                    class="btn btn-primary float-right">
-                    <img src="${pageContext.request.contextPath}/images/outline-edit.png"
-                         alt="edit user">
+                    <img src="${pageContext.request.contextPath}/images/outline-edit.png" alt="edit user">
                 </a>
             </h1>
             <hr>

@@ -37,7 +37,7 @@ public class ActivityAddCommand implements Command {
 
         if (!ObjectUtils.allNotNull(name, description, importance)) {
             request.setAttribute("importanceLevels", ActivityImportance.values());
-            return "/add-activity.jsp";
+            return "/WEB-INF/pages/add-activity.jsp";
         }
 
         Activity activity = new Activity();
@@ -57,7 +57,7 @@ public class ActivityAddCommand implements Command {
             request.setAttribute("activity", activityDTO);
             request.setAttribute("importanceLevels", ActivityImportance.values());
             request.setAttribute("errors", validationErrorsMap);
-            return "/add-activity.jsp";
+            return "/WEB-INF/pages/add-activity.jsp";
         }
         activityService.createActivity(activityDTO);
         return "redirect:/activities";

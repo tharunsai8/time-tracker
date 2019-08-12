@@ -16,7 +16,7 @@
 </head>
 <body>
 
-<%@include file="WEB-INF/fragments/navbar.jspf" %>
+<%@include file="/WEB-INF/fragments/navbar.jspf" %>
 
 <div class="container">
     <div class="row">

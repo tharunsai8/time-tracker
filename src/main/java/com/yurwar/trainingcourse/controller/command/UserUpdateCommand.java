@@ -47,7 +47,7 @@ public class UserUpdateCommand implements Command {
             User user = userService.getUserById(id);
             request.setAttribute("user", user);
             request.setAttribute("authorities", Authority.values());
-            return "/update-user.jsp";
+            return "/WEB-INF/pages/update-user.jsp";
         }
 
         UpdateUserDTO userDTO = UpdateUserDTO.builder()
@@ -64,7 +64,7 @@ public class UserUpdateCommand implements Command {
             request.setAttribute("user", userDTO);
             request.setAttribute("authorities", Authority.values());
             request.setAttribute("errors", validationErrorsMap);
-            return "/update-user.jsp";
+            return "/WEB-INF/pages/update-user.jsp";
         }
 
         try {
@@ -74,7 +74,7 @@ public class UserUpdateCommand implements Command {
             request.setAttribute("user", userDTO);
             request.setAttribute("authorities", Authority.values());
             request.setAttribute("usernameUniqueError", rb.getString("users.registration.login.not_unique"));
-            return "/update-user.jsp";
+            return "/WEB-INF/pages/update-user.jsp";
         }
         return "redirect:/users";
     }
