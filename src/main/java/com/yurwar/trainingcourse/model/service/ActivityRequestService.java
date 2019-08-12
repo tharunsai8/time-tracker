@@ -58,7 +58,6 @@ public class ActivityRequestService {
                         log.info("User already in activity");
                         break;
                     }
-                    //TODO Try to remove break
                     ActivityRequest activityRequest = new ActivityRequest();
                     activityRequest.setUser(user);
                     activityRequest.setActivity(activity);

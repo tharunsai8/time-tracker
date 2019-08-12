@@ -14,7 +14,6 @@ public class ActivityRequestMapper implements ObjectMapper<ActivityRequest> {
     public ActivityRequest extractFromResultSet(ResultSet rs) throws SQLException {
         ActivityRequest activityRequest = new ActivityRequest();
         activityRequest.setId(rs.getLong("activity_requests.id"));
-        //TODO Check on add activity_id and user_id
 
         Timestamp dbTimestamp = rs.getTimestamp("activity_requests.request_date");
         activityRequest.setRequestDate(dbTimestamp != null ? dbTimestamp.toLocalDateTime() : null);

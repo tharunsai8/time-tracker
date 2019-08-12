@@ -15,7 +15,6 @@ import org.apache.logging.log4j.Logger;
 import java.sql.*;
 import java.util.*;
 
-//TODO Add log
 public class JDBCUserDao implements UserDao {
     public static final Logger log = LogManager.getLogger();
     private final Connection connection;
