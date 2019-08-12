@@ -23,6 +23,7 @@ public class CommandManager {
         commandMap.put("/users/delete", new UserDeleteCommand(userService));
         commandMap.put("/users/update", new UserUpdateCommand(userService));
         commandMap.put("/profile", new UserProfileCommand(userService));
+        commandMap.put("/profile/update", new UserProfileUpdateCommand(userService));
         commandMap.put("/activities", new ActivitiesCommand(activityService));
         commandMap.put("/activities/add", new ActivityAddCommand(activityService));
         commandMap.put("/activities/request", new ActivityRequestsCommand(activityRequestService));

@@ -18,7 +18,7 @@
 <main role="main">
     <div class="jumbotron">
         <div class="container">
-            <h1 class="display-4"><fmt:message key="error.error_403"></h1>
+            <h1 class="display-4"><fmt:message key="error.error_403"/></h1>
         </div>
     </div>
 </main>
