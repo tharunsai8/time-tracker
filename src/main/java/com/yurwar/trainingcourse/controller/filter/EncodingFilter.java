@@ -3,7 +3,13 @@ package com.yurwar.trainingcourse.controller.filter;
 import javax.servlet.*;
 import java.io.IOException;
 
+/**
+ * Set encoding of server responses
+ */
 public class EncodingFilter implements Filter {
+    /**
+     * Set response content type and character encoding of response and request
+     */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {

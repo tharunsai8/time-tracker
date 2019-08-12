@@ -1,14 +1,10 @@
 package com.yurwar.trainingcourse.model.dao.impl;
 
-import com.yurwar.trainingcourse.model.dao.ActivityDao;
-import com.yurwar.trainingcourse.model.dao.ActivityRequestDao;
-import com.yurwar.trainingcourse.model.dao.DaoFactory;
-import com.yurwar.trainingcourse.model.dao.UserDao;
+import com.yurwar.trainingcourse.model.dao.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 public class JDBCDaoFactory extends DaoFactory {
@@ -16,25 +12,26 @@ public class JDBCDaoFactory extends DaoFactory {
     private final DataSource dataSource = ConnectionPoolHolder.getDataSource();
 
     @Override
-    public UserDao createUserDao() {
-        return new JDBCUserDao(getConnection());
+    public UserDao createUserDao(DaoConnection connection) {
+        return new JDBCUserDao(connection.getConnection());
     }
 
     @Override
-    public ActivityDao createActivityDao() {
-        return new JDBCActivityDao(getConnection());
+    public ActivityDao createActivityDao(DaoConnection connection) {
+        return new JDBCActivityDao(connection.getConnection());
     }
 
     @Override
-    public ActivityRequestDao createActivityRequestDao() {
-        return new JDBCActivityRequestDao(getConnection());
+    public ActivityRequestDao createActivityRequestDao(DaoConnection connection) {
+        return new JDBCActivityRequestDao(connection.getConnection());
     }
 
-    private Connection getConnection() {
+    @Override
+    public DaoConnection getConnection() {
         try {
-            return dataSource.getConnection();
+            return new JDBCDaoConnection(dataSource.getConnection());
         } catch (SQLException e) {
-            log.error("Can not get connection to database");
+            log.error("Can not get connection to database", e);
             throw new RuntimeException(e);
         }
     }

@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="tt" uri="time-tracker-tags" %>
 
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="i18n.messages"/>
@@ -15,7 +16,7 @@
 </head>
 <body>
 
-<%@include file="WEB-INF/fragments/navbar.jspf" %>
+<%@include file="/WEB-INF/fragments/navbar.jspf" %>
 
 <div class="container">
     <div class="row">
@@ -27,7 +28,7 @@
                         <hr>
                     </c:if>
                     <c:if test="${requestScope.users.isEmpty()}">
-                        <h1><fmt:message key="users.empty"/></h1>
+                        <h1 class="display-4"><fmt:message key="users.empty"/></h1>
                         <hr>
                     </c:if>
                 </div>
@@ -90,13 +91,14 @@
                     </table>
                 </div>
                 <div class="card-footer">
+                    <%@include file="/WEB-INF/fragments/users-paginator.jspf" %>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<%@include file="WEB-INF/fragments/footer.jspf" %>
+<%@include file="/WEB-INF/fragments/footer.jspf" %>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

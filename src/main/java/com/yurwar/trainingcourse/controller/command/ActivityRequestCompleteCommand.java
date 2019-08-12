@@ -2,22 +2,43 @@ package com.yurwar.trainingcourse.controller.command;
 
 import com.yurwar.trainingcourse.model.entity.User;
 import com.yurwar.trainingcourse.model.service.ActivityRequestService;
+import com.yurwar.trainingcourse.util.CommandUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
+/**
+ * Add activity request from user to complete activity using activity request service
+ *
+ * @author Yurii Matora
+ * @see com.yurwar.trainingcourse.model.entity.Activity
+ * @see com.yurwar.trainingcourse.model.entity.ActivityRequest
+ * @see ActivityRequestService
+ */
 public class ActivityRequestCompleteCommand implements Command {
-    private ActivityRequestService activityRequestService;
+    private static final Logger log = LogManager.getLogger();
+    private final ActivityRequestService activityRequestService;
 
-    public ActivityRequestCompleteCommand(ActivityRequestService activityRequestService) {
+    ActivityRequestCompleteCommand(ActivityRequestService activityRequestService) {
         this.activityRequestService = activityRequestService;
     }
 
+    /**
+     * @param request User http request to server
+     * @return name of page or redirect
+     */
     @Override
     public String execute(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("authUser");
-        Long activityId = Long.valueOf(request.getParameter("id"));
+        User user = CommandUtils.getUserFromSession(request);
+
+        long activityId;
+        try {
+            activityId = Long.parseLong(request.getParameter("id"));
+        } catch (NumberFormatException e) {
+            log.warn("Can not parse number from request parameter");
+            return "/WEB-INF/error/404.jsp";
+        }
 
         activityRequestService.makeCompleteActivityRequest(user.getId(), activityId);
         return "redirect:/activities";

@@ -2,25 +2,32 @@ package com.yurwar.trainingcourse.controller.command;
 
 import com.yurwar.trainingcourse.model.entity.User;
 import com.yurwar.trainingcourse.model.service.UserService;
+import com.yurwar.trainingcourse.util.CommandUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
+/**
+ * Get user profile page with user data on it
+ *
+ * @author Yurii Matora
+ * @see User
+ * @see UserService
+ */
 public class UserProfileCommand implements Command {
     private final UserService userService;
 
-    public UserProfileCommand(UserService userService) {
+    UserProfileCommand(UserService userService) {
         this.userService = userService;
     }
 
+    /**
+     * @param request User http request to server
+     * @return name of page or redirect
+     */
     @Override
     public String execute(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("authUser");
-        //fixme one name for all activity requests
-        request.setAttribute("user", userService.findUserById(user.getId())
-                .orElseThrow(() ->
-                        new IllegalArgumentException("Invalid user id: " + user.getId())));
-        return "/profile.jsp";
+        User user = CommandUtils.getUserFromSession(request);
+        request.setAttribute("user", userService.getUserById(user.getId()));
+        return "/WEB-INF/pages/profile.jsp";
     }
 }

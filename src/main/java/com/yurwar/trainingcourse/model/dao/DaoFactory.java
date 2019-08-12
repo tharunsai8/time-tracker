@@ -2,12 +2,11 @@ package com.yurwar.trainingcourse.model.dao;
 
 import com.yurwar.trainingcourse.model.dao.impl.JDBCDaoFactory;
 
+/**
+ * Factory that return dao and connection to use with dao
+ */
 public abstract class DaoFactory {
     private static DaoFactory daoFactory;
-
-    public abstract UserDao createUserDao();
-    public abstract ActivityDao createActivityDao();
-    public abstract ActivityRequestDao createActivityRequestDao();
 
     public static DaoFactory getInstance() {
         if (daoFactory == null) {
@@ -19,4 +18,12 @@ public abstract class DaoFactory {
         }
         return daoFactory;
     }
+
+    public abstract UserDao createUserDao(DaoConnection connection);
+
+    public abstract ActivityDao createActivityDao(DaoConnection connection);
+
+    public abstract ActivityRequestDao createActivityRequestDao(DaoConnection connection);
+
+    public abstract DaoConnection getConnection();
 }

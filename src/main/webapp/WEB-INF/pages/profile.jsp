@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="tt" uri="time-tracker-tags" %>
 
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="i18n.messages"/>
@@ -22,6 +23,10 @@
             <h1 class="display-4">
                 <span><fmt:message key="users.profile.welcome"/></span>
                 <span>${requestScope.user.firstName}</span>
+                <a href="${pageContext.request.contextPath}/app/profile/update"
+                   class="btn btn-primary float-right">
+                    <img src="${pageContext.request.contextPath}/images/outline-edit.png" alt="edit user">
+                </a>
             </h1>
             <hr>
         </div>

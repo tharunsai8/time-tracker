@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="tt" uri="time-tracker-tags" %>
 
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="i18n.messages"/>
@@ -21,16 +22,6 @@
         <div class="card-header">
             <h1 class="display-4"><fmt:message key="registration.header"/></h1>
             <hr>
-            <c:if test="${requestScope.error}">
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <span>
-                <fmt:message key="users.registration.error"/>
-            </span>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            </c:if>
         </div>
         <div class="card-body">
             <form action="${pageContext.request.contextPath}/app/registration" method="post">
@@ -40,10 +31,16 @@
                             <fmt:message key="registration.first_name.label"/>
                             <input type="text"
                                    name="firstName"
+                                   value="${requestScope.user.firstName}"
                                    placeholder="<fmt:message key="registration.first_name.placeholder"/>"
                                    class="form-control"
                                    required
                             />
+                            <span class="text-danger">
+                            <c:forEach items="${requestScope.errors.firstNameErrors}" var="error">
+                                ${error}<br>
+                            </c:forEach>
+                            </span>
                         </label>
                     </div>
                     <div class="col-md-3 mb-3">
@@ -51,10 +48,16 @@
                             <fmt:message key="registration.last_name.label"/>
                             <input type="text"
                                    name="lastName"
+                                   value="${requestScope.user.lastName}"
                                    placeholder="<fmt:message key="registration.last_name.placeholder"/>"
                                    class="form-control"
                                    required
                             />
+                            <span class="text-danger">
+                            <c:forEach items="${requestScope.errors.lastNameErrors}" var="error">
+                                ${error}<br>
+                            </c:forEach>
+                            </span>
                         </label>
                     </div>
                 </div>
@@ -64,22 +67,34 @@
                             <fmt:message key="registration.username.label"/>
                             <input type="text"
                                    name="username"
+                                   value="${requestScope.user.username}"
                                    placeholder="<fmt:message key="registration.username.placeholder"/>"
                                    class="form-control"
                                    required
                             />
+                            <span class="text-danger">
+                            <c:forEach items="${requestScope.errors.usernameErrors}" var="error">
+                                ${error}<br>
+                            </c:forEach>
+                            ${requestScope.usernameUniqueError}
+                        </span>
                         </label>
-
                     </div>
                     <div class="col-md-3 mb-3">
                         <label>
                             <fmt:message key="registration.password.label"/>
                             <input type="password"
                                    name="password"
+                                   value="${requestScope.user.password}"
                                    placeholder="<fmt:message key="registration.password.placeholder"/>"
                                    class="form-control"
                                    required
                             />
+                            <span class="text-danger">
+                            <c:forEach items="${requestScope.errors.passwordErrors}" var="error">
+                                ${error}<br>
+                            </c:forEach>
+                            </span>
                         </label>
                     </div>
                 </div>

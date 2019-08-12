@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="tt" uri="time-tracker-tags" %>
 
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="i18n.messages"/>
@@ -22,7 +23,7 @@
             <h1 class="display-2">
                 <fmt:message key="index.main.name"/>
             </h1>
-            <p>
+            <p class="lead">
                 <fmt:message key="index.main.desc"/>
             </p>
         </div>
@@ -35,7 +36,7 @@
                     <fmt:message key="index.secondary.column1.name"/>
 
                 </h3>
-                <p>
+                <p class="text-muted">
                     <fmt:message key="index.secondary.column1.desc"/>
                 </p>
             </div>
@@ -43,7 +44,7 @@
                 <h3>
                     <fmt:message key="index.secondary.column2.name"/>
                 </h3>
-                <p>
+                <p class="text-muted">
                     <fmt:message key="index.secondary.column2.desc"/>
                 </p>
             </div>
@@ -51,7 +52,7 @@
                 <h3>
                     <fmt:message key="index.secondary.column3.name"/>
                 </h3>
-                <p>
+                <p class="text-muted">
                     <fmt:message key="index.secondary.column3.desc"/>
                 </p>
             </div>

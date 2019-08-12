@@ -1,24 +1,27 @@
 package com.yurwar.trainingcourse.controller.command;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+/**
+ * Logout user from system
+ *
+ * @author Yurii Matora
+ */
 public class LogoutCommand implements Command {
-    private static final Logger log = LogManager.getLogger();
 
+    LogoutCommand() {
+    }
+
+    /**
+     * @param request User http request to server
+     * @return name of page or redirect
+     */
     @Override
     public String execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        String username = (String) session.getAttribute("username");
         session.invalidate();
-//        session.removeAttribute("user");
-//        session.removeAttribute("username");
-//        session.removeAttribute("role");
         request.setAttribute("success", true);
-        log.info("User " + username + " logout successfully");
         return "/login.jsp";
     }
 }

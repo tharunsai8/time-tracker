@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="tt" uri="time-tracker-tags" %>
 
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="i18n.messages"/>
@@ -38,6 +39,11 @@
                                        placeholder="<fmt:message key="activities.add.activity_name.placeholder"/>"
                                        type="text"
                                        required/>
+                                <span class="text-danger">
+                                    <c:forEach items="${requestScope.errors.nameErrors}" var="error">
+                                        ${error}<br>
+                                    </c:forEach>
+                                </span>
                             </div>
                             <div class="form-group col-md-12">
                                 <label class="col-form-label" for="description">
@@ -47,6 +53,11 @@
                                           name="description"
                                           placeholder="<fmt:message key="activities.add.description.placeholder"/>"
                                           class="form-control">${requestScope.activity.description}</textarea>
+                                <span class="text-danger">
+                                    <c:forEach items="${requestScope.errors.descriptionErrors}" var="error">
+                                        ${error}<br>
+                                    </c:forEach>
+                                </span>
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="col-form-label" for="importanceLevel">
@@ -74,7 +85,7 @@
     </div>
 </div>
 
-<%@include file="WEB-INF/fragments/footer.jspf" %>
+<%@include file="/WEB-INF/fragments/footer.jspf" %>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

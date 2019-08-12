@@ -7,10 +7,26 @@ import com.yurwar.trainingcourse.model.service.UserService;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Singletone class, provides map of all commands and inject necessary service to their constructor
+ *
+ * @author Yurii Matora
+ */
 public class CommandManager {
+    /**
+     * Singletone instance of class
+     */
     private static CommandManager commandManager;
+    /**
+     * Map of commands
+     *
+     * @see Command
+     */
     private final Map<String, Command> commandMap = new HashMap<>();
 
+    /**
+     * Initialize command map with all paths to commands and necessary services
+     */
     private CommandManager() {
         final UserService userService = new UserService();
         final ActivityService activityService = new ActivityService();
@@ -23,6 +39,7 @@ public class CommandManager {
         commandMap.put("/users/delete", new UserDeleteCommand(userService));
         commandMap.put("/users/update", new UserUpdateCommand(userService));
         commandMap.put("/profile", new UserProfileCommand(userService));
+        commandMap.put("/profile/update", new UserProfileUpdateCommand(userService));
         commandMap.put("/activities", new ActivitiesCommand(activityService));
         commandMap.put("/activities/add", new ActivityAddCommand(activityService));
         commandMap.put("/activities/request", new ActivityRequestsCommand(activityRequestService));
@@ -34,6 +51,9 @@ public class CommandManager {
         commandMap.put("/activities/request/complete", new ActivityRequestCompleteCommand(activityRequestService));
     }
 
+    /**
+     * @return the only instance of class
+     */
     public static CommandManager getInstance() {
         if (commandManager == null) {
             synchronized (CommandManager.class) {
@@ -45,6 +65,10 @@ public class CommandManager {
         return commandManager;
     }
 
+    /**
+     * @param commandName path in command line
+     * @return command that can handle user request with execute method
+     */
     public Command getCommand(String commandName) {
         return commandMap.getOrDefault(commandName, r -> "/index.jsp");
     }

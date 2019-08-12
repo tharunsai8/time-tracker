@@ -6,18 +6,29 @@ import com.yurwar.trainingcourse.model.service.ActivityRequestService;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Reject user activity request
+ *
+ * @author Yurii Matora
+ * @see ActivityRequest
+ * @see ActivityRequestService
+ */
 public class ActivityRequestRejectCommand implements Command {
-    private ActivityRequestService activityRequestService;
+    private final ActivityRequestService activityRequestService;
 
-    public ActivityRequestRejectCommand(ActivityRequestService activityRequestService) {
+    ActivityRequestRejectCommand(ActivityRequestService activityRequestService) {
         this.activityRequestService = activityRequestService;
     }
 
+    /**
+     * @param request User http request to server
+     * @return name of page or redirect
+     */
     @Override
     public String execute(HttpServletRequest request) {
         long activityRequestId = Long.parseLong(request.getParameter("id"));
 
-        ActivityRequest activityRequest = activityRequestService.findActivityRequestById(activityRequestId);
+        ActivityRequest activityRequest = activityRequestService.getActivityRequestById(activityRequestId);
 
         if (!activityRequest.getStatus().equals(ActivityRequestStatus.PENDING)) {
             return "redirect:/activities/request";

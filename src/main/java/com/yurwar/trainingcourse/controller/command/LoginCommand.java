@@ -9,17 +9,26 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Check user credentials and login user into the system using user service
+ *
+ * @author Yurii Matora
+ * @see UserService
+ */
 public class LoginCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private final UserService userService;
 
-    public LoginCommand(UserService userService) {
+    LoginCommand(UserService userService) {
         this.userService = userService;
     }
 
+    /**
+     * @param request User http request to server
+     * @return name of page or redirect
+     */
     @Override
     public String execute(HttpServletRequest request) {
         String username = request.getParameter("username");
@@ -27,7 +36,8 @@ public class LoginCommand implements Command {
         if (!ObjectUtils.allNotNull(username, password)) {
             return "/login.jsp";
         }
-        log.info("User try to log in with username: " + username + " and password: " + password );
+
+        log.info("User try to log in with username: " + username);
 
         Optional<User> userOptional = userService.findUserByUsername(username);
         if (userOptional.isEmpty()) {

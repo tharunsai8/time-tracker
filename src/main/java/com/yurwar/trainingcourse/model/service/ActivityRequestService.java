@@ -1,10 +1,8 @@
 package com.yurwar.trainingcourse.model.service;
 
-import com.yurwar.trainingcourse.model.dao.ActivityDao;
-import com.yurwar.trainingcourse.model.dao.ActivityRequestDao;
-import com.yurwar.trainingcourse.model.dao.DaoFactory;
-import com.yurwar.trainingcourse.model.dao.UserDao;
+import com.yurwar.trainingcourse.model.dao.*;
 import com.yurwar.trainingcourse.model.entity.*;
+import com.yurwar.trainingcourse.util.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,23 +10,33 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Service with business logic for managing activity requests
+ *
+ * @author Yurii Matora
+ */
 public class ActivityRequestService {
     private static final Logger log = LogManager.getLogger();
     private final DaoFactory daoFactory = DaoFactory.getInstance();
 
-    public List<ActivityRequest> getAllActivityRequests() {
-        try (ActivityRequestDao activityRequestDao = daoFactory.createActivityRequestDao()) {
-            return activityRequestDao.findAll();
-        } catch (Exception e) {
+    public List<ActivityRequest> getAllActivityRequestsPageable(int page, int size) {
+        try (DaoConnection connection = daoFactory.getConnection()) {
+            ActivityRequestDao activityRequestDao = daoFactory.createActivityRequestDao(connection);
+            return activityRequestDao.findAllPageable(page, size);
+        } catch (DaoException e) {
             log.warn("Can not get all activity requests", e);
         }
         return Collections.emptyList();
     }
 
     public void makeAddActivityRequest(long userId, long activityId) {
-        try (UserDao userDao = daoFactory.createUserDao();
-             ActivityDao activityDao = daoFactory.createActivityDao();
-             ActivityRequestDao activityRequestDao = daoFactory.createActivityRequestDao()) {
+        try (DaoConnection connection = daoFactory.getConnection()) {
+            UserDao userDao = daoFactory.createUserDao(connection);
+            ActivityDao activityDao = daoFactory.createActivityDao(connection);
+            ActivityRequestDao activityRequestDao = daoFactory.createActivityRequestDao(connection);
+
+            connection.beginTransaction();
+
             User user = userDao.findById(userId).orElseThrow(() ->
                     new IllegalArgumentException("Invalid user id: " + userId));
             Activity activity = activityDao.findById(activityId).orElseThrow(() ->
@@ -55,7 +63,6 @@ public class ActivityRequestService {
                         log.info("User already in activity");
                         break;
                     }
-                    //TODO Try to remove break
                     ActivityRequest activityRequest = new ActivityRequest();
                     activityRequest.setUser(user);
                     activityRequest.setActivity(activity);
@@ -78,15 +85,21 @@ public class ActivityRequestService {
                     break;
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+
+            connection.commit();
+        } catch (DaoException e) {
+            log.warn("Can not make add activity request", e);
         }
     }
 
     public void makeCompleteActivityRequest(long userId, long activityId) {
-        try (UserDao userDao = daoFactory.createUserDao();
-             ActivityDao activityDao = daoFactory.createActivityDao();
-             ActivityRequestDao activityRequestDao = daoFactory.createActivityRequestDao()) {
+        try (DaoConnection connection = daoFactory.getConnection()) {
+            UserDao userDao = daoFactory.createUserDao(connection);
+            ActivityDao activityDao = daoFactory.createActivityDao(connection);
+            ActivityRequestDao activityRequestDao = daoFactory.createActivityRequestDao(connection);
+
+            connection.beginTransaction();
+
             User user = userDao.findById(userId).orElseThrow(() ->
                     new IllegalArgumentException("Invalid user id: " + userId));
             Activity activity = activityDao.findById(activityId).orElseThrow(() ->
@@ -100,13 +113,14 @@ public class ActivityRequestService {
                                     activityRequest.getStatus().equals(ActivityRequestStatus.PENDING))
                     .count();
             if (currentActivityRequestsCount > 0) {
-                log.info("User already sent activity request");
+                log.info("User {} already sent activity request", user.getUsername());
+                connection.commit();
                 return;
             }
 
             switch (activity.getStatus()) {
                 case COMPLETED:
-                    log.info("Activity already completed");
+                    log.info("Activity {} already completed", activity.getName());
                     break;
                 case ACTIVE:
                     if (activity.getUsers().contains(user)) {
@@ -118,34 +132,41 @@ public class ActivityRequestService {
                         activityRequest.setRequestDate(LocalDateTime.now());
 
                         activityRequestDao.create(activityRequest);
-                        return;
                     }
                     break;
                 case PENDING:
-                    log.info("User can not complete pending activity");
+                    log.info("User {} can not complete pending activity", user.getUsername());
                     break;
             }
+
+            connection.commit();
+        } catch (DaoException e) {
+            log.warn("Can not make complete activity request", e);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public ActivityRequest findActivityRequestById(long activityRequestId) {
-        try (ActivityRequestDao activityRequestDao = daoFactory.createActivityRequestDao()) {
-            //TODO Check is present
-            return activityRequestDao.findById(activityRequestId).get();
-        } catch (Exception e) {
-            e.printStackTrace();
+    public ActivityRequest getActivityRequestById(long activityRequestId) {
+        try (DaoConnection connection = daoFactory.getConnection()) {
+            ActivityRequestDao activityRequestDao = daoFactory.createActivityRequestDao(connection);
+
+            return activityRequestDao.findById(activityRequestId).orElseThrow(() ->
+                    new IllegalArgumentException("Invalid activity request id: " + activityRequestId));
+        } catch (DaoException e) {
+            log.warn("Can not find activity request");
         }
         return null;
     }
 
     public void approveAddActivityRequest(long activityRequestId) {
-        try (UserDao userDao = daoFactory.createUserDao();
-             ActivityDao activityDao = daoFactory.createActivityDao();
-             ActivityRequestDao activityRequestDao = daoFactory.createActivityRequestDao()) {
-            ActivityRequest activityRequest = findActivityRequestById(activityRequestId);
+        try (DaoConnection connection = daoFactory.getConnection()) {
+            ActivityDao activityDao = daoFactory.createActivityDao(connection);
+            ActivityRequestDao activityRequestDao = daoFactory.createActivityRequestDao(connection);
 
+            connection.beginTransaction();
+
+            ActivityRequest activityRequest = getActivityRequestById(activityRequestId);
             Activity activity = activityRequest.getActivity();
             User user = activityRequest.getUser();
 
@@ -157,10 +178,7 @@ public class ActivityRequestService {
                     user.getActivities().add(activity);
                     activityRequest.setStatus(ActivityRequestStatus.APPROVED);
 
-                    //TODO Check which method choose
                     activityDao.update(activity);
-//                    userDao.save(user);
-                    log.info("Activity request approved");
                     break;
                 }
                 case ACTIVE: {
@@ -168,10 +186,7 @@ public class ActivityRequestService {
                     user.getActivities().add(activity);
                     activityRequest.setStatus(ActivityRequestStatus.APPROVED);
 
-                    //TODO Check which method choose
                     activityDao.update(activity);
-//                    userDao.save(user);
-                    log.info("Activity request approved");
                     break;
                 }
                 case COMPLETED: {
@@ -181,17 +196,21 @@ public class ActivityRequestService {
                 }
             }
             activityRequestDao.update(activityRequest);
-        } catch (Exception e) {
-            e.printStackTrace();
+
+            connection.commit();
+        } catch (DaoException e) {
+            log.warn("Can not approve add activity request", e);
         }
     }
 
     public void approveCompleteActivityRequest(long activityRequestId) {
-        try (UserDao userDao = daoFactory.createUserDao();
-             ActivityDao activityDao = daoFactory.createActivityDao();
-             ActivityRequestDao activityRequestDao = daoFactory.createActivityRequestDao()) {
-            ActivityRequest activityRequest = findActivityRequestById(activityRequestId);
+        try (DaoConnection connection = daoFactory.getConnection()) {
+            ActivityDao activityDao = daoFactory.createActivityDao(connection);
+            ActivityRequestDao activityRequestDao = daoFactory.createActivityRequestDao(connection);
 
+            connection.beginTransaction();
+
+            ActivityRequest activityRequest = getActivityRequestById(activityRequestId);
             Activity activity = activityRequest.getActivity();
 
             switch (activity.getStatus()) {
@@ -203,7 +222,6 @@ public class ActivityRequestService {
                     activity.setEndTime(LocalDateTime.now());
                     activity.setStatus(ActivityStatus.COMPLETED);
                     activityRequest.setStatus(ActivityRequestStatus.APPROVED);
-                    //TODO Check update method
                     activityDao.update(activity);
                     activityRequestDao.update(activityRequest);
                     break;
@@ -215,18 +233,37 @@ public class ActivityRequestService {
                     break;
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+
+            connection.commit();
+        } catch (DaoException e) {
+            log.warn("Can not approve complete activity request", e);
         }
     }
 
     public void rejectActivityRequest(long activityRequestId) {
-        try (ActivityRequestDao activityRequestDao = daoFactory.createActivityRequestDao()) {
-            ActivityRequest activityRequest = findActivityRequestById(activityRequestId);
+        try (DaoConnection connection = daoFactory.getConnection()) {
+            ActivityRequestDao activityRequestDao = daoFactory.createActivityRequestDao(connection);
+
+            connection.beginTransaction();
+
+            ActivityRequest activityRequest = getActivityRequestById(activityRequestId);
             activityRequest.setStatus(ActivityRequestStatus.REJECTED);
             activityRequestDao.update(activityRequest);
-        } catch (Exception e) {
-            e.printStackTrace();
+
+            connection.commit();
+        } catch (DaoException e) {
+            log.warn("Can not reject activity request", e);
         }
+    }
+
+    public long getNumberOfRecords() {
+        try (DaoConnection connection = daoFactory.getConnection()) {
+            ActivityRequestDao activityRequestDao = daoFactory.createActivityRequestDao(connection);
+
+            return activityRequestDao.getNumberOfRecords();
+        } catch (DaoException e) {
+            log.warn("Can not get number of activity requests", e);
+        }
+        return 0;
     }
 }
