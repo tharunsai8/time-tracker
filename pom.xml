@@ -6,7 +6,7 @@
 
     <groupId>com.yurwar.trainingcourse</groupId>
     <artifactId>time-tracker</artifactId>
-    <version>0.2</version>
+    <version>0.2.1-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>Time tracker web application</name>
